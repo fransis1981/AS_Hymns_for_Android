@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle">
+    <stroke android:width="2dp"
+            android:color="@color/strofaLabel_color_faded" />
+
+    <corners android:radius="20dp" />
+
+    <padding android:bottom="3dp" android:left="3dp"
+             android:right="3dp" android:top="3dp" />
+
+    <gradient android:type="linear"
+              android:startColor="@color/apptheme_color_faded"
+              android:endColor="@color/keypad_outline_color"
+              android:angle="135" />
+</shape>

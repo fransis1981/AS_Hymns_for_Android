@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:background="@drawable/hymntitle_bg"
+                  android:weightSum="1">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NUM"
+                android:id="@+id/singleHymn_number"
+                android:layout_centerVertical="true"
+                android:gravity="center" android:layout_alignParentLeft="true"
+                android:layout_marginLeft="5dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="6dp"
+                style="@style/HymnTitleNumber_style"/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/hymn_title" style="@style/HymnTitle_style"
+                android:layout_toRightOf="@+id/singleHymn_number"
+                android:layout_toLeftOf="@+id/singleHymn_starcheck"
+                />
+        <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/starcheck_selector"
+                android:id="@+id/singleHymn_starcheck" android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="1dp" android:paddingLeft="2dp" android:paddingBottom="2dp"/>
+    </RelativeLayout>
+
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@android:id/list" android:layout_gravity="center_horizontal" android:paddingTop="5dp"
+            android:divider="@drawable/strofe_divider" android:dividerHeight="1dp"/>
+
+    </LinearLayout>

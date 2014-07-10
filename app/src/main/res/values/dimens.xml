@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dimensions related to keypad and circle buttons -->
+    <dimen name="circleButton_Margin">3dp</dimen>
+    <dimen name="circleButton_defaultHeight">150dp</dimen>
+    <dimen name="circleButton_defaultWidth">150dp</dimen>
+    <dimen name="circleButton_LineWidth">2dp</dimen>
+    <dimen name="circleButton_TextStroke">2dp</dimen>
+    <dimen name="keypad_ExternalPadding">6dp</dimen>
+
+    <!-- Other Dimensions -->
+    <dimen name="tab_host_default_height">48dp</dimen>
+</resources>

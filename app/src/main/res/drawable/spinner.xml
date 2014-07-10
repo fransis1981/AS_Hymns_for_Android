@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/rotate_spinner_part1" />
+    <item android:drawable="@drawable/rotate_spinner_part2" />
+</layer-list>

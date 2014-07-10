@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="apptheme_color">#ffff0700</color>
+    <color name="apptheme_color_faded">#ffff0700</color>
+
+    <color name="testo_strofe_color">#ff000d7c</color>
+    <color name="strofe_gold_decor">#ff000d9a</color>
+    <color name="strofaLabel_color">#ff23fe00</color>
+    <color name="strofaLabel_color_faded">#ff000d9a</color>
+    <color name="HymnTitle_color">#ff00fbfe</color>
+
+    <color name="main_spinners_fg">#ff000d9a</color>
+    <color name="main_spinners_bg">#fffff3d0</color>
+
+    <!-- Colors related to keypad and circle buttons -->
+    <color name="keypad_soft_bg">#1043fea7</color>
+    <color name="keypad_outline_color">#45d9aa52</color>
+    <color name="circleButton_outerLine">#fffdfe00</color>
+    <color name="circleButton_Illumination">#40fffb6b</color>
+
+</resources>

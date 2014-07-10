@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="fill_parent"
+             android:shrinkColumns="0, 2"
+             android:background="@drawable/keypad_bg_drawable">
+
+    <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="0dp" android:layout_weight="0.5" android:background="#00000000"
+            android:gravity="center">
+        <view android:layout_width="0dp"
+              android:layout_height="fill_parent"
+              class="com.fransis1981.Android_Hymns.DigitCircleButtonView" android:id="@+id/keypad_num1"
+              android:layout_column="0" android:text="1" android:layout_weight="0.32"/>
+        <view android:layout_width="0dp"
+              android:layout_height="fill_parent"
+              class="com.fransis1981.Android_Hymns.DigitCircleButtonView" android:id="@+id/keypad_num2"
+              android:layout_column="1" android:text="2" android:layout_weight="0.32"/>
+        <view android:layout_width="0dp"
+              android:layout_height="fill_parent"
+              class="com.fransis1981.Android_Hymns.DigitCircleButtonView" android:id="@+id/keypad_num3"
+              android:layout_column="2" android:text="3" android:layout_weight="0.32"/>
+    </TableRow>
+    <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="0dp" android:layout_weight="0.5" android:gravity="center">
+        <view android:layout_width="0dp"
+              android:layout_height="fill_parent"
+              class="com.fransis1981.Android_Hymns.DigitCircleButtonView" android:id="@+id/keypad_num4"
+              android:layout_column="0" android:text="4" android:layout_weight="0.32"/>
+        <view android:layout_width="0dp"
+              android:layout_height="fill_parent"
+              class="com.fransis1981.Android_Hymns.DigitCircleButtonView" android:id="@+id/keypad_num5"
+              android:layout_column="1" android:text="5" android:layout_weight="0.32"/>
+        <view android:layout_width="0dp"
+              android:layout_height="fill_parent"
+              class="com.fransis1981.Android_Hymns.DigitCircleButtonView" android:id="@+id/keypad_num6"
+              android:layout_column="2" android:text="6" android:layout_weight="0.32"/>
+    </TableRow>
+    <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="0dp" android:layout_weight="0.5" android:gravity="center">
+        <view android:layout_width="0dp"
+              android:layout_height="fill_parent"
+              class="com.fransis1981.Android_Hymns.DigitCircleButtonView" android:id="@+id/keypad_num7"
+              android:layout_column="0" android:text="7" android:layout_weight="0.32"/>
+        <view android:layout_width="0dp"
+              android:layout_height="fill_parent"
+              class="com.fransis1981.Android_Hymns.DigitCircleButtonView" android:id="@+id/keypad_num8"
+              android:layout_column="1" android:text="8" android:layout_weight="0.32"/>
+        <view android:layout_width="0dp"
+              android:layout_height="fill_parent"
+              class="com.fransis1981.Android_Hymns.DigitCircleButtonView" android:id="@+id/keypad_num9"
+              android:layout_column="2" android:text="9" android:layout_weight="0.32"/>
+    </TableRow>
+    <TableRow
+            android:layout_width="fill_parent" android:baselineAligned="false"
+            android:layout_height="0dp" android:layout_weight="0.5" android:gravity="center">
+        <ImageButton android:layout_width="0dp"
+                     android:layout_height="fill_parent"
+                     android:src="@drawable/keypad_cancel" android:id="@+id/keypad_cancel"
+                     android:layout_column="0" android:layout_weight="0.3"
+                     android:background="@android:color/transparent" android:layout_gravity="center"/>
+        <view android:layout_width="0dp"
+              android:layout_height="fill_parent"
+              class="com.fransis1981.Android_Hymns.DigitCircleButtonView" android:id="@+id/keypad_num0"
+              android:layout_column="1" android:text="0" android:layout_weight="0.30"
+              android:layout_gravity="center_horizontal"/>
+        <ImageButton android:layout_width="0dp"
+                     android:layout_height="fill_parent"
+                     android:src="@drawable/keypad_ok" android:id="@+id/keypad_ok"
+                     android:layout_column="2" android:layout_weight="0.30"
+                     android:background="@android:color/transparent" android:gravity="bottom"
+                     android:adjustViewBounds="false"/>
+    </TableRow>
+</TableLayout>

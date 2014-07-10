@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:weightSum="1">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="2dp"
+                  android:layout_marginBottom="2dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_innari"
+                android:id="@+id/lbl_innari"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                style="@style/spinners_labels_style_direct" android:layout_marginRight="2dp"/>
+        <Spinner
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_innari"
+                style="@style/main_spinners_style"/>
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content" android:layout_marginBottom="2dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_categoria"
+                android:id="@+id/lbl_categoria"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                style="@style/spinners_labels_style_direct" android:layout_marginRight="2dp"/>
+        <Spinner
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_categoria"
+                style="@style/main_spinners_style"/>
+    </LinearLayout>
+
+    <TabHost
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent" android:id="@android:id/tabhost">
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
+            <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+            </TabWidget>
+            <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                <android.support.v4.view.ViewPager
+                        android:id="@+id/main_viewpager"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        />
+
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+</LinearLayout>

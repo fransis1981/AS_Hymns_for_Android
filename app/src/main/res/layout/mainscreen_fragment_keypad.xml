@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/txt_composed_number" android:layout_gravity="center_horizontal"
+            style="@style/composedNumberBox_Style" android:gravity="center"/>
+    <view android:layout_width="fill_parent"
+          android:layout_height="fill_parent"
+          class="com.fransis1981.Android_Hymns.NumKeyPadView"
+          android:id="@+id/main_keypad"
+          android:layout_gravity="center_horizontal"
+          android:padding="@dimen/keypad_ExternalPadding"/>
+
+</LinearLayout>

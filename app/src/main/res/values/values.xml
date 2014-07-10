@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Milliseconds to wait after composing a number before automatically accepting that number -->
+    <integer name="autoConfirmTimeout">2500</integer>
+
+    <integer name="default_recents_capacity">20</integer>
+
+    <!-- Values related to keypad and circle buttons -->
+    <integer name="circleButton_BlurRadius">6</integer>
+</resources>
