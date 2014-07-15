@@ -7,4 +7,7 @@
 
     <!-- Values related to keypad and circle buttons -->
     <integer name="circleButton_BlurRadius">6</integer>
+
+    <!-- Default positioning of the controls fragment (it's on the left side of the screen) -->
+    <bool name="default_controls_on_the_left">true</bool>
 </resources>

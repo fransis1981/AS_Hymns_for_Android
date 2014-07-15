@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="main_fragment" type="layout">@layout/main_fragment_land</item>
+    <item name="main" type="layout">@layout/main_tablet</item> <!-- Usato solo in fase di DEBUG per provare la modalità tablet sul cellulare -->
+    <bool name="isTableLayout">true</bool> <!-- Rimettere a FALSE in productioin: Usato solo in fase di DEBUG per provare la modalità tablet sul cellulare -->
+</resources>

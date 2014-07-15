@@ -1,7 +1,11 @@
 package com.fransis1981.Android_Hymns;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,16 +21,33 @@ public class MyActivity extends FragmentActivity {
    static final String CATEGORIASELECTION_BUNDLESTATE = "SelectedCategory";
    static final String INNARIOSELECTION_BUNDLESTATE = "SelectedHymnBook";
 
+    //Dictionary preference for the positioning of the controls fragment in tablet mode.
+    static final String PREF_Controls_On_The_Left = "Controls_On_The_Left";
+
+    //This field keeps the ID of the frame where the hymns fragment gets instantiated.
+    private int currentHymnsContainerID = 0;
+
+    //This field is populated upon creation to reduce boiler plate code.
+    private boolean _tabletMode;
+
+    FragmentManager _fm;
+
     /** Called when the activity is first created.  */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _tabletMode = HymnsApplication.myResources.getBoolean(R.bool.isTableLayout);
+        _fm = getSupportFragmentManager();
 
         try {
            setContentView(R.layout.main);
-           //_context = this;
 
-           //initUI();
+            //Retrieving last saved or default positioning for the controls fragment.
+            SharedPreferences sp = this.getSharedPreferences(HymnsApplication.HelperPreferences_STR, Context.MODE_PRIVATE);
+            boolean on_the_left = sp.getBoolean(PREF_Controls_On_The_Left,
+                    HymnsApplication.myResources.getBoolean(R.bool.default_controls_on_the_left));
+
+            deployFragments(on_the_left);
 
         } catch (Exception e) {
             Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE CREATNG MAIN ACTIVITY GUI...." + e.getMessage());
@@ -39,29 +60,10 @@ public class MyActivity extends FragmentActivity {
       //TODO: se mi conservo a livello di classe il puntatore al menu, posso cambiarne il contenuto a run-time
       //TODO: fintanto che questo metodo non viene di nuovo invocato; lo stesso vale per i singoli MenuItem.
       super.onCreateOptionsMenu(menu);
-      MenuItem mnu_pref = menu.add(0, MENU_PREFERENCES, Menu.NONE, R.string.mnu_options_str);
-      mnu_pref.setIcon(android.R.drawable.ic_menu_preferences);
+      MenuItem mnu_pref = menu.add(0, MENU_PREFERENCES, Menu.NONE, R.string.mnu_move_controls_on_the_right);
       return true;
    }
 
-//   @Override
-//   protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//      super.onRestoreInstanceState(savedInstanceState);
-//
-//      if (savedInstanceState != null) {
-//         currentCategoriaSelection = savedInstanceState.getInt(CATEGORIASELECTION_BUNDLESTATE);
-//         currentInnariSelection = savedInstanceState.getInt(INNARIOSELECTION_BUNDLESTATE);
-//         mTabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_BUNDLESTATE, MyConstants.TAB_MAIN_KEYPAD));
-//      }
-//   }
-//
-//   @Override
-//   protected void onSaveInstanceState(Bundle outState) {
-//      outState.putString(TAB_BUNDLESTATE, mTabHost.getCurrentTabTag());
-//      outState.putInt(CATEGORIASELECTION_BUNDLESTATE, currentCategoriaSelection);
-//      outState.putInt(INNARIOSELECTION_BUNDLESTATE, currentInnariSelection);
-//      super.onSaveInstanceState(outState);
-//   }
 
    @Override
    protected void onDestroy() {
@@ -71,27 +73,38 @@ public class MyActivity extends FragmentActivity {
       super.onDestroy();
    }
 
-//   @Override
-//   protected void onPause() {
-//      currentInnariSelection = mSpinnerInnari.getSelectedItemPosition();
-//      currentCategoriaSelection = mSpinnerCategoria.getSelectedItemPosition();
-//      super.onPause();
-//   }
-
-//   //Using this callback to manage spinners' state.
-//   @Override
-//   protected void onResume() {
-//      super.onResume();
-//      if (currentInnariSelection == -1 && currentCategoriaSelection == -1) mSpinnerInnari.setSelection(1);
-//      else {
-//         if (currentInnariSelection > 0) mSpinnerInnari.setSelection(currentInnariSelection);
-//         else if (currentCategoriaSelection > 0) mSpinnerCategoria.setSelection(currentCategoriaSelection);
-//      }
-//   }
-
    //This method is used to discriminate between different kinds of layouts.
    void callback_HymnSelected(Inno inno) {
-      //TODO: discriminate implementation between tablet and handset
-      SingleHymn_Activity.startIntentWithHymn(this, inno);
+      if (_tabletMode) {
+          ( (SingleHymn_Fragment) _fm.findFragmentById(currentHymnsContainerID)).showHymn(inno);
+      }
+      else {
+          SingleHymn_Activity.startIntentWithHymn(this, inno);
+      }
    }
+
+    private void deployFragments(boolean prm_controls_on_left) {
+        //An additional check for tablet mode.
+        if (!_tabletMode) return;
+
+        SingleHymn_Fragment _shf = (SingleHymn_Fragment)
+                SingleHymn_Fragment.instantiate(this, SingleHymn_Fragment.class.getName());
+        MyMainFragment _mmf = (MyMainFragment)
+                MyMainFragment.instantiate(this, MyMainFragment.class.getName());
+        FragmentTransaction _ft;
+
+        if (prm_controls_on_left) {
+            currentHymnsContainerID = R.id.right_pane;
+            _ft = _fm.beginTransaction();
+            _ft.replace(R.id.left_pane, _mmf).commit();
+        }
+        else {
+            currentHymnsContainerID = R.id.left_pane;
+            _ft = _fm.beginTransaction();
+            _ft.replace(R.id.right_pane, _mmf).commit();
+        }
+        _ft = _fm.beginTransaction();
+        _ft.replace(currentHymnsContainerID, _shf).commit();
+        _shf.showHymn(HymnsApplication.getCurrentInnario().getInno(1));
+    }
 }
