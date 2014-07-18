@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:baselineAligned="false">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:id="@+id/left_pane"
-                  android:orientation="vertical"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="60" />
+    <fragment android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.fransis1981.Android_Hymns.MyMainFragment"
+        android:id="@+id/left_pane"
+        android:layout_weight="50"
+        tools:layout="@layout/main_fragment_port" />
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:id="@+id/right_pane"
-                 android:orientation="vertical"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_weight="40" />
+    <fragment android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.fransis1981.Android_Hymns.SingleHymn_Fragment"
+        android:id="@+id/right_pane"
+        android:layout_weight="50"
+        android:layout_marginLeft="4dp"
+        tools:layout="@layout/single_hymn_fragment" />
 
 </LinearLayout>
