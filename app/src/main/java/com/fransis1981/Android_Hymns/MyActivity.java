@@ -67,7 +67,7 @@ public class MyActivity extends FragmentActivity {
       //TODO: se mi conservo a livello di classe il puntatore al menu, posso cambiarne il contenuto a run-time
       //TODO: fintanto che questo metodo non viene di nuovo invocato; lo stesso vale per i singoli MenuItem.
       super.onCreateOptionsMenu(menu);
-      MenuItem mnu_pref = menu.add(0, MENU_PREFERENCES, Menu.NONE, R.string.mnu_move_controls_on_the_right);
+      //MenuItem mnu_pref = menu.add(0, MENU_PREFERENCES, Menu.NONE, R.string.mnu_move_controls_on_the_right);
       return true;
    }
 
