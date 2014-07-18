@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 
 public class MyActivity extends FragmentActivity {
@@ -31,6 +32,7 @@ public class MyActivity extends FragmentActivity {
     private boolean _tabletMode;
 
     FragmentManager _fm;
+    SingleHymn_Fragment singleHymn_fragment;
 
     /** Called when the activity is first created.  */
     @Override
@@ -38,6 +40,7 @@ public class MyActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         _tabletMode = HymnsApplication.myResources.getBoolean(R.bool.isTableLayout);
         _fm = getSupportFragmentManager();
+        currentHymnsContainerID = R.id.right_pane;
 
         try {
            setContentView(R.layout.main);
@@ -47,7 +50,11 @@ public class MyActivity extends FragmentActivity {
             boolean on_the_left = sp.getBoolean(PREF_Controls_On_The_Left,
                     HymnsApplication.myResources.getBoolean(R.bool.default_controls_on_the_left));
 
-            deployFragments(on_the_left);
+            //deployFragments(on_the_left);
+            if (_tabletMode) {
+                singleHymn_fragment = (SingleHymn_Fragment) _fm.findFragmentById(currentHymnsContainerID);
+                singleHymn_fragment.showHymn(HymnsApplication.getCurrentInnario().getInno(1));
+            }
 
         } catch (Exception e) {
             Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE CREATNG MAIN ACTIVITY GUI...." + e.getMessage());
@@ -76,7 +83,8 @@ public class MyActivity extends FragmentActivity {
    //This method is used to discriminate between different kinds of layouts.
    void callback_HymnSelected(Inno inno) {
       if (_tabletMode) {
-          ( (SingleHymn_Fragment) _fm.findFragmentById(currentHymnsContainerID)).showHymn(inno);
+          singleHymn_fragment.showHymn(inno);
+          getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
       }
       else {
           SingleHymn_Activity.startIntentWithHymn(this, inno);
