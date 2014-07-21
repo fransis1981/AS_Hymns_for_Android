@@ -4,18 +4,33 @@
     <color name="apptheme_color_faded">#ffff0700</color>
 
     <color name="testo_strofe_color">#ff000d7c</color>
-    <color name="strofe_gold_decor">#ff000d9a</color>
-    <color name="strofaLabel_color">#ff23fe00</color>
+    <color name="strofe_gold_decor">#ffdecdad</color>
+    <color name="strofaLabel_color">#ffdecdad</color>
     <color name="strofaLabel_color_faded">#ff000d9a</color>
-    <color name="HymnTitle_color">#ff00fbfe</color>
+
+    <color name="history_button_border_color">#ffdecdad</color>
 
     <color name="main_spinners_fg">#ff000d9a</color>
     <color name="main_spinners_bg">#fffff3d0</color>
 
+    <!-- Colors related to hymn title elements -->
+    <color name="HymnTitle_border">@android:color/white</color>
+    <color name="HymnTitle_soft_bg_start">#ffcbcbcb</color>
+    <color name="HymnTitle_soft_bg_end">#7feaeaea</color>
+    <color name="HymnTitle_color">#ff505150</color>
+    <color name="HymnTitle_number_text_color">#ffffffff</color>
+    <color name="HymnTitle_subtitle_color">#ffe7e2cd</color>
+
     <!-- Colors related to keypad and circle buttons -->
     <color name="keypad_soft_bg">#1043fea7</color>
+    <color name="keypad_soft_bg_start">#ffcbcbcb</color>
+    <color name="keypad_soft_bg_middle">#7feaeaea</color>
+    <color name="keypad_soft_bg_end">#7feaeaea</color>
+    <color name="keypad_external_border">@android:color/white</color>
     <color name="keypad_outline_color">#45d9aa52</color>
-    <color name="circleButton_outerLine">#fffdfe00</color>
-    <color name="circleButton_Illumination">#40fffb6b</color>
+    <color name="circleButton_outerLine">#ff020202</color>
+    <color name="circleButton_Illumination">#2ff8f8fa</color>
+    <color name="circleButton_text_active">#fffff9f2</color>
+    <color name="circleButton_text_inactive">#ffb0afb0</color>
 
 </resources>

@@ -54,7 +54,7 @@ public class DigitCircleButtonView extends Button {
 
             if (textPaint == null) {
                textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-               textPaint.setColor(HymnsApplication.myResources.getColor(R.color.strofaLabel_color));
+               textPaint.setColor(HymnsApplication.myResources.getColor(R.color.circleButton_text_active));
                textPaint.setStrokeWidth((int) HymnsApplication.myResources.getDimension(R.dimen.circleButton_TextStroke));
                textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
                textPaint.setTextAlign(Paint.Align.CENTER);
@@ -63,7 +63,7 @@ public class DigitCircleButtonView extends Button {
 
             if (textPaint_obscured == null) {
                textPaint_obscured = new Paint(Paint.ANTI_ALIAS_FLAG);
-               textPaint_obscured.setColor(HymnsApplication.myResources.getColor(R.color.strofaLabel_color_faded));
+               textPaint_obscured.setColor(HymnsApplication.myResources.getColor(R.color.circleButton_text_inactive));
                textPaint_obscured.setStrokeWidth((int) HymnsApplication.myResources.getDimension(R.dimen.circleButton_TextStroke));
                textPaint_obscured.setStyle(Paint.Style.STROKE);
                textPaint_obscured.setTextAlign(Paint.Align.CENTER);

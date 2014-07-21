@@ -10,6 +10,8 @@
     <string name="generic_categoria_spinner_label">&lt;Category&gt;</string>
 
     <string name="mnu_options_str">Settings…</string>
+    <string name="mnu_move_controls_on_the_right">Move controls on the right</string>
+    <string name="mnu_move_controls_on_the_left">Move controls on the left</string>
 
     <!-- Tab titles -->
     <string name="tab_keypad">Keypad</string>

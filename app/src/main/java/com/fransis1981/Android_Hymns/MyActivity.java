@@ -91,6 +91,7 @@ public class MyActivity extends FragmentActivity {
       }
    }
 
+    //TODO: this method is currently
     private void deployFragments(boolean prm_controls_on_left) {
         //An additional check for tablet mode.
         if (!_tabletMode) return;
