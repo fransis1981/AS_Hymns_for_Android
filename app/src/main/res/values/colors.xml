@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="apptheme_color">#ffff0700</color>
-    <color name="apptheme_color_faded">#ffff0700</color>
+    <color name="apptheme_color">#ffcbcbcb</color>
+    <color name="apptheme_color_faded">#ffcbcbcb</color>
 
     <color name="testo_strofe_color">#ff000d7c</color>
     <color name="strofe_gold_decor">#ffdecdad</color>
@@ -17,7 +17,7 @@
     <color name="HymnTitle_border">@android:color/white</color>
     <color name="HymnTitle_soft_bg_start">#ffcbcbcb</color>
     <color name="HymnTitle_soft_bg_end">#7feaeaea</color>
-    <color name="HymnTitle_color">#ff505150</color>
+    <color name="HymnTitle_color">#ff353635</color>
     <color name="HymnTitle_number_text_color">#ffffffff</color>
     <color name="HymnTitle_subtitle_color">#ffe7e2cd</color>
 
@@ -32,5 +32,7 @@
     <color name="circleButton_Illumination">#2ff8f8fa</color>
     <color name="circleButton_text_active">#fffff9f2</color>
     <color name="circleButton_text_inactive">#ffb0afb0</color>
+
+    <color name="hymnsappmainstyle_color">@color/HymnTitle_soft_bg_start</color>
 
 </resources>

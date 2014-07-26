@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Spinnerhymnsappmainstyle" parent="android:Widget.Holo.Spinner">
+        <item name="android:background">@drawable/hymnsappmainstyle_spinner_background_holo_dark</item>
+        <item name="android:dropDownSelector">@drawable/hymnsappmainstyle_list_selector_holo_dark</item>
+        <item name="android:textColor">@color/strofe_gold_decor</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>
