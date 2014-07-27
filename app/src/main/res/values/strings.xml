@@ -4,7 +4,7 @@
 
     <string name="keypad_cancel_str">Cancel</string>
     <string name="coro_label">CHORUS</string>
-    <string name="label_innari">Hymnbooks:</string>
+    <string name="label_innari">Hymnbook:</string>
     <string name="label_categoria">Category:</string>
     <string name="clear_history">Clear History</string>
     <string name="generic_categoria_spinner_label">&lt;Category&gt;</string>

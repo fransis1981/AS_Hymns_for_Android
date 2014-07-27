@@ -80,7 +80,7 @@ public class MyMainFragment extends Fragment
       //Treating spinner innari
       mSpinnerInnari = (Spinner) v.findViewById(R.id.spinner_innari);
       spin_innariAdapter =
-            new ArrayAdapter<String>(_context, R.layout.mainspinners_item, HymnsApplication.getInnariTitles());
+            new ArrayAdapter<String>(_context, android.R.layout.simple_spinner_item, HymnsApplication.getInnariTitles());
       spin_innariAdapter.insert(HymnsApplication.myResources.getString(R.string.generic_categoria_spinner_label), 0);
       spin_innariAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
       mSpinnerInnari.setAdapter(spin_innariAdapter);
@@ -90,7 +90,7 @@ public class MyMainFragment extends Fragment
       //Treating spinner categoria
       mSpinnerCategoria = (Spinner) v.findViewById(R.id.spinner_categoria);
       spin_catAdapter =
-            new ArrayAdapter<String>(_context, R.layout.mainspinners_item, Inno.Categoria.getCategoriesStringList());
+            new ArrayAdapter<String>(_context, android.R.layout.simple_spinner_item, Inno.Categoria.getCategoriesStringList());
       spin_catAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
       mSpinnerCategoria.setAdapter(spin_catAdapter);
       mSpinnerCategoria.setOnItemSelectedListener(this);
