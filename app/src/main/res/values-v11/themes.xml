@@ -5,7 +5,10 @@
         <item name="android:actionBarStyle">@style/ActionBar.Transparent.Hymns_actionbar_theme</item>
         <item name="android:spinnerStyle">@style/Spinnerhymnsappmainstyle</item>
         <item name="android:spinnerItemStyle">@style/main_spinners_style</item>
-        <!-- <item name="android:actionModeBackground">@drawable/cab_background_top_hymns_actionbar_theme</item>
-        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_hymns_actionbar_theme</item> -->
+        <!--
+        <item name="android:actionModeBackground">@drawable/cab_background_top_hymns_actionbar_theme</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_hymns_actionbar_theme</item>
+        -->
     </style>
+
 </resources>

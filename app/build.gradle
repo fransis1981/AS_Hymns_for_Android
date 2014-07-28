@@ -5,7 +5,7 @@ android {
     buildToolsVersion '20.0.0'
     defaultConfig {
         applicationId 'com.fransis1981.Android_Hymns'
-        minSdkVersion 14
+        minSdkVersion 9
         targetSdkVersion 14
     }
     buildTypes {

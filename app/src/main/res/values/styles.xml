@@ -65,15 +65,19 @@
     <style name="spinners_labels_style_direct">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">13sp</item>
     </style>
     <style name="spinners_labels_style_inverse">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:background">@color/main_spinners_bg</item>
+        <item name="android:textSize">13sp</item>
     </style>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- ~~~~~~~~~~~~ SUPPORT STYLES ~~~~~~~~~~ -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+
     <style name="ActionBar.Transparent.Hymns_actionbar_theme" parent="@android:style/Widget.Holo.ActionBar">
         <item name="android:background">@drawable/ab_transparent_hymns_actionbar_theme</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Hymns_actionbar_theme</item>
@@ -114,7 +118,6 @@
         <item name="android:ellipsize">marquee</item>
         <item name="android:maxLines">2</item>
         <item name="android:maxWidth">180dip</item>
-        <item name="android:textAllCaps">true</item>
     </style>
 
 </resources>

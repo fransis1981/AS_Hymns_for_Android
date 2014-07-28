@@ -10,4 +10,7 @@
 
     <!-- Other Dimensions -->
     <dimen name="tab_host_default_height">48dp</dimen>
+
+    <!-- Labels on main screen -->
+    <dimen name="main_labels_textsize">16sp</dimen>
 </resources>

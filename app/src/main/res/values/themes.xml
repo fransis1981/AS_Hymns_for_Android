@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="HymnsAppMainStyle" parent="@android:Theme.Black">
+        <!--
         <item name="android:actionBarItemBackground">@drawable/selectable_background_hymns_actionbar_theme</item>
         <item name="android:actionBarStyle">@style/ActionBar.Transparent.Hymns_actionbar_theme</item>
+        -->
         <item name="android:spinnerStyle">@style/Spinnerhymnsappmainstyle</item>
         <item name="android:spinnerItemStyle">@style/main_spinners_style</item>
         <!-- <item name="android:actionModeBackground">@drawable/cab_background_top_hymns_actionbar_theme</item>
