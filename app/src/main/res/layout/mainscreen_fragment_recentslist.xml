@@ -19,5 +19,8 @@
             android:text="Cancella cronologia"
             android:layout_alignParentBottom="true"
             android:background="@drawable/button_outline"
-            />
+            android:textColor="@color/apptheme_color"
+            android:textSize="@dimen/history_button_textsize"
+            android:padding="@dimen/history_button_padding"
+        />
 </RelativeLayout>

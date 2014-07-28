@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="HymnTitle_style">
+        <item name="android:textSize">24sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/HymnTitle_color</item>
+    </style>
+    <style name="HymnTitle_item_style" parent="HymnTitle_style">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">left</item>
+    </style>
+    <style name="item_titoloInnario_style">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textColor">@color/HymnTitle_subtitle_color</item>
+    </style>
+    <style name="HymnTitleNumber_style">
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/HymnTitle_number_text_color</item>
+    </style>
+
+    <style name="strofaLabel_Style">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/strofaLabel_color</item>
+        <item name="android:paddingLeft">3dp</item>
+        <item name="android:paddingRight">9dp</item>
+        <item name="android:gravity">top</item>
+    </style>
+    <style name="strofaContentl_Style">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#ffefeac9</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:gravity">top</item>
+    </style>
+
+    <style name="composedNumberBox_Style">
+        <item name="android:layout_height">30sp</item>
+        <item name="android:layout_width">150dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:background">@drawable/composed_number_box_bg</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+    </style>
+
+
+    <style name="main_spinners_style" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/strofe_gold_decor</item>
+        <item name="android:padding">1dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+</resources>
