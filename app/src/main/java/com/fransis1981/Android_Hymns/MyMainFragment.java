@@ -67,7 +67,8 @@ public class MyMainFragment extends Fragment
       if (savedInstanceState != null) {
          currentCategoriaSelection = savedInstanceState.getInt(MyActivity.CATEGORIASELECTION_BUNDLESTATE);
          currentInnariSelection = savedInstanceState.getInt(MyActivity.INNARIOSELECTION_BUNDLESTATE);
-         mTabHost.setCurrentTabByTag(savedInstanceState.getString(MyActivity.TAB_BUNDLESTATE, MyConstants.TAB_MAIN_KEYPAD));
+         String sss = savedInstanceState.getString(MyActivity.TAB_BUNDLESTATE);
+         mTabHost.setCurrentTabByTag((sss == null)? MyConstants.TAB_MAIN_KEYPAD : sss);
       }
 
       return v;
