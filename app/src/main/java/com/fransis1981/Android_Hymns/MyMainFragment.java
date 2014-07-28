@@ -143,6 +143,7 @@ public class MyMainFragment extends Fragment
             mSpinnerCategoria.setSelection(0);
             HymnsApplication.setCurrentInnario(selected_str);
             highlightLabelInnari();
+            mTabHost.setCurrentTabByTag(MyConstants.TAB_MAIN_KEYPAD);
          }
          currentInnariSelection = position;
       }
@@ -155,6 +156,7 @@ public class MyMainFragment extends Fragment
             mSpinnerInnari.setSelection(0);
             HymnsApplication.setCurrentInnario(cat);
             highlightLabelCategoria();
+            mTabHost.setCurrentTabByTag(MyConstants.TAB_MAIN_HYMNSLIST);
          }
       }
    }

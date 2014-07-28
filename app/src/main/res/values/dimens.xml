@@ -13,6 +13,8 @@
 
     <!-- Labels on main screen -->
     <dimen name="main_labels_textsize">18sp</dimen>
+
+    <!-- History button -->
     <dimen name="history_button_height">24dp</dimen>
     <dimen name="history_button_textsize">18sp</dimen>
     <dimen name="history_button_padding">6dp</dimen>
