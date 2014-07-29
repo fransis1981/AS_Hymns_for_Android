@@ -7,9 +7,12 @@
     <supports-screens
             android:anyDensity="true"
     />
-    <application android:label="@string/app_name" android:icon="@drawable/main_icon" android:name="HymnsApplication"
-            android:allowBackup="true" android:hardwareAccelerated="true"
-            android:theme="@style/HymnsAppMainStyle">
+    <application android:label="@string/app_name"
+                 android:icon="@drawable/main_icon"
+                 android:name="HymnsApplication"
+                 android:allowBackup="true"
+                 android:hardwareAccelerated="true"
+                 android:theme="@style/HymnsAppMainStyle">
 
         <activity android:name="MyActivity"
                   android:label="@string/app_name">
