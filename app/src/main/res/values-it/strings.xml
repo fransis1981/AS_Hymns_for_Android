@@ -4,7 +4,7 @@
 
     <string name="keypad_cancel_str">Cancella</string>
     <string name="coro_label">CORO</string>
-    <string name="label_innari">Innari:</string>
+    <string name="label_innari">Innario:</string>
     <string name="label_categoria">Categoria:</string>
     <string name="clear_history">Cancella cronologia</string>
     <string name="generic_categoria_spinner_label">&lt;Categoria&gt;</string>
