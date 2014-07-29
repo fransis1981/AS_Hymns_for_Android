@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Inni e Salmi Spirituali</string>
+
     <string name="keypad_cancel_str">Cancella</string>
     <string name="coro_label">CORO</string>
     <string name="label_innari">Innari:</string>

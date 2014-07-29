@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Inni e Salmi Spirituali</string>
+    <string name="app_name">Spiritual Hymns (lyrics)</string>
 
     <string name="keypad_cancel_str">Cancel</string>
     <string name="coro_label">CHORUS</string>
