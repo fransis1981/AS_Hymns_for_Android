@@ -58,6 +58,7 @@ public class Fragment_Keypad extends Fragment implements UpdateContentItf {
                   break;
 
                case NumKeyPadView.KEYPAD_OK:
+                  if (curr.length() == 0) break;
                   ((MyActivity) getActivity()).callback_HymnSelected(HymnsApplication.getCurrentInnario().getInno(mLastValidComposedNumber));
                   resetComposedNumber();
                   break;
