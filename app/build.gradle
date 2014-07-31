@@ -7,7 +7,7 @@ android {
         applicationId 'com.fransis1981.Android_Hymns'
         minSdkVersion 8
         targetSdkVersion 14
-        versionName "1.0"
+        versionName '1.1'
 
         applicationVariants.each { variant ->
             apk = variant.packageApplication.outputFile;
