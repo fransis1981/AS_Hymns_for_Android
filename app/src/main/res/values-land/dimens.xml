@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Other Dimensions -->
+    <dimen name="tab_host_default_height">36dp</dimen>
+
+    <!-- Labels on main screen -->
+    <dimen name="main_labels_textsize">18sp</dimen>
+
+    <!-- History button -->
+    <dimen name="history_button_height">20dp</dimen>
+    <dimen name="history_button_textsize">16sp</dimen>
+    <dimen name="history_button_padding">3dp</dimen>
+</resources>
