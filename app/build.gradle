@@ -5,15 +5,25 @@ android {
     buildToolsVersion '20.0.0'
     defaultConfig {
         applicationId 'com.fransis1981.Android_Hymns'
-        minSdkVersion 9
+        minSdkVersion 8
         targetSdkVersion 14
+        versionName "1.0"
+
+        applicationVariants.each { variant ->
+            apk = variant.packageApplication.outputFile;
+            newName = apk.name.replace(".apk", "-" + variant.name + "-v" + defaultConfig.versionName + ".apk");
+            variant.packageApplication.outputFile = new File(apk.parentFile, newName);
+        }
     }
+
     buildTypes {
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+
     productFlavors {
     }
 }
