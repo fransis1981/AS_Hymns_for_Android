@@ -6,7 +6,7 @@ package com.fransis1981.Android_Hymns;
 public final class MyConstants {
    public static final String LogTag_STR = "HYMNS";
    public static final String DB_NAME = "DB_Inni.s3db";
-   public static final int DB_VERSION = 6;            //Increment this number when a new DB file is going to be shipped.
+   public static final int DB_VERSION = 7;            //Increment this number when a new DB file is going to be shipped.
 
    //Database tables and fields naming and indexing
    public static final String TABLE_INNARI = "Innari";

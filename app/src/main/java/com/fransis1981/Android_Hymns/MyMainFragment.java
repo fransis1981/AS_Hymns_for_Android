@@ -143,7 +143,9 @@ public class MyMainFragment extends Fragment
             mSpinnerCategoria.setSelection(0);
             HymnsApplication.setCurrentInnario(selected_str);
             highlightLabelInnari();
-            mTabHost.setCurrentTabByTag(MyConstants.TAB_MAIN_KEYPAD);
+            String sss = mTabHost.getCurrentTabTag();
+            if (sss.equalsIgnoreCase(MyConstants.TAB_MAIN_RECENT) || sss.equalsIgnoreCase(MyConstants.TAB_MAIN_STARRED))
+                mTabHost.setCurrentTabByTag(MyConstants.TAB_MAIN_HYMNSLIST);
          }
          currentInnariSelection = position;
       }
