@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- This is the last customization file after importing the support resources for action bar. -->
+
+    <style name="HymnsAppMainStyle" parent="Theme.Hymns_actionbar_theme">
+
+        <item name="android:spinnerStyle">@style/Spinnerhymnsappmainstyle</item>
+        <item name="android:spinnerItemStyle">@style/main_spinners_style</item>
+
+    </style>
+
+</resources>

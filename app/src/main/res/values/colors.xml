@@ -6,7 +6,7 @@
     <color name="testo_strofe_color">#ff000d7c</color>
     <color name="strofe_gold_decor">#ffdecdad</color>
     <color name="strofaLabel_color">#ffdecdad</color>
-    <color name="strofaLabel_color_faded">#ff000d9a</color>
+    <color name="strofaLabel_color_faded">#99decdad</color>
 
     <color name="history_button_border_color">#ffdecdad</color>
 
@@ -34,5 +34,10 @@
     <color name="circleButton_text_inactive">#ffb0afb0</color>
 
     <color name="hymnsappmainstyle_color">@color/HymnTitle_soft_bg_start</color>
+
+    <!-- abc -> AppCompat related colors -->
+    <color name="abc_search_url_text_normal">#7fa87f</color>
+    <color name="abc_search_url_text_selected">@android:color/black</color>
+    <color name="abc_search_url_text_pressed">@android:color/black</color>
 
 </resources>

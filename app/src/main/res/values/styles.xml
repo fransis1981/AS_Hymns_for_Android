@@ -1,123 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
 <resources>
 
-    <style name="HymnTitle_style">
-        <item name="android:textSize">26sp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/HymnTitle_color</item>
-    </style>
-    <style name="HymnTitle_item_style" parent="HymnTitle_style">
-        <item name="android:textSize">22sp</item>
-        <item name="android:gravity">left</item>
-    </style>
-    <style name="item_titoloInnario_style">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">italic</item>
-        <item name="android:gravity">left</item>
-        <item name="android:textColor">@color/HymnTitle_subtitle_color</item>
-    </style>
-    <style name="HymnTitleNumber_style">
-        <item name="android:textSize">18sp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/HymnTitle_number_text_color</item>
+    <!-- Styles in here can be extended for customisation in your application. Each utilises
+         one of the Base styles. If Holo themes are available on the current platform version
+         they will be used instead of the compat styles. -->
+
+    <style name="Widget.AppCompat.ActionBar" parent="Widget.AppCompat.Base.ActionBar">
     </style>
 
-    <style name="strofaLabel_Style">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/strofaLabel_color</item>
-        <item name="android:paddingLeft">3dp</item>
-        <item name="android:paddingRight">15dp</item>
-        <item name="android:gravity">top</item>
-    </style>
-    <style name="strofaContentl_Style">
-        <item name="android:textSize">22sp</item>
-        <item name="android:textColor">#ffefeac9</item>
-        <item name="android:paddingLeft">0dp</item>
-        <item name="android:paddingRight">2dp</item>
-        <item name="android:paddingTop">0dp</item>
-        <item name="android:paddingBottom">3dp</item>
-        <item name="android:gravity">top</item>
+    <style name="Widget.AppCompat.Light.ActionBar" parent="Widget.AppCompat.Light.Base.ActionBar">
     </style>
 
-    <style name="composedNumberBox_Style">
-        <item name="android:layout_height">30sp</item>
-        <item name="android:layout_width">150dp</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">25sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:typeface">monospace</item>
-        <item name="android:background">@drawable/composed_number_box_bg</item>
-        <item name="android:padding">0dp</item>
-        <item name="android:layout_marginTop">2dp</item>
+    <style name="Widget.AppCompat.ActionBar.Solid"
+           parent="Widget.AppCompat.Base.ActionBar.Solid">
     </style>
 
-
-    <style name="main_spinners_style" parent="android:Widget.TextView.SpinnerItem">
-        <item name="android:textColor">@color/strofe_gold_decor</item>
-        <item name="android:padding">1dp</item>
-        <item name="android:textSize">17sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:gravity">center</item>
+    <style name="Widget.AppCompat.Light.ActionBar.Solid"
+           parent="Widget.AppCompat.Light.Base.ActionBar.Solid">
     </style>
 
-
-    <style name="spinners_labels_style_direct">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:textSize">@dimen/main_labels_textsize</item>
-    </style>
-    <style name="spinners_labels_style_inverse">
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:background">@color/main_spinners_bg</item>
-        <item name="android:textSize">@dimen/main_labels_textsize</item>
+    <style name="Widget.AppCompat.Light.ActionBar.Solid.Inverse"
+           parent="Widget.AppCompat.Light.Base.ActionBar.Solid.Inverse">
     </style>
 
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <!-- ~~~~~~~~~~~~ SUPPORT STYLES ~~~~~~~~~~ -->
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-
-    <style name="ActionBar.Transparent.Hymns_actionbar_theme" parent="@android:style/Widget.Holo.ActionBar">
-        <item name="android:background">@drawable/ab_transparent_hymns_actionbar_theme</item>
-        <item name="android:progressBarStyle">@style/ProgressBar.Hymns_actionbar_theme</item>
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title"
+           parent="TextAppearance.AppCompat.Widget.Base.ActionBar.Title">
     </style>
 
-    <style name="ProgressBar.Hymns_actionbar_theme" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
-        <item name="android:progressDrawable">@drawable/progress_horizontal_hymns_actionbar_theme</item>
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
+           parent="TextAppearance.AppCompat.Widget.Base.ActionBar.Subtitle">
     </style>
 
-
-    <style name="Spinnerhymnsappmainstyle" parent="android:Widget.Spinner">
-        <item name="android:background">@drawable/hymnsappmainstyle_spinner_background_holo_dark</item>
-        <item name="android:dropDownSelector">@drawable/hymnsappmainstyle_list_selector_holo_dark</item>
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
+           parent="TextAppearance.AppCompat.Widget.Base.ActionBar.Title.Inverse">
     </style>
 
-
-    <!--
-    <style name="SpinnerDropDownItemhymnsappmainstyle" parent="android:Widget.DropDownItem.Spinner">
-        <item name="android:checkMark">@drawable/hymnsappmainstyle_btn_radio_holo_dark</item>
-    </style>
-    -->
-
-    <style name="TabHymnsAppMainStyle">
-        <item name="android:gravity">center_horizontal</item>
-        <item name="android:paddingLeft">10dip</item>
-        <item name="android:paddingRight">10dip</item>
-        <item name="android:background">@drawable/hymnsappmainstyle_tab_indicator_holo</item>
-        <item name="android:layout_width">0dip</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:minWidth">80dip</item>
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse"
+           parent="TextAppearance.AppCompat.Widget.Base.ActionBar.Subtitle.Inverse">
     </style>
 
-    <style name="TabTextHymnsAppMainStyle">
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-        <!-- v14 <item name="android:textAllCaps">true</item> -->
-        <item name="android:ellipsize">marquee</item>
-        <item name="android:maxLines">2</item>
-        <item name="android:maxWidth">180dip</item>
+    <style name="Widget.AppCompat.ProgressBar.Horizontal"
+           parent="Widget.AppCompat.Base.ProgressBar.Horizontal">
+    </style>
+
+    <style name="Widget.AppCompat.ProgressBar"
+           parent="Widget.AppCompat.Base.ProgressBar">
+    </style>
+
+    <style name="Widget.AppCompat.ActionButton" parent="Widget.AppCompat.Base.ActionButton">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActionButton"
+           parent="Widget.AppCompat.Light.Base.ActionButton">
+    </style>
+
+    <style name="Widget.AppCompat.ActionButton.CloseMode"
+           parent="Widget.AppCompat.Base.ActionButton.CloseMode">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActionButton.CloseMode"
+           parent="Widget.AppCompat.Light.Base.ActionButton.CloseMode">
+    </style>
+
+    <style name="Widget.AppCompat.ActionButton.Overflow"
+           parent="Widget.AppCompat.Base.ActionButton.Overflow">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActionButton.Overflow"
+           parent="Widget.AppCompat.Light.Base.ActionButton.Overflow">
+    </style>
+
+    <style name="Widget.AppCompat.ActionBar.TabBar" parent="Widget.AppCompat.Base.ActionBar.TabBar">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActionBar.TabBar"
+           parent="Widget.AppCompat.Light.Base.ActionBar.TabBar">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActionBar.TabBar.Inverse"
+           parent="Widget.AppCompat.Light.Base.ActionBar.TabBar.Inverse"></style>
+
+    <style name="Widget.AppCompat.ActionBar.TabView"
+           parent="Widget.AppCompat.Base.ActionBar.TabView">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActionBar.TabView"
+           parent="Widget.AppCompat.Light.Base.ActionBar.TabView">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActionBar.TabView.Inverse"
+           parent="Widget.AppCompat.Light.Base.ActionBar.TabView.Inverse">
+    </style>
+
+    <style name="Widget.AppCompat.ActionBar.TabText"
+           parent="Widget.AppCompat.Base.ActionBar.TabText">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActionBar.TabText"
+           parent="Widget.AppCompat.Light.Base.ActionBar.TabText">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActionBar.TabText.Inverse"
+           parent="Widget.AppCompat.Light.Base.ActionBar.TabText.Inverse">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Menu"
+           parent="TextAppearance.AppCompat.Widget.Base.ActionBar.Menu">
+    </style>
+
+    <style name="Widget.AppCompat.ActionMode" parent="Widget.AppCompat.Base.ActionMode">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActionMode.Inverse"
+           parent="Widget.AppCompat.Light.Base.ActionMode.Inverse">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.ActionMode.Title"
+           parent="TextAppearance.AppCompat.Widget.Base.ActionMode.Title">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.ActionMode.Subtitle"
+           parent="TextAppearance.AppCompat.Widget.Base.ActionMode.Subtitle">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.ActionMode.Title.Inverse"
+           parent="TextAppearance.AppCompat.Widget.Base.ActionMode.Title.Inverse">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.ActionMode.Subtitle.Inverse"
+           parent="TextAppearance.AppCompat.Widget.Base.ActionMode.Subtitle.Inverse">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.DropDownItem"
+           parent="TextAppearance.AppCompat.Widget.Base.DropDownItem">
+    </style>
+
+    <style name="Widget.AppCompat.Spinner.DropDown.ActionBar"
+           parent="Widget.AppCompat.Base.Spinner">
+    </style>
+
+    <style name="Widget.AppCompat.Light.Spinner.DropDown.ActionBar"
+           parent="Widget.AppCompat.Light.Base.Spinner">
+    </style>
+
+    <style name="Widget.AppCompat.DropDownItem.Spinner"
+           parent="Widget.AppCompat.Base.DropDownItem.Spinner">
+    </style>
+    <style name="Widget.AppCompat.Light.DropDownItem.Spinner"
+           parent="Widget.AppCompat.Light.Base.DropDownItem.Spinner">
+    </style>
+
+    <style name="Widget.AppCompat.ListView.DropDown"
+           parent="Widget.AppCompat.Base.ListView.DropDown">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ListView.DropDown"
+           parent="Widget.AppCompat.Light.Base.ListView.DropDown">
+    </style>
+
+    <style name="TextAppearance.Widget.AppCompat.ExpandedMenu.Item"
+           parent="TextAppearance.Widget.AppCompat.Base.ExpandedMenu.Item">
+    </style>
+
+    <style name="Widget.AppCompat.ListPopupWindow" parent="Widget.AppCompat.Base.ListPopupWindow">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ListPopupWindow"
+           parent="Widget.AppCompat.Light.Base.ListPopupWindow">
+    </style>
+
+    <style name="Widget.AppCompat.PopupMenu" parent="Widget.AppCompat.Base.PopupMenu">
+    </style>
+
+    <style name="Widget.AppCompat.Light.PopupMenu"
+           parent="Widget.AppCompat.Light.Base.PopupMenu">
+    </style>
+
+    <style name="Widget.AppCompat.ListView.Menu" parent="Widget.AppCompat.Base.ListView.Menu">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.PopupMenu.Large"
+           parent="TextAppearance.AppCompat.Base.Widget.PopupMenu.Large">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.PopupMenu.Small"
+           parent="TextAppearance.AppCompat.Base.Widget.PopupMenu.Small">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Light.Widget.PopupMenu.Large"
+           parent="TextAppearance.AppCompat.Light.Base.Widget.PopupMenu.Large">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
+           parent="TextAppearance.AppCompat.Light.Base.Widget.PopupMenu.Small">
+    </style>
+
+    <style name="TextAppearance.AppCompat.SearchResult.Title"
+           parent="TextAppearance.AppCompat.Base.SearchResult.Title">
+    </style>
+
+    <style name="TextAppearance.AppCompat.SearchResult.Subtitle"
+           parent="TextAppearance.AppCompat.Base.SearchResult.Subtitle">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Light.SearchResult.Title"
+           parent="TextAppearance.AppCompat.Light.Base.SearchResult.Title">
+    </style>
+
+    <style name="TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+           parent="TextAppearance.AppCompat.Light.Base.SearchResult.Subtitle">
+    </style>
+
+    <style name="Widget.AppCompat.AutoCompleteTextView"
+           parent="Widget.AppCompat.Base.AutoCompleteTextView">
+    </style>
+
+    <style name="Widget.AppCompat.Light.AutoCompleteTextView"
+           parent="Widget.AppCompat.Light.Base.AutoCompleteTextView">
+    </style>
+
+    <style name="Widget.AppCompat.ActivityChooserView"
+           parent="Widget.AppCompat.Base.ActivityChooserView">
+    </style>
+
+    <style name="Widget.AppCompat.Light.ActivityChooserView"
+           parent="Widget.AppCompat.Light.Base.ActivityChooserView">
     </style>
 
 </resources>

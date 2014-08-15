@@ -11,4 +11,21 @@
     <dimen name="history_button_height">20dp</dimen>
     <dimen name="history_button_textsize">16sp</dimen>
     <dimen name="history_button_padding">3dp</dimen>
+
+    <!-- [abc] -> AppCompat related values -->
+    <!-- Default height of an action bar. -->
+    <dimen name="abc_action_bar_default_height">40dip</dimen>
+    <!-- Vertical padding around action bar icons. -->
+    <dimen name="abc_action_bar_icon_vertical_padding">4dip</dimen>
+    <!-- Text size for action bar titles -->
+    <dimen name="abc_action_bar_title_text_size">16dp</dimen>
+    <!-- Text size for action bar subtitles -->
+    <dimen name="abc_action_bar_subtitle_text_size">12dp</dimen>
+    <!-- Top margin for action bar subtitles -->
+    <dimen name="abc_action_bar_subtitle_top_margin">-2dp</dimen>
+    <!-- Bottom margin for action bar subtitles -->
+    <dimen name="abc_action_bar_subtitle_bottom_margin">4dip</dimen>
+    <!-- Size of the indeterminate Progress Bar -->
+    <dimen name="abc_action_bar_progress_bar_size">32dp</dimen>
+
 </resources>
