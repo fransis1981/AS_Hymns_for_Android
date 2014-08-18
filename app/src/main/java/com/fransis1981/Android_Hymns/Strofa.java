@@ -26,10 +26,11 @@ public class Strofa {
     * if this is not a chorus, value is increased by 1 and its string representation is assigned to label.
     */
    public Strofa(Cursor cursor, Integer _lastNumericLabel, Inno _parent) {
-      isChorus = cursor.getInt(MyConstants.INDEX_STROFE_ISCHORUS) != 0;
-      indiceStrofa = cursor.getShort(MyConstants.INDEX_STROFE_ID_NUM_STROFA);
-      contenuto = cursor.getString(MyConstants.INDEX_STROFE_TESTO).replaceAll("<br>", "\n");
-      label = isChorus?HymnsApplication.myResources.getString(R.string.coro_label):(++_lastNumericLabel).toString();
+       parentInno = _parent;
+       isChorus = cursor.getInt(MyConstants.INDEX_STROFE_ISCHORUS) != 0;
+       indiceStrofa = cursor.getShort(MyConstants.INDEX_STROFE_ID_NUM_STROFA);
+       contenuto = cursor.getString(MyConstants.INDEX_STROFE_TESTO).replaceAll("<br>", "\n");
+       label = isChorus?HymnsApplication.myResources.getString(R.string.coro_label):(++_lastNumericLabel).toString();
    }
 
 }

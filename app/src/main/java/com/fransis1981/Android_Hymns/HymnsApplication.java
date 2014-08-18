@@ -1,9 +1,13 @@
 package com.fransis1981.Android_Hymns;
 
 import android.app.Application;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -140,21 +144,53 @@ public class HymnsApplication extends Application {
 
    /*
     * This is a convenience method to get an ArrayList of titles for use with spinner's adapter.
-    * REMOVED:In first position an empty string is put to allow an empty item in the spinner when no innario is selected.
     */
    public static ArrayList<String> getInnariTitles() {
       ArrayList<String> ret = new ArrayList<String>();
-      //ret.add("");
       for (Innario i: innari)
          ret.add(i.toString());
       return ret;
    }
 
-   /*
-    * This method adds a hymn in the proper categorized Innario.
-    */
 
    public static StarManager getStarManager() { return starManager; }
    public static MRUManager getRecentsManager() { return recentsManager; }
+
+
+    //Helper class to clusterize clipboard related methods.
+    public static class ClipboardHelper {
+
+        /*
+         * This method copies a string text content into clipboard.
+         */
+        static void CopyText(Context c, String prm_label, String prm_text) {
+            if (Build.VERSION.SDK_INT < 11) {
+                android.text.ClipboardManager _cm = (android.text.ClipboardManager) c.getSystemService(Context.CLIPBOARD_SERVICE);
+                if (_cm != null) _cm.setText(prm_text);
+            } else {
+                android.content.ClipboardManager _cm = (android.content.ClipboardManager) c.getSystemService(Context.CLIPBOARD_SERVICE);
+                if (_cm != null) {
+                    ClipData _clip = ClipData.newPlainText(prm_label, prm_text);
+                    _cm.setPrimaryClip(_clip);
+                }
+            }
+        }
+
+        /*
+         * This method copies a strophe's text content into clipboard.
+         */
+        static void CopyStrophe(Context c, Strofa s) {
+            CopyText(c,
+                    s.getParent().getTitolo() + " [" + s.getLabel() + "]",
+                    s.getContenuto());
+        }
+
+        /*
+         * This method copies a hymn's full text content (including its title) into clipboard.
+         */
+        static void CopyHymn(Context c, Inno prm_hymn) {
+            CopyText(c, prm_hymn.getTitolo(), prm_hymn.getFullText(true));
+        }
+    }       //END public static class ClipboardHelper
 
 }

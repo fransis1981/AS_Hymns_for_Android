@@ -119,6 +119,21 @@ public class Inno {
 
    public boolean isStarred() { return mStarred; }
 
+    /*
+     * This method returns a single string containing the hymn full text.
+     * New line characters are used at breaklines.
+     * The parameter prm_withTitle controls wether the returned string contains the hymn title in the first line.
+     */
+    public String getFullText(boolean prm_withTitle) {
+        String _s = new String();
+        ArrayList<Strofa> _al = getListStrofe();
+
+        if (prm_withTitle) _s = getTitolo() + "\n";
+        for (Strofa strofa: _al)
+            _s = _s + strofa.getLabel() + ". " + strofa.getContenuto() + "\n";
+        return _s;
+    }
+
    void loadStrofeFromDB() {
       if (strofe_cori == null) {
          strofe_cori = new ArrayList<Strofa>();

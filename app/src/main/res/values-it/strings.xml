@@ -10,15 +10,21 @@
     <string name="clear_history">Cancella cronologia</string>
     <string name="generic_categoria_spinner_label">&lt;Categoria&gt;</string>
 
-    <string name="mnu_options_str">Preferenze…</string>
-    <string name="mnu_move_controls_on_the_right">Sposta i controlli a destra</string>
-    <string name="mnu_move_controls_on_the_left">Sposta i controlli a sinistra</string>
-
     <!-- Tab titles -->
     <string name="tab_keypad">Numeri</string>
     <string name="tab_list">Elenco</string>
     <string name="tab_recents">Recenti</string>
     <string name="tab_starred">Preferiti</string>
+
+    <!-- Tab titles -->
+    <string name="menu_hymn_copy_label">Copia</string>
+    <string name="menu_hymn_copy_strophe_label">Copia questa strofa</string>
+    <string name="menu_hymn_copy_full_label">Copia intero inno</string>
+
+    <string name="mnu_options_str">Preferenze…</string>
+    <string name="mnu_move_controls_on_the_right">Sposta i controlli a destra</string>
+    <string name="mnu_move_controls_on_the_left">Sposta i controlli a sinistra</string>
+
 
     <!-- abc -> AppCompat strings -->
     <string name="abc_action_mode_done" msgid="4076576682505996667">"Fine"</string>

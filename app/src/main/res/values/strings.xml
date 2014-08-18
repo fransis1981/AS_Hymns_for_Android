@@ -9,15 +9,21 @@
     <string name="clear_history">Clear History</string>
     <string name="generic_categoria_spinner_label">&lt;Category&gt;</string>
 
-    <string name="mnu_options_str">Settings…</string>
-    <string name="mnu_move_controls_on_the_right">Move controls on the right</string>
-    <string name="mnu_move_controls_on_the_left">Move controls on the left</string>
-
     <!-- Tab titles -->
     <string name="tab_keypad">Keypad</string>
     <string name="tab_list">List</string>
     <string name="tab_recents">Recents</string>
     <string name="tab_starred">Starred</string>
+
+    <!-- Menu titles -->
+    <string name="menu_hymn_copy_label">Copy</string>
+    <string name="menu_hymn_copy_strophe_label">Copy this strophe only</string>
+    <string name="menu_hymn_copy_full_label">Copy entire hymn</string>
+
+    <string name="mnu_options_str">Settings…</string>
+    <string name="mnu_move_controls_on_the_right">Move controls on the right</string>
+    <string name="mnu_move_controls_on_the_left">Move controls on the left</string>
+
 
     <!-- abc -> AppCompat strings -->
     <!-- Label for the "Done" button on the far left of action mode toolbars. -->

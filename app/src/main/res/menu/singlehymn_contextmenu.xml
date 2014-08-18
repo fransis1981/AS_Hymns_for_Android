@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:id="@+id/mnu_hymn_copy_strophe"
+              android:title="@string/menu_hymn_copy_strophe_label" />
+        <item android:id="@+id/mnu_hymn_copy_full"
+              android:title="@string/menu_hymn_copy_full_label" />
+</menu>
