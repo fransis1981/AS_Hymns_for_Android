@@ -74,11 +74,16 @@ public class Inno {
    public String getTitolo() {
       return titolo;
    }
+
    public int getNumero() { return numero; }
+
+    /* ATTENZIONE: questo oggetto può essere null se l'Inno è usato solo a fini di elaborazione intermedia. */
    public Innario getParentInnario() { return parentInnario; }
+
    public Categoria getCategoria() { return categoria; }
 
    public int getNumTotaleStrofe() { return numStrofe + numCori; }
+
 
    public Inno() {
       numStrofe = 0 ;

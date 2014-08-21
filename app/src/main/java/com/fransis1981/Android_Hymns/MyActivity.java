@@ -6,14 +6,20 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.WindowManager;
 
 
-public class MyActivity extends ActionBarActivity {
+public class MyActivity extends ActionBarActivity
+                        implements FTSWorkerFragment.TaskCallbacks {
+
+    //Tag string constant to associate with the FTS worker fragment.
+    private static final String TAG_FTSWORKER_FRAGMENT = "FTS_WORKER";
 
    //Using symbolic constants for menu items, as by convention.
    private static final int MENU_PREFERENCES = Menu.FIRST;
@@ -34,11 +40,16 @@ public class MyActivity extends ActionBarActivity {
 
     FragmentManager _fm;
     SingleHymn_Fragment singleHymn_fragment;
+    FTSWorkerFragment mFTSFragment;
 
     /** Called when the activity is first created.  */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        supportRequestWindowFeature(Window.FEATURE_PROGRESS);
+        //supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         _tabletMode = HymnsApplication.myResources.getBoolean(R.bool.isTableLayout);
         _fm = getSupportFragmentManager();
         currentHymnsContainerID = R.id.right_pane;
@@ -57,6 +68,15 @@ public class MyActivity extends ActionBarActivity {
                 singleHymn_fragment.showHymn(HymnsApplication.getCurrentInnario().getInno(1));
             }
 
+            ActionBar ab = getSupportActionBar();
+            setSupportProgressBarIndeterminate(false);
+
+            // If the Fragment is non-null, then it is currently being retained across a configuration change.
+            if (mFTSFragment == null) {
+                mFTSFragment = new FTSWorkerFragment();
+                _fm.beginTransaction().add(mFTSFragment, TAG_FTSWORKER_FRAGMENT).commit();
+            }
+
         } catch (Exception e) {
             Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE CREATNG MAIN ACTIVITY GUI...." + e.getMessage());
             e.printStackTrace();
@@ -69,6 +89,7 @@ public class MyActivity extends ActionBarActivity {
       //TODO: fintanto che questo metodo non viene di nuovo invocato; lo stesso vale per i singoli MenuItem.
       super.onCreateOptionsMenu(menu);
       //MenuItem mnu_pref = menu.add(0, MENU_PREFERENCES, Menu.NONE, R.string.mnu_move_controls_on_the_right);
+
       return true;
    }
 
@@ -92,7 +113,7 @@ public class MyActivity extends ActionBarActivity {
       }
    }
 
-    //TODO: this method is currently
+    //TODO: this method is currently unused (waiting for the implementation of dynamic fragments)
     private void deployFragments(boolean prm_controls_on_left) {
         //An additional check for tablet mode.
         if (!_tabletMode) return;
@@ -116,5 +137,29 @@ public class MyActivity extends ActionBarActivity {
         _ft = _fm.beginTransaction();
         _ft.replace(currentHymnsContainerID, _shf).commit();
         _shf.showHymn(HymnsApplication.getCurrentInnario().getInno(1));
+    }
+
+    /**********************************************************************
+                    FTS Worker Fragment callbacks
+     **********************************************************************/
+    @Override
+    public void onPreExecute() {
+        setSupportProgressBarVisibility(true);
+    }
+
+    @Override
+    public void onProgressUpdate(int val) {
+        //Maximum displayable action bar progress value is 9999.
+        setSupportProgress(val);
+    }
+
+    @Override
+    public void onCancelled() {
+
+    }
+
+    @Override
+    public void onPostExecute() {
+        setSupportProgressBarVisibility(false);
     }
 }

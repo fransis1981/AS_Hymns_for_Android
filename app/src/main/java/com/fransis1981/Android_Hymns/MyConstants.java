@@ -4,6 +4,13 @@ package com.fransis1981.Android_Hymns;
  * Created by francesco.vitullo on 27/01/14.
  */
 public final class MyConstants {
+    //Titoli dei tab nella pagina principale
+    public static final String TAB_MAIN_KEYPAD = HymnsApplication.myResources.getString(R.string.tab_keypad);
+    public static final String TAB_MAIN_HYMNSLIST = HymnsApplication.myResources.getString(R.string.tab_list);
+    public static final String TAB_MAIN_RECENT = HymnsApplication.myResources.getString(R.string.tab_recents);
+    public static final String TAB_MAIN_STARRED = HymnsApplication.myResources.getString(R.string.tab_starred);
+
+   //DB related constants
    public static final String LogTag_STR = "HYMNS";
    public static final String DB_NAME = "DB_Inni.s3db";
    public static final int DB_VERSION = 7;            //Increment this number when a new DB file is going to be shipped.
@@ -41,13 +48,19 @@ public final class MyConstants {
    public static final int INDEX_STROFE_TESTO = 2;
    public static final int INDEX_STROFE_ISCHORUS = 3;
 
-   //Titoli dei tab nella pagina principale
-   public static final String TAB_MAIN_KEYPAD = HymnsApplication.myResources.getString(R.string.tab_keypad);
-   public static final String TAB_MAIN_HYMNSLIST = HymnsApplication.myResources.getString(R.string.tab_list);
-   public static final String TAB_MAIN_RECENT = HymnsApplication.myResources.getString(R.string.tab_recents);
-   public static final String TAB_MAIN_STARRED = HymnsApplication.myResources.getString(R.string.tab_starred);
+   public static final String FTS_TABLE = "hymns_FTS";
 
    //Queries
    public static final String QUERY_SELECT_INNARI = "SELECT * FROM Innari";
+
+   public static final String QUERY_DROP_FTS_TABLE = "DROP TABLE IF EXISTS " + FTS_TABLE;
+
+   //NOTE: The column "Testo" in the FTS table is the union of all strofe for a given hymn.
+   public static final String QUERY_CREATE_FTS_TABLE =
+           "CREATE VIRTUAL TABLE " + FTS_TABLE + " USING fts3 (" +
+           FIELD_INNI_ID_INNARIO + ", " +
+           FIELD_INNI_ID + ", " +
+           FIELD_INNI_TITOLO + ", " +
+           FIELD_STROFE_TESTO + ")";
 
 }
