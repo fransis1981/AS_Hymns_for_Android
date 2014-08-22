@@ -122,7 +122,6 @@ public class FTSWorkerFragment extends Fragment {
             }
             catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity(), "FTS worker:" + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
 
