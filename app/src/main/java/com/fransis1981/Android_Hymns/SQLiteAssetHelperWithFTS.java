@@ -40,8 +40,7 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
         mDB =  super.getReadableDatabase();
 
         //Store FTS availability status...
-        //TODO...
-
+        mFTSAvailable = isTableExisting(MyConstants.FTS_TABLE);
 
         return mDB;
     }
@@ -53,6 +52,22 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
         return mFTSAvailable;
     }
 
+    /*
+     * If you pass fals as parameter, the FTS gets actually dropped; if you pass true, the FTS
+     * table must actually exist, otherwise an exception is thrown.
+     */
+    public void setFTSAvailable(boolean _av) throws IllegalStateException {
+        if (!_av) {
+            mDB.execSQL(MyConstants.QUERY_DROP_FTS_TABLE);
+            mFTSAvailable = false;
+        }
+        else {
+            mFTSAvailable = isTableExisting(MyConstants.FTS_TABLE);
+            if (!mFTSAvailable)
+                throw new IllegalStateException("At this point, FTS table was expected to exist.");
+        }
+    }
+
     private boolean isTableExisting(String tableName) {
         boolean _wasClosed = mDB == null || !mDB.isOpen();
         if(_wasClosed) mDB = getReadableDatabase();
@@ -62,13 +77,18 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
                 "SELECT DISTINCT tbl_name FROM sqlite_master WHERE tbl_name = ?", sss
             );
 
+        boolean ret;
+
         if(cursor != null) {
             if(cursor.getCount() > 0) {
                 cursor.close();
-                return true;
+                ret = true;
             }
             cursor.close();
         }
-        return false;
+        ret = false;
+
+        if (_wasClosed) mDB.close();
+        return ret;
     }
 }

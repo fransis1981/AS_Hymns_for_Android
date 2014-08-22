@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +36,9 @@ public class MyMainFragment extends Fragment
       }
    }
 
-   Context _context;
+    private static final String TAG_FTSWORKER_FRAGMENT = "FTS_WORKER";
+
+    Context _context;
    MainScreenPagerAdapter mPagerAdapter;
    ViewPager mViewPager;
    TabHost mTabHost;
@@ -60,7 +63,7 @@ public class MyMainFragment extends Fragment
          initUI(v);
 
       } catch (Exception e) {
-         Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE CREATNG MAIN FRAGMENT GUI...." + e.getMessage());
+         Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE CREATING MAIN FRAGMENT GUI...." + e.getMessage());
          e.printStackTrace();
       }
 

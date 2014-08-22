@@ -18,7 +18,7 @@ import java.util.HashMap;
  * Current HymnBook XML version is stored in SharedPreferences and is checked to determine the
  * source for loading hymns (persistent storage or XML).
  */
-public class HymnBooksHelper extends SQLiteAssetHelper {
+public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
    private Context mContext;
    static HymnBooksHelper singleton;
 
@@ -26,16 +26,28 @@ public class HymnBooksHelper extends SQLiteAssetHelper {
    HashMap<Inno.Categoria, Innario> categoricalInnari;    //One separate Innario for each category.
    SQLiteDatabase db;
 
+    public static final int PROGRESSBAR_MAX_VALUE = 9999;
+
+    /*
+     *     https://code.google.com/p/android/issues/detail?id=22564
+     *     Costanti e variabili per supportare la conservazione dello stato del processo di background per la
+     *     costruzione della tabella FTS. Questo è un work-around ad un bug della support-library di Google.
+     */
+    public static final int FTS_BUILDING_STOPPED = -1;
+    public int FTS_Building_CurrentProgressValue = FTS_BUILDING_STOPPED;
+    public Cursor FTS_Building_Cursor;
+
+    private int mTotalNumberOfHymns = 0;    //Actual value is calculated upon initialization
+    /* ---------------------------------------------------------------------- */
+
    HymnBooksHelper(Context context) {
-      super(context, MyConstants.DB_NAME, null, MyConstants.DB_VERSION);
-      setForcedUpgrade();
+      super(context, MyConstants.DB_NAME, null, null, MyConstants.DB_VERSION);
+      //setForcedUpgrade();
       mContext = context;
       singleton = this;
 
    }
    public static HymnBooksHelper me() { return singleton; }
-
-   //TODO: possibly implement threads to improve performance.
 
    private void initDB() {
       if (db == null) db = getReadableDatabase();
@@ -59,10 +71,16 @@ public class HymnBooksHelper extends SQLiteAssetHelper {
                                 c.getString(MyConstants.INDEX_INNARI_TITOLO),
                                 c.getString(MyConstants.INDEX_INNARI_ID)));
          //Log.i(MyConstants.LogTag_STR, "LETTO DAL DB: " + c.getString(MyConstants.INDEX_INNARI_TITOLO));
+
+          mTotalNumberOfHymns += c.getInt(MyConstants.INDEX_INNARI_NUM_INNI);
       }
       c.close();
       //HymnsApplication.tl.addSplit("All hymnbooks acquired by means of the cursor (Dialer Lists and base Inno objects).");
    }
+
+    public int getTotalNumberOfHymns() {
+        return mTotalNumberOfHymns;
+    }
 
    /*
     * Questo metodo popola l'array globale degli innari;

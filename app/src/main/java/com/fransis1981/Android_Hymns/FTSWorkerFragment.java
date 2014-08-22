@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.widget.Toast;
 
 /**
  * Created by Fransis on 21/08/2014.
@@ -47,7 +48,8 @@ public class FTSWorkerFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // Retain this fragment across configuration changes.
-        setRetainInstance(true);
+        // Currently commented because: https://code.google.com/p/android/issues/detail?id=22564
+        //setRetainInstance(true);
 
         // Create and execute the background task.
         mTask = new FTSTask();
@@ -60,6 +62,7 @@ public class FTSWorkerFragment extends Fragment {
      */
     @Override
     public void onDetach() {
+        mTask.cancel(true);
         super.onDetach();
         mCallbacks = null;
     }
@@ -85,8 +88,19 @@ public class FTSWorkerFragment extends Fragment {
          */
         @Override
         protected Void doInBackground(HymnBooksHelper... prm) {
-            for (int i = -1; !isCancelled() && i < 10000; i+=50) {
-                SystemClock.sleep(10);
+            publishProgress(prm[0].FTS_Building_CurrentProgressValue);
+            int _increment = (HymnBooksHelper.PROGRESSBAR_MAX_VALUE + HymnBooksHelper.FTS_BUILDING_STOPPED) / prm[0].getTotalNumberOfHymns();
+
+
+            //TODO: Open the FTS builder cursor if it not yet.
+
+            if (prm[0].FTS_Building_CurrentProgressValue > HymnBooksHelper.FTS_BUILDING_STOPPED) {
+                //TODO: FTS build previously started; should fix cursor and progress value to one step back.
+            }
+
+            for (int i = prm[0].FTS_Building_CurrentProgressValue; !isCancelled() && i < 10000; i+=50) {
+                SystemClock.sleep(30);
+                prm[0].FTS_Building_CurrentProgressValue = i;
                 publishProgress(i);
             }
             return null;
@@ -101,8 +115,14 @@ public class FTSWorkerFragment extends Fragment {
 
         @Override
         protected void onCancelled() {
-            if (mCallbacks != null) {
-                mCallbacks.onCancelled();
+            try {
+                if (mCallbacks != null) {
+                    mCallbacks.onCancelled();
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "FTS worker:" + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
 

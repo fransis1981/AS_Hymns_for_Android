@@ -48,7 +48,6 @@ public class MyActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
 
         supportRequestWindowFeature(Window.FEATURE_PROGRESS);
-        //supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         _tabletMode = HymnsApplication.myResources.getBoolean(R.bool.isTableLayout);
         _fm = getSupportFragmentManager();
@@ -72,8 +71,11 @@ public class MyActivity extends ActionBarActivity
             setSupportProgressBarIndeterminate(false);
 
             // If the Fragment is non-null, then it is currently being retained across a configuration change.
+            // IMPORTANT NOTE: Currently I am not retaining instance because of the issue (see inline comment below).
+            //TODO: Actually create FTS wroker fragment if FTS table does not exist.
             if (mFTSFragment == null) {
                 mFTSFragment = new FTSWorkerFragment();
+                mFTSFragment.setTargetFragment(mFTSFragment, 0);    //[QUICK-FIX_API<13-NOT WORKING]: https://code.google.com/p/android/issues/detail?id=22564
                 _fm.beginTransaction().add(mFTSFragment, TAG_FTSWORKER_FRAGMENT).commit();
             }
 
@@ -112,6 +114,16 @@ public class MyActivity extends ActionBarActivity
           SingleHymn_Activity.startIntentWithHymn(this, inno);
       }
    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //Removing fragment and reattaching it if activity gets re-created.
+        //The reason of this: https://code.google.com/p/android/issues/detail?id=22564
+        if (mFTSFragment != null)
+            _fm.beginTransaction().remove(mFTSFragment).commit();
+
+        super.onSaveInstanceState(outState);
+    }
 
     //TODO: this method is currently unused (waiting for the implementation of dynamic fragments)
     private void deployFragments(boolean prm_controls_on_left) {
