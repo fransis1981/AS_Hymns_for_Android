@@ -71,15 +71,6 @@ public class MyActivity extends ActionBarActivity
             ActionBar ab = getSupportActionBar();
             setSupportProgressBarIndeterminate(false);
 
-            // If the Fragment is non-null, then it is currently being retained across a configuration change.
-            // IMPORTANT NOTE: Currently I am not retaining instance because of the issue (see inline comment below).
-            //TODO: Actually create FTS wroker fragment if FTS table does not exist.
-            if (HymnBooksHelper.me().isBuildingFTS() || !HymnBooksHelper.me().isFTSAvailable())
-            if (mFTSFragment == null) {
-                mFTSFragment = new FTSWorkerFragment();
-                mFTSFragment.setTargetFragment(mFTSFragment, 0);    //[QUICK-FIX_API<13-NOT WORKING]: https://code.google.com/p/android/issues/detail?id=22564
-                _fm.beginTransaction().add(mFTSFragment, TAG_FTSWORKER_FRAGMENT).commit();
-            }
 
         } catch (Exception e) {
             Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE CREATNG MAIN ACTIVITY GUI...." + e.getMessage());
@@ -87,7 +78,21 @@ public class MyActivity extends ActionBarActivity
         }
    }
 
-   @Override
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // If the Fragment is non-null, then it is currently being retained across a configuration change.
+        // IMPORTANT NOTE: Currently I am not retaining instance because of the issue (see inline comment below).
+        if (HymnBooksHelper.me().isBuildingFTS() || !HymnBooksHelper.me().isFTSAvailable())
+            if (mFTSFragment == null) {
+                mFTSFragment = new FTSWorkerFragment();
+                mFTSFragment.setTargetFragment(mFTSFragment, 0);    //[QUICK-FIX_API<13-NOT WORKING]: https://code.google.com/p/android/issues/detail?id=22564
+                _fm.beginTransaction().add(mFTSFragment, TAG_FTSWORKER_FRAGMENT).commit();
+            }
+    }
+
+    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       //TODO: se mi conservo a livello di classe il puntatore al menu, posso cambiarne il contenuto a run-time
       //TODO: fintanto che questo metodo non viene di nuovo invocato; lo stesso vale per i singoli MenuItem.
@@ -118,7 +123,7 @@ public class MyActivity extends ActionBarActivity
    }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onPause() {
         //Removing fragment and reattaching it if activity gets re-created.
         //The reason of this: https://code.google.com/p/android/issues/detail?id=22564
         if (mFTSFragment != null) {
@@ -127,8 +132,9 @@ public class MyActivity extends ActionBarActivity
             mFTSFragment = null;
         }
 
-        super.onSaveInstanceState(outState);
+        super.onPause();
     }
+
 
     //TODO: this method is currently unused (waiting for the implementation of dynamic fragments)
     private void deployFragments(boolean prm_controls_on_left) {
