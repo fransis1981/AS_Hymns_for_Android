@@ -25,6 +25,9 @@
     <string name="mnu_move_controls_on_the_right">Sposta i controlli a destra</string>
     <string name="mnu_move_controls_on_the_left">Sposta i controlli a sinistra</string>
 
+    <string name="fts_worker_cancel_reason0">Problema nella creazuibe della tabella indice; contattare il programmatore.</string>
+    <string name="fts_worker_cancel_reason1">Impossibile creare la tabella FTS; controllare la memoria disponibile.</string>
+
 
     <!-- abc -> AppCompat strings -->
     <string name="abc_action_mode_done" msgid="4076576682505996667">"Fine"</string>

@@ -130,7 +130,7 @@ public class Inno {
      * The parameter prm_withTitle controls wether the returned string contains the hymn title in the first line.
      */
     public String getFullText(boolean prm_withTitle) {
-        String _s = new String();
+        String _s = "";
         ArrayList<Strofa> _al = getListStrofe();
 
         if (prm_withTitle) _s = getTitolo() + "\n";

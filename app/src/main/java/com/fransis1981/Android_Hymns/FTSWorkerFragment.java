@@ -1,11 +1,12 @@
 package com.fransis1981.Android_Hymns;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
+import android.util.Log;
 
 /**
  * Created by Fransis on 21/08/2014.
@@ -20,12 +21,14 @@ public class FTSWorkerFragment extends Fragment {
     static interface TaskCallbacks {
         void onPreExecute();
         void onProgressUpdate(int val);
-        void onCancelled();
+        void onCancelled(String reason);
         void onPostExecute();
     }
 
     private TaskCallbacks mCallbacks;
-    private FTSTask mTask;
+    FTSTask mTask;
+
+    private String mCancelReason = "";
 
     /**
      * Hold a reference to the parent Activity so we can report the
@@ -72,7 +75,7 @@ public class FTSWorkerFragment extends Fragment {
      * method in case they are invoked after the Activity's and
      * Fragment's onDestroy() method have been called.
      */
-    private class FTSTask extends AsyncTask<HymnBooksHelper, Integer, Void> {
+    class FTSTask extends AsyncTask<HymnBooksHelper, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -88,21 +91,64 @@ public class FTSWorkerFragment extends Fragment {
          */
         @Override
         protected Void doInBackground(HymnBooksHelper... prm) {
-            publishProgress(prm[0].FTS_Building_CurrentProgressValue);
-            int _increment = (HymnBooksHelper.PROGRESSBAR_MAX_VALUE + HymnBooksHelper.FTS_BUILDING_STOPPED) / prm[0].getTotalNumberOfHymns();
-
-
-            //TODO: Open the FTS builder cursor if it not yet.
-
-            if (prm[0].FTS_Building_CurrentProgressValue > HymnBooksHelper.FTS_BUILDING_STOPPED) {
-                //TODO: FTS build previously started; should fix cursor and progress value to one step back.
+            //Wait for the DB to be available
+            while (prm[0] == null || prm[0].db == null || !prm[0].db.isOpen()) {
+                SystemClock.sleep(2);
             }
 
-            for (int i = prm[0].FTS_Building_CurrentProgressValue; !isCancelled() && i < 10000; i+=50) {
-                SystemClock.sleep(30);
-                prm[0].FTS_Building_CurrentProgressValue = i;
-                publishProgress(i);
+            int _increment = HymnBooksHelper.PROGRESSBAR_MAX_VALUE / prm[0].getTotalNumberOfHymns();
+
+            //Checking previous execution and progress status
+            if (prm[0].isBuildingFTS()) {
+                //FTS build previously started; should fix cursor and progress value to one step back,
+                //remembering to delete for safety current pointed hymn's ID.
+                if (prm[0].FTS_Building_Cursor.getPosition() > -1) {
+                    int _tempid = prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_ID);
+                    prm[0].deleteHymnFromFTS_byID(_tempid);
+                    prm[0].FTS_Building_Cursor.moveToPrevious();
+                }
+
+                publishProgress(prm[0].FTS_Building_CurrentProgressValue =
+                        ((prm[0].FTS_Building_Cursor.getPosition()+1)*_increment));
             }
+            else {
+                if (!prm[0].createFTSTable()) {
+                    mCancelReason = HymnsApplication.myResources.getString(R.string.fts_worker_cancel_reason1);
+                    this.cancel(true);
+                }
+                prm[0].FTS_Building_Cursor = prm[0].db.query(MyConstants.TABLE_INNI, null, null, null, null, null, null);
+                prm[0].FTS_Building_CurrentProgressValue = 0;
+            }
+
+            ContentValues _cv = new ContentValues();
+            int _successful_inserts = 0;
+            while (prm[0].FTS_Building_Cursor.moveToNext() && !isCancelled()) {
+                _cv.clear();
+                Inno _inno = new Inno(prm[0].FTS_Building_Cursor, null);
+                _cv.put(MyConstants.FIELD_INNARI_ID, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNARI_ID));
+                _cv.put(MyConstants.FIELD_INNI_ID, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_ID));
+                _cv.put(MyConstants.FIELD_INNI_TITOLO, _inno.getTitolo());
+                _cv.put(MyConstants.FIELD_STROFE_TESTO, _inno.getFullText(false));
+                if (prm[0].db.insert(MyConstants.FTS_TABLE, null, _cv) == -1) {
+                    Log.e(MyConstants.LogTag_STR, "Error while FTS indexing: " + _inno.getTitolo());
+                }
+                else {
+                    _successful_inserts++;
+                }
+
+                publishProgress(prm[0].FTS_Building_CurrentProgressValue += _increment);
+            }
+            //break everything and do not change any status-relevant fields if this task was cancelled.
+            if (MyConstants.DEBUG)
+                Log.i(MyConstants.LogTag_STR, String.format("Correctly inserted %d rows into FTS table.", _successful_inserts));
+            if (isCancelled()) return null;
+
+            prm[0].FTS_Building_Cursor.close();
+            prm[0].FTS_Building_Cursor = null;
+            prm[0].FTS_Building_CurrentProgressValue = HymnBooksHelper.FTS_BUILDING_STOPPED;
+            prm[0].setFTSAvailable(true);
+            if (MyConstants.DEBUG)
+                Log.i(MyConstants.LogTag_STR, "Completed FTS table generation.");
             return null;
         }
 
@@ -117,7 +163,7 @@ public class FTSWorkerFragment extends Fragment {
         protected void onCancelled() {
             try {
                 if (mCallbacks != null) {
-                    mCallbacks.onCancelled();
+                    mCallbacks.onCancelled(mCancelReason);
                 }
             }
             catch (Exception e) {

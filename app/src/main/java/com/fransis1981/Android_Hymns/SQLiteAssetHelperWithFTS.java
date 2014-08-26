@@ -12,8 +12,8 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
  */
 public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
 
-    SQLiteDatabase mDB;
-    boolean mFTSAvailable;
+    protected SQLiteDatabase mDB;
+    protected boolean mFTSAvailable;
 
     public SQLiteAssetHelperWithFTS(Context context, String name, String storageDirectory, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, storageDirectory, factory, version);
@@ -27,7 +27,7 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
         //will manage its creation from scratch.
         try {
             if (newVersion != oldVersion)
-                db.execSQL(MyConstants.QUERY_DROP_FTS_TABLE);
+                setFTSAvailable(false);
         }
         catch (Exception e) {
             Log.e(MyConstants.LogTag_STR, "onUpgrade(): error while dropping FTS table. Check DB R/W properties.");
@@ -40,9 +40,29 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
         mDB =  super.getReadableDatabase();
 
         //Store FTS availability status...
+        if (MyConstants.DEBUG) setFTSAvailable(false);
         mFTSAvailable = isTableExisting(MyConstants.FTS_TABLE);
-
         return mDB;
+    }
+
+    /*
+     * This method simply checks if the DB is not read only and executes the statement for creating a new
+     * FTS table; the return value is the success status of the creation.
+     */
+    public synchronized boolean createFTSTable() {
+        boolean ret = false;
+        try {
+            if (!mDB.isReadOnly())
+                mDB.execSQL(MyConstants.QUERY_CREATE_FTS_TABLE);
+            else throw new Exception("DB was read-only; cannot create a new FTS table.");
+            ret = true;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            ret = false;
+        }
+
+        return ret;
     }
 
     /*
@@ -53,13 +73,14 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
     }
 
     /*
-     * If you pass fals as parameter, the FTS gets actually dropped; if you pass true, the FTS
+     * If you pass false as parameter, the FTS gets actually dropped; if you pass true, the FTS
      * table must actually exist, otherwise an exception is thrown.
      */
-    public void setFTSAvailable(boolean _av) throws IllegalStateException {
+    public synchronized void setFTSAvailable(boolean _av) throws IllegalStateException {
         if (!_av) {
             mDB.execSQL(MyConstants.QUERY_DROP_FTS_TABLE);
             mFTSAvailable = false;
+            if (MyConstants.DEBUG) Log.w(MyConstants.LogTag_STR, "Hymns FTS table JUST DROPPED!");
         }
         else {
             mFTSAvailable = isTableExisting(MyConstants.FTS_TABLE);
@@ -74,19 +95,15 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
 
         String[] sss = new String[] {tableName};
         Cursor cursor = mDB.rawQuery(
-                "SELECT DISTINCT tbl_name FROM sqlite_master WHERE tbl_name = ?", sss
+                "SELECT DISTINCT name FROM sqlite_master WHERE name = ?",  sss
             );
 
-        boolean ret;
+        boolean ret = false;
 
         if(cursor != null) {
-            if(cursor.getCount() > 0) {
-                cursor.close();
-                ret = true;
-            }
+            if(cursor.getCount() > 0) ret = true;
             cursor.close();
         }
-        ret = false;
 
         if (_wasClosed) mDB.close();
         return ret;

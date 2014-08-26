@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 
 public class MyActivity extends ActionBarActivity
@@ -73,6 +74,7 @@ public class MyActivity extends ActionBarActivity
             // If the Fragment is non-null, then it is currently being retained across a configuration change.
             // IMPORTANT NOTE: Currently I am not retaining instance because of the issue (see inline comment below).
             //TODO: Actually create FTS wroker fragment if FTS table does not exist.
+            if (HymnBooksHelper.me().isBuildingFTS() || !HymnBooksHelper.me().isFTSAvailable())
             if (mFTSFragment == null) {
                 mFTSFragment = new FTSWorkerFragment();
                 mFTSFragment.setTargetFragment(mFTSFragment, 0);    //[QUICK-FIX_API<13-NOT WORKING]: https://code.google.com/p/android/issues/detail?id=22564
@@ -119,8 +121,11 @@ public class MyActivity extends ActionBarActivity
     protected void onSaveInstanceState(Bundle outState) {
         //Removing fragment and reattaching it if activity gets re-created.
         //The reason of this: https://code.google.com/p/android/issues/detail?id=22564
-        if (mFTSFragment != null)
+        if (mFTSFragment != null) {
+            mFTSFragment.mTask.cancel(true);
             _fm.beginTransaction().remove(mFTSFragment).commit();
+            mFTSFragment = null;
+        }
 
         super.onSaveInstanceState(outState);
     }
@@ -166,8 +171,10 @@ public class MyActivity extends ActionBarActivity
     }
 
     @Override
-    public void onCancelled() {
-
+    public void onCancelled(String reason) {
+        String txt = reason.length() == 0 ?
+                      HymnsApplication.myResources.getString(R.string.fts_worker_cancel_reason0) : reason;
+        Toast.makeText(this, txt, Toast.LENGTH_LONG).show();
     }
 
     @Override

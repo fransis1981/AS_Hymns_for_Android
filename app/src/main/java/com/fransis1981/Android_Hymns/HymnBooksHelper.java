@@ -49,13 +49,26 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
    }
    public static HymnBooksHelper me() { return singleton; }
 
-   private void initDB() {
+    @Override
+    public synchronized SQLiteDatabase getReadableDatabase() {
+        super.getReadableDatabase();
+        return mDB;
+    }
+
+    private void initDB() {
       if (db == null) db = getReadableDatabase();
    }
 
    private void initDataStructures() {
       initDB();
-      //HymnsApplication.tl.addSplit("Preliminary operations upon DB.");
+       if (mFTSAvailable) {
+           //Just to be paranoid...
+           Cursor _c = mDB.query(MyConstants.FTS_TABLE, null, null, null, null, null, null);
+           if (_c.getCount() != getTotalNumberOfHymns())
+               setFTSAvailable(false);
+       }
+
+       //HymnsApplication.tl.addSplit("Preliminary operations upon DB.");
 
       //Si prepara la struttura per gli innari di categoria
       categoricalInnari = new HashMap<Inno.Categoria, Innario>();
@@ -113,4 +126,43 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
       return null;
    }
 
+
+    /*
+     * If you pass false as parameter, the FTS gets actually dropped; if you pass true, the FTS
+     * table must actually exist, otherwise an exception is thrown.
+     * In addition to super implementation, FTS table is checked against the proper number of hymns.
+     * Infact, if an external object calls this method it is expected that it also takes care of
+     * properly creating the FTS table.
+     */
+    @Override
+    public void setFTSAvailable(boolean _av) throws IllegalStateException {
+        super.setFTSAvailable(_av);
+        if (_av && !checkFTSTableConsistency()) {
+            mFTSAvailable = false;
+            throw new IllegalStateException("FTS table does not contain the correct number of hymns.");
+        }
+        mFTSAvailable = _av;
+    }
+
+    public boolean isBuildingFTS() {
+        return  (FTS_Building_CurrentProgressValue > HymnBooksHelper.FTS_BUILDING_STOPPED)
+                && (FTS_Building_Cursor != null);
+    }
+
+    /*
+         * check that the FTS table contains the right number of rows
+         * (it could not because of some evil race condition or app termination).
+         * This method returns true if the FTS table appears to have the correct number of hymns.
+        */
+    private boolean checkFTSTableConsistency() {
+        Cursor _c = db.query(MyConstants.FTS_TABLE, null, null, null, null, null, null);
+        return _c.getCount() == getTotalNumberOfHymns();
+    }
+
+    public int deleteHymnFromFTS_byID(int _id) {
+        return
+        db.delete(MyConstants.FTS_TABLE, MyConstants.FIELD_INNI_ID_INNARIO + "=?", new String[] {String.valueOf(_id)});
+    }
+
+    //TODO: Search query format -> SELECT * FROM FTS_TABLE WHERE FTS_TABLE MATCH 'word NEAR/2 word'
 }

@@ -24,6 +24,8 @@
     <string name="mnu_move_controls_on_the_right">Move controls on the right</string>
     <string name="mnu_move_controls_on_the_left">Move controls on the left</string>
 
+    <string name="fts_worker_cancel_reason0">Issue encountered while creating index table; please contact the programmer.</string>
+    <string name="fts_worker_cancel_reason1">It was not possible to create FTS table; check for free memory.</string>
 
     <!-- abc -> AppCompat strings -->
     <!-- Label for the "Done" button on the far left of action mode toolbars. -->
