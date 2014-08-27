@@ -58,4 +58,7 @@
     <!-- Description of the choose target button in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] -->
     <string name="abc_shareactionprovider_share_with">Share with</string>
 
+
+    <string name="mnu_search_label">Search</string>
+
 </resources>

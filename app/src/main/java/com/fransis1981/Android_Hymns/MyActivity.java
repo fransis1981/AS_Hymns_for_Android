@@ -2,12 +2,15 @@ package com.fransis1981.Android_Hymns;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +41,8 @@ public class MyActivity extends ActionBarActivity
 
     //This field is populated upon creation to reduce boiler plate code.
     private boolean _tabletMode;
+
+    private MenuItem mSearchMenuItem;
 
     FragmentManager _fm;
     SingleHymn_Fragment singleHymn_fragment;
@@ -87,20 +92,28 @@ public class MyActivity extends ActionBarActivity
         if (HymnBooksHelper.me().isBuildingFTS() || !HymnBooksHelper.me().isFTSAvailable())
             if (mFTSFragment == null) {
                 mFTSFragment = new FTSWorkerFragment();
-                mFTSFragment.setTargetFragment(mFTSFragment, 0);    //[QUICK-FIX_API<13-NOT WORKING]: https://code.google.com/p/android/issues/detail?id=22564
+                //mFTSFragment.setTargetFragment(mFTSFragment, 0);    //[QUICK-FIX_API<13-NOT WORKING]: https://code.google.com/p/android/issues/detail?id=22564
                 _fm.beginTransaction().add(mFTSFragment, TAG_FTSWORKER_FRAGMENT).commit();
             }
     }
 
     @Override
-   public boolean onCreateOptionsMenu(Menu menu) {
-      //TODO: se mi conservo a livello di classe il puntatore al menu, posso cambiarne il contenuto a run-time
-      //TODO: fintanto che questo metodo non viene di nuovo invocato; lo stesso vale per i singoli MenuItem.
-      super.onCreateOptionsMenu(menu);
-      //MenuItem mnu_pref = menu.add(0, MENU_PREFERENCES, Menu.NONE, R.string.mnu_move_controls_on_the_right);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
-      return true;
-   }
+        mSearchMenuItem = menu.findItem(R.id.mnu_search);
+        mSearchMenuItem.setVisible(HymnBooksHelper.me().isFTSAvailable());
+        SearchView _sv;
+        if (Build.VERSION.SDK_INT < 11) {
+            _sv = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
+        }
+        else {
+            _sv = (SearchView) mSearchMenuItem.getActionView();
+        }
+
+        return true;
+    }
 
 
    @Override
@@ -186,5 +199,6 @@ public class MyActivity extends ActionBarActivity
     @Override
     public void onPostExecute() {
         setSupportProgressBarVisibility(false);
+        supportInvalidateOptionsMenu();
     }
 }

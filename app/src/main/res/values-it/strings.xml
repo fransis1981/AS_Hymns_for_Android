@@ -44,4 +44,7 @@
     <string name="abc_shareactionprovider_share_with_application" msgid="7165123711973476752">"Condividi con %s"</string>
     <string name="abc_shareactionprovider_share_with" msgid="3421042268587513524">"Condividi con"</string>
 
+
+    <string name="mnu_search_label">Cerca</string>
+
 </resources>
