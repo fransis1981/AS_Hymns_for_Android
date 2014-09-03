@@ -2,6 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
            xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Inni e Salmi Spirituali</string>
+    <string name="singlehymn_activitylabel">Cantico Singolo</string>
 
     <string name="keypad_cancel_str">Cancella</string>
     <string name="coro_label">CORO</string>
@@ -46,5 +47,9 @@
 
 
     <string name="mnu_search_label">Cerca</string>
+    <string name="search_hint">Cerca titolo o contenuto...</string>
+    <string name="title_activity_search">Cerca</string>
+    <string name="global_search_desc_label">Cerca inni per titolo o contenuto.</string>
+    <string name="voice_search_prompt">Pronuncia qualche parola da cercare negli inni</string>
 
 </resources>

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Spiritual Hymns (lyrics)</string>
 
+    <string name="app_name">Spiritual Hymns (lyrics)</string>
+    <string name="singlehymn_activitylabel">Single Hymns</string>
     <string name="keypad_cancel_str">Cancel</string>
     <string name="coro_label">CHORUS</string>
     <string name="label_innari">Hymnbook:</string>
     <string name="label_categoria">Category:</string>
     <string name="clear_history">Clear History</string>
-    <string name="generic_categoria_spinner_label">&lt;Category&gt;</string>
+    <string name="generic_categoria_spinner_label">&lt;Category></string>
 
     <!-- Tab titles -->
     <string name="tab_keypad">Keypad</string>
@@ -19,11 +20,9 @@
     <string name="menu_hymn_copy_label">Copy</string>
     <string name="menu_hymn_copy_strophe_label">Copy this strophe only</string>
     <string name="menu_hymn_copy_full_label">Copy entire hymn</string>
-
     <string name="mnu_options_str">Settings…</string>
     <string name="mnu_move_controls_on_the_right">Move controls on the right</string>
     <string name="mnu_move_controls_on_the_left">Move controls on the left</string>
-
     <string name="fts_worker_cancel_reason0">Issue encountered while creating index table; please contact the programmer.</string>
     <string name="fts_worker_cancel_reason1">It was not possible to create FTS table; check for free memory.</string>
 
@@ -57,8 +56,10 @@
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <!-- Description of the choose target button in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] -->
     <string name="abc_shareactionprovider_share_with">Share with</string>
-
-
     <string name="mnu_search_label">Search</string>
+    <string name="search_hint">Search title or content...</string>
+    <string name="title_activity_search">Search</string>
+    <string name="global_search_desc_label">Search hymns titles or verse content.</string>
+    <string name="voice_search_prompt">Pronounce some words to search hymns</string>
 
 </resources>

@@ -128,7 +128,8 @@ public class FTSWorkerFragment extends Fragment {
                 _cv.put(MyConstants.FIELD_INNARI_ID, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNARI_ID));
                 _cv.put(MyConstants.FIELD_INNI_ID, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_ID));
                 _cv.put(MyConstants.FIELD_INNI_TITOLO, _inno.getTitolo());
-                _cv.put(MyConstants.FIELD_STROFE_TESTO, _inno.getFullText(false));
+                _cv.put(MyConstants.FIELD_STROFE_TESTO,
+                            HymnBooksHelper.normalizeAndLower(_inno.getFullText(false)));
                 if (prm[0].db.insert(MyConstants.FTS_TABLE, null, _cv) == -1) {
                     Log.e(MyConstants.LogTag_STR, "Error while FTS indexing: " + _inno.getTitolo());
                 }

@@ -1,5 +1,6 @@
 package com.fransis1981.Android_Hymns;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -104,13 +105,16 @@ public class MyActivity extends ActionBarActivity
 
         mSearchMenuItem = menu.findItem(R.id.mnu_search);
         mSearchMenuItem.setVisible(HymnBooksHelper.me().isFTSAvailable());
-        SearchView _sv;
-        if (Build.VERSION.SDK_INT < 11) {
+        android.support.v7.widget.SearchView _sv;
+        SearchManager _sm = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        //if (Build.VERSION.SDK_INT < 11) {
             _sv = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
-        }
-        else {
-            _sv = (SearchView) mSearchMenuItem.getActionView();
-        }
+        //}
+        //else {
+        //    _sv = (SearchView) mSearchMenuItem.getActionView();
+       // }
+        //TODO: how to implement here backward compatibility?
+        _sv.setSearchableInfo(_sm.getSearchableInfo(getComponentName()));
 
         return true;
     }

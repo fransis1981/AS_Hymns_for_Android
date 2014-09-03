@@ -3,13 +3,17 @@ package com.fransis1981.Android_Hymns;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 /**
  * Created by Fransis on 18/04/14 11.38.
@@ -144,6 +148,9 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
         mFTSAvailable = _av;
     }
 
+    /*
+     * Returns true if fields state shows that FTS table is still under building process.
+     */
     public boolean isBuildingFTS() {
         return  (FTS_Building_CurrentProgressValue > HymnBooksHelper.FTS_BUILDING_STOPPED)
                 && (FTS_Building_Cursor != null);
@@ -164,5 +171,57 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
         db.delete(MyConstants.FTS_TABLE, MyConstants.FIELD_INNI_ID_INNARIO + "=?", new String[] {String.valueOf(_id)});
     }
 
-    //TODO: Search query format -> SELECT * FROM FTS_TABLE WHERE FTS_TABLE MATCH 'word NEAR/2 word'
+    //Search query format: [SELECT * FROM FTS_TABLE WHERE FTS_TABLE MATCH 'word1* ... wordN*' LIMIT #]
+    /*
+     * Starting from a user-entered query text (passed in the prm_query parameter), this method:
+     *  - Normalizes special characters
+     *  - Add wildcards in between words
+     *  - NOT DONE -> Builds actual query using the NEAR/2 FTS keyword [Wildcards should be enough]
+     *  - Runs the query, limiting the number of results to the value passed in the prm_limit parameter
+     *    (if this parameter is greater than 0)
+     */
+    Cursor doFullTextSearch(String prm_query, int prm_limit) {
+        if (TextUtils.isEmpty(prm_query))
+            throw new IllegalArgumentException("Invoked doFullTextSearch() with an empty query string.");
+        String _sql_qry = MyConstants.QUERY_FTS_SEARCH + "'" + normalizeAndLower(prm_query) + "'"
+                                + ((prm_limit == 0)? "" : String.format(" LIMIT %d", prm_limit));
+
+        Cursor _c = db.rawQuery(_sql_qry, null);
+        if (_c != null && !_c.moveToFirst()) {
+            _c.close();
+            _c = null;
+        }
+
+        return _c;
+    }
+
+    /*
+     * For each word in the query parameter, this method adds a wildcard.
+     */
+    private String addWildcards(String query) {
+        if (TextUtils.isEmpty(query)) return query;
+
+        final StringBuilder builder = new StringBuilder();
+        final String[] splits = TextUtils.split(query, " ");
+        for (String split : splits)
+            builder.append(split).append("* ");
+
+        return builder.toString().trim();
+    }
+
+
+    /*
+     * Static helper method for preparing text either for FTS indexing and for building search query.
+     */
+    public static String normalizeAndLower(String str) {
+        String normalized;
+        if (Build.VERSION.SDK_INT < 9) {
+            normalized = SupportNormalizer.unaccentify(str);
+        }
+        else {
+            normalized = Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+        }
+        return normalized.toLowerCase();
+    }
+
 }

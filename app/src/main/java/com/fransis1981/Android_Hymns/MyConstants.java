@@ -57,7 +57,7 @@ public final class MyConstants {
 
    public static final String QUERY_DROP_FTS_TABLE = "DROP TABLE IF EXISTS " + FTS_TABLE;
 
-   //NOTE: The column "Testo" in the FTS table is the union of all strophes for a given hymn.
+   //NOTE: The column "Testo" in the FTS table is the union of all verses for a given hymn.
    public static final String QUERY_CREATE_FTS_TABLE =
            "CREATE VIRTUAL TABLE " + FTS_TABLE + " USING fts3 (" +
            FIELD_INNI_ID_INNARIO + ", " +
@@ -65,4 +65,8 @@ public final class MyConstants {
            FIELD_INNI_TITOLO + ", " +
            FIELD_STROFE_TESTO + ")";
 
+    //Template for a search query on the FTS table; append 'search keywords' to this string.
+    //If needed, append also the LIMIT # statement at the end for limiting the number of results.
+    public static final String QUERY_FTS_SEARCH = "SELECT * FROM " + FTS_TABLE +
+            " WHERE " + FTS_TABLE + " MATCH ";
 }

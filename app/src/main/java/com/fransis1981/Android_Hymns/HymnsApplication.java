@@ -111,6 +111,10 @@ public class HymnsApplication extends Application {
        }
        //tl.addSplit("Prepared star manager with preferences.");
        //tl.dumpToLog();
+
+        Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("A Ti, Deus Trino, poderoso Deus,|br/|Que estás presente sempre junto aos teus|br/|A ministrar as bênçãos lá dos céus,"));
+        Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("Santo Deus, vem inflamar|br/|Nossos débeis corações;|br/|Vem as trevas dissipar,|br/|Livra-nos de imperfeições."));
+        Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("Queres a glória divina alcançar?|br/|Dá teu coração a Jesus."));
     }
 
    public static void setCurrentInnario(Innario _innario) {
