@@ -1,11 +1,13 @@
 package com.fransis1981.Android_Hymns;
 
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
@@ -17,14 +19,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 
-public class MyActivity extends ActionBarActivity
-                        implements FTSWorkerFragment.TaskCallbacks {
+public class MyActivity extends ActionBarActivity {
 
     //Tag string constant to associate with the FTS worker fragment.
-    private static final String TAG_FTSWORKER_FRAGMENT = "FTS_WORKER";
+    //private static final String TAG_FTSWORKER_FRAGMENT = "FTS_WORKER";
 
    //Using symbolic constants for menu items, as by convention.
    private static final int MENU_PREFERENCES = Menu.FIRST;
@@ -47,7 +47,9 @@ public class MyActivity extends ActionBarActivity
 
     FragmentManager _fm;
     SingleHymn_Fragment singleHymn_fragment;
-    FTSWorkerFragment mFTSFragment;
+    //FTSWorkerFragment mFTSFragment;
+    boolean mFTSServiceWorking = false;
+    ProgressReceiver mReceiver;
 
     /** Called when the activity is first created.  */
     @Override
@@ -85,20 +87,6 @@ public class MyActivity extends ActionBarActivity
    }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        // If the Fragment is non-null, then it is currently being retained across a configuration change.
-        // IMPORTANT NOTE: Currently I am not retaining instance because of the issue (see inline comment below).
-        if (HymnBooksHelper.me().isBuildingFTS() || !HymnBooksHelper.me().isFTSAvailable())
-            if (mFTSFragment == null) {
-                mFTSFragment = new FTSWorkerFragment();
-                //mFTSFragment.setTargetFragment(mFTSFragment, 0);    //[QUICK-FIX_API<13-NOT WORKING]: https://code.google.com/p/android/issues/detail?id=22564
-                _fm.beginTransaction().add(mFTSFragment, TAG_FTSWORKER_FRAGMENT).commit();
-            }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -108,39 +96,57 @@ public class MyActivity extends ActionBarActivity
         android.support.v7.widget.SearchView _sv;
         SearchManager _sm = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         //if (Build.VERSION.SDK_INT < 11) {
-            _sv = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
+        _sv = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
         //}
         //else {
         //    _sv = (SearchView) mSearchMenuItem.getActionView();
-       // }
-        //TODO: how to implement here backward compatibility?
+        // }
+        //How to implement here backward compatibility? -> Using min API level 8.
         _sv.setSearchableInfo(_sm.getSearchableInfo(getComponentName()));
+
+        menu.findItem(R.id.mnu_system_search_options).setIntent(new Intent(Settings.ACTION_SEARCH_SETTINGS));
 
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        // If the Fragment is non-null, then it is currently being retained across a configuration change.
+        // IMPORTANT NOTE: Currently I am not retaining instance because of the issue (see inline comment below).
+        /*
+        if (HymnBooksHelper.me().isBuildingFTS() || !HymnBooksHelper.me().isFTSAvailable())
+            if (mFTSFragment == null) {
+                mFTSFragment = new FTSWorkerFragment();
+                //mFTSFragment.setTargetFragment(mFTSFragment, 0);    //[QUICK-FIX_API<13-NOT WORKING]: https://code.google.com/p/android/issues/detail?id=22564
+                _fm.beginTransaction().add(mFTSFragment, TAG_FTSWORKER_FRAGMENT).commit();
+            }
+        */
 
-   @Override
-   protected void onDestroy() {
-      //Saving preferences (recents and starred) before the activity gets destroyed
-      HymnsApplication.getRecentsManager().saveToPreferences(this);
-      HymnsApplication.getStarManager().saveToPreferences(this);
-      super.onDestroy();
-   }
+        //TODO: Migrating FTS indexing to service implementation; start service only if FTS is still needed
+        if (!HymnBooksHelper.me().isFTSAvailable() && !mFTSServiceWorking) {
+            manageFTSServiceStart();
+        }
+        else if (!HymnBooksHelper.me().isFTSAvailable() && mFTSServiceWorking) {
+            try {
+                if (mReceiver == null) mReceiver = new ProgressReceiver();
+                IntentFilter _ifilter = new IntentFilter(FTSIndexerSvc.FTS_INDEX_PROGRESSED);
+                registerReceiver(mReceiver, _ifilter);
+            }
+            catch (Exception e) {
+                Log.e(MyConstants.LogTag_STR, "BAD ISSUE while registering the progress receiver: " + e.getMessage());
+            }
+        }
+        else if (HymnBooksHelper.me().isFTSAvailable() && mFTSServiceWorking) {
+            manageFTSServiceEnd();
+        }
 
-   //This method is used to discriminate between different kinds of layouts.
-   void callback_HymnSelected(Inno inno) {
-      if (_tabletMode) {
-          singleHymn_fragment.showHymn(inno);
-          getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-      }
-      else {
-          SingleHymn_Activity.startIntentWithHymn(this, inno);
-      }
-   }
+        super.onResume();
+    }
+
 
     @Override
     protected void onPause() {
+        /*
         //Removing fragment and reattaching it if activity gets re-created.
         //The reason of this: https://code.google.com/p/android/issues/detail?id=22564
         if (mFTSFragment != null) {
@@ -148,10 +154,61 @@ public class MyActivity extends ActionBarActivity
             _fm.beginTransaction().remove(mFTSFragment).commit();
             mFTSFragment = null;
         }
+        */
+        if (mFTSServiceWorking) {
+            try {
+                unregisterReceiver(mReceiver);
+                mReceiver = null;
+            }
+            catch (Exception e) {
+            }
+        }
 
         super.onPause();
     }
 
+
+    @Override
+    protected void onDestroy() {
+        //Saving preferences (recents and starred) before the activity gets destroyed
+        HymnsApplication.getRecentsManager().saveToPreferences(this);
+        HymnsApplication.getStarManager().saveToPreferences(this);
+        super.onDestroy();
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String _qry = intent.getStringExtra(SearchManager.QUERY);
+            //TODO: process Cursor and display results
+        }
+        else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            String _s = intent.getDataString();
+            if (_s.length() > 0) {
+                if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "Intercepted an ACTION_VIEW from suggestion with data " + _s);
+                try {
+                    callback_HymnSelected(Inno.findInnoById(Long.parseLong(_s)));
+                }
+                catch (InnoNotFoundException infe) {
+                    Log.e(MyConstants.LogTag_STR, "Suggestion clicked: inno not found exception ---> this should be impossible.");
+                }
+            }
+        }
+    }
+
+
+    //This method is used to discriminate between different kinds of layouts.
+    void callback_HymnSelected(Inno inno) {
+        if (_tabletMode) {
+            singleHymn_fragment.showHymn(inno);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        else {
+            SingleHymn_Activity.startIntentWithHymn(this, inno);
+        }
+    }
 
     //TODO: this method is currently unused (waiting for the implementation of dynamic fragments)
     private void deployFragments(boolean prm_controls_on_left) {
@@ -167,7 +224,7 @@ public class MyActivity extends ActionBarActivity
         if (prm_controls_on_left) {
             currentHymnsContainerID = R.id.right_pane;
             _ft = _fm.beginTransaction();
-            _ft.replace(R.id.left_pane, _mmf).commit();
+            _ft.replace(R.id.left_pane, _mmf).commit();     //TODO: should use add instead of replace?
         }
         else {
             currentHymnsContainerID = R.id.left_pane;
@@ -179,9 +236,41 @@ public class MyActivity extends ActionBarActivity
         _shf.showHymn(HymnsApplication.getCurrentInnario().getInno(1));
     }
 
+    /*
+     * Helper method for taking all actions related to FTS Indexer service start
+     * (e.g., preparing receiver, progress bar, etc.)
+     */
+    void manageFTSServiceStart() {
+        setSupportProgressBarVisibility(true);
+        mFTSServiceWorking = true;
+        IntentFilter _ifilter = new IntentFilter(FTSIndexerSvc.FTS_INDEX_PROGRESSED);
+        mReceiver = new ProgressReceiver();
+        registerReceiver(mReceiver, _ifilter);
+        startService(new Intent(this, FTSIndexerSvc.class));
+    }
+
+    /*
+     * Helper method for taking all actions related to FTS Indexer service end. (Note that the service self stops).
+     * (e.g., nulling the receiver, hide progress bar, etc.)
+     */
+    void manageFTSServiceEnd() {
+        setSupportProgressBarVisibility(false);
+        mFTSServiceWorking = false;
+        if (!mSearchMenuItem.isVisible()) supportInvalidateOptionsMenu();
+        try {
+            unregisterReceiver(mReceiver);
+            mReceiver = null;
+        }
+        catch (Exception e) {
+            Log.e(MyConstants.LogTag_STR, "MyActivity.manageFTSServiceEnd(): " + e.getMessage());
+        }
+    }
+
+
     /**********************************************************************
                     FTS Worker Fragment callbacks
      **********************************************************************/
+    /*
     @Override
     public void onPreExecute() {
         setSupportProgressBarVisibility(true);
@@ -205,4 +294,22 @@ public class MyActivity extends ActionBarActivity
         setSupportProgressBarVisibility(false);
         supportInvalidateOptionsMenu();
     }
+    */
+
+    /*
+     * This class is used to receive progress broadcast updates from the FTS indexer service.
+     */
+    private class ProgressReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int _val = intent.getIntExtra(FTSIndexerSvc.FTS_PROGRESS_EXTRA_VAL, 0);
+            if (_val == FTSIndexerSvc.FTS_PROGRESS_COMPLETE) {
+                manageFTSServiceEnd();
+            }
+            else {
+                setSupportProgress(_val);
+            }
+        }
+    }       //END class ProgressReceiver
+
 }

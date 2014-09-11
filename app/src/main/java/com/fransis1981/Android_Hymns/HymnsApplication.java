@@ -112,9 +112,9 @@ public class HymnsApplication extends Application {
        //tl.addSplit("Prepared star manager with preferences.");
        //tl.dumpToLog();
 
-        Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("A Ti, Deus Trino, poderoso Deus,|br/|Que estás presente sempre junto aos teus|br/|A ministrar as bênçãos lá dos céus,"));
-        Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("Santo Deus, vem inflamar|br/|Nossos débeis corações;|br/|Vem as trevas dissipar,|br/|Livra-nos de imperfeições."));
-        Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("Queres a glória divina alcançar?|br/|Dá teu coração a Jesus."));
+        //Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("A Ti, Deus Trino, poderoso Deus,|br/|Que estás presente sempre junto aos teus|br/|A ministrar as bênçãos lá dos céus,"));
+        //Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("Santo Deus, vem inflamar|br/|Nossos débeis corações;|br/|Vem as trevas dissipar,|br/|Livra-nos de imperfeições."));
+        //Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("Queres a glória divina alcançar?|br/|Dá teu coração a Jesus."));
     }
 
    public static void setCurrentInnario(Innario _innario) {
@@ -137,6 +137,7 @@ public class HymnsApplication extends Application {
 
    /*
     * Questo metodo restituisce l'oggetto Innario opportuno conoscendone il titolo.
+    * Ritorna NULL se nessun innario corrisponde al criterio specificato.
     */
    public static Innario getInnarioByTitle(String _title) {
       for (Innario i: innari) {
@@ -145,6 +146,16 @@ public class HymnsApplication extends Application {
       return null;
    }
 
+    /*
+     * Questo metodo restituisce l'oggetto Innario opportuno conoscendone l'ID nel database.
+     * Ritorna NULL se nessun innario corrisponde al criterio specificato.
+     */
+    public static Innario getInnarioByID(String prm_id) {
+        for (Innario i: innari) {
+            if (i.getId().equals(prm_id)) return i;
+        }
+        return null;
+    }
 
    /*
     * This is a convenience method to get an ArrayList of titles for use with spinner's adapter.

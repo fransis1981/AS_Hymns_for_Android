@@ -56,7 +56,7 @@ public class Inno {
    public static class InnoComparator implements Comparator<Inno> {
       @Override
       public int compare(Inno lhs, Inno rhs) {
-         return ((Integer) lhs.numero).compareTo((Integer) rhs.numero);
+         return ((Integer) lhs.numero).compareTo(rhs.numero);
       }
    }
 
@@ -71,11 +71,13 @@ public class Inno {
 
    boolean mStarred;
 
-   public String getTitolo() {
+    public String getTitolo() {
       return titolo;
    }
 
-   public int getNumero() { return numero; }
+    public int getId() { return id_inno; }
+
+    public int getNumero() { return numero; }
 
     /* ATTENZIONE: questo oggetto può essere null se l'Inno è usato solo a fini di elaborazione intermedia. */
    public Innario getParentInnario() { return parentInnario; }
@@ -102,6 +104,26 @@ public class Inno {
       titolo = cursor.getString(MyConstants.INDEX_INNI_TITOLO);
       categoria = Categoria.parseInt(cursor.getInt(MyConstants.INDEX_INNI_CATEGORIA));
    }
+
+
+    /*
+     * This method checks if the requested hymn is already available at the application level, otherwise
+     * it builds a new object with NULL parent and returns it.
+     */
+    public static Inno findInnoById(long prm_id_inno) throws InnoNotFoundException {
+        Cursor c = HymnBooksHelper.me().db.query(MyConstants.TABLE_INNI, null,
+                MyConstants.FIELD_INNI_ID + "=?", new String[]{String.valueOf(prm_id_inno)},
+                null, null, null);
+        if (c.getCount() == 0) throw new InnoNotFoundException();
+        c.moveToNext();
+        Innario _innario = HymnsApplication.getInnarioByID(c.getString(MyConstants.INDEX_INNI_ID_INNARIO));
+        if (_innario != null) {
+            return _innario.getInno(c.getInt(MyConstants.INDEX_INNI_NUMERO));
+        }
+        else {
+            return new Inno(c, null);
+        }
+    }
 
    public ArrayList<Strofa> getListStrofe() {
       //Load strofe on demand by means of a cursor
@@ -155,4 +177,5 @@ public class Inno {
          c.close();
       }
    }
+
 }

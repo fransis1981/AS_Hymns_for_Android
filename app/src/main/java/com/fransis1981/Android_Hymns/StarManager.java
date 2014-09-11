@@ -50,6 +50,10 @@ public class StarManager {
 
    //Already passing in the pointer to the starred hymn.
    public void addStarred(Inno inno) {
+       for (Inno i: mStarredList) {
+           //Check if a hymn with the same ID has already been starred.
+           if (i.getId() == inno.getId()) return;
+       }
       mStarredList.add(inno);
       Collections.sort(mStarredList, new Inno.InnoComparator());
       raiseStarredItemsChangedEvent();

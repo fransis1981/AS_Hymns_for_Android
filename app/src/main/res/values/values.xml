@@ -5,7 +5,7 @@
 
     <integer name="default_recents_capacity">20</integer>
 
-    <integer name="default_suggestions_capacity">5</integer>
+    <integer name="default_suggestions_capacity">10</integer>
 
     <!-- Values related to keypad and circle buttons -->
     <integer name="circleButton_BlurRadius">6</integer>

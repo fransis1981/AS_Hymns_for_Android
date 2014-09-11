@@ -156,6 +156,7 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
                 && (FTS_Building_Cursor != null);
     }
 
+
     /*
          * check that the FTS table contains the right number of rows
          * (it could not because of some evil race condition or app termination).
@@ -166,10 +167,12 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
         return _c.getCount() == getTotalNumberOfHymns();
     }
 
+
     public int deleteHymnFromFTS_byID(int _id) {
         return
         db.delete(MyConstants.FTS_TABLE, MyConstants.FIELD_INNI_ID_INNARIO + "=?", new String[] {String.valueOf(_id)});
     }
+
 
     //Search query format: [SELECT * FROM FTS_TABLE WHERE FTS_TABLE MATCH 'word1* ... wordN*' LIMIT #]
     /*
@@ -183,7 +186,7 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
     Cursor doFullTextSearch(String prm_query, int prm_limit) {
         if (TextUtils.isEmpty(prm_query))
             throw new IllegalArgumentException("Invoked doFullTextSearch() with an empty query string.");
-        String _sql_qry = MyConstants.QUERY_FTS_SEARCH + "'" + normalizeAndLower(prm_query) + "'"
+        String _sql_qry = MyConstants.QUERY_FTS_SEARCH + "'" + addFinalWildcard(normalizeAndLower(prm_query)) + "'"
                                 + ((prm_limit == 0)? "" : String.format(" LIMIT %d", prm_limit));
 
         Cursor _c = db.rawQuery(_sql_qry, null);
@@ -207,6 +210,15 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
             builder.append(split).append("* ");
 
         return builder.toString().trim();
+    }
+
+
+    /*
+     * This method adds a single wildcard at the end of the query parameter.
+     */
+    private String addFinalWildcard(String query) {
+        if (TextUtils.isEmpty(query)) return query;
+        return query + "*";
     }
 
 
