@@ -47,8 +47,8 @@
 
 
     <string name="mnu_search_label">Cerca</string>
-    <string name="search_hint">Cerca titolo o contenuto...</string>
-    <string name="title_activity_search">Cerca</string>
+    <string name="search_hint">Cerca titolo/strofe...</string>
+    <string name="title_activity_search">Risultati della ricerca...</string>
     <string name="global_search_desc_label">Cerca inni per titolo o contenuto.</string>
     <string name="voice_search_prompt">Pronuncia qualche parola da cercare negli inni</string>
     <string name="mnu_quicksearchoptions_label">Opzioni di ricerca con Google</string>

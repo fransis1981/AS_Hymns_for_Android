@@ -47,7 +47,6 @@ public class MyActivity extends ActionBarActivity {
 
     FragmentManager _fm;
     SingleHymn_Fragment singleHymn_fragment;
-    //FTSWorkerFragment mFTSFragment;
     boolean mFTSServiceWorking = false;
     ProgressReceiver mReceiver;
 
@@ -95,13 +94,7 @@ public class MyActivity extends ActionBarActivity {
         mSearchMenuItem.setVisible(HymnBooksHelper.me().isFTSAvailable());
         android.support.v7.widget.SearchView _sv;
         SearchManager _sm = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        //if (Build.VERSION.SDK_INT < 11) {
         _sv = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
-        //}
-        //else {
-        //    _sv = (SearchView) mSearchMenuItem.getActionView();
-        // }
-        //How to implement here backward compatibility? -> Using min API level 8.
         _sv.setSearchableInfo(_sm.getSearchableInfo(getComponentName()));
 
         menu.findItem(R.id.mnu_system_search_options).setIntent(new Intent(Settings.ACTION_SEARCH_SETTINGS));
@@ -111,18 +104,6 @@ public class MyActivity extends ActionBarActivity {
 
     @Override
     protected void onResume() {
-        // If the Fragment is non-null, then it is currently being retained across a configuration change.
-        // IMPORTANT NOTE: Currently I am not retaining instance because of the issue (see inline comment below).
-        /*
-        if (HymnBooksHelper.me().isBuildingFTS() || !HymnBooksHelper.me().isFTSAvailable())
-            if (mFTSFragment == null) {
-                mFTSFragment = new FTSWorkerFragment();
-                //mFTSFragment.setTargetFragment(mFTSFragment, 0);    //[QUICK-FIX_API<13-NOT WORKING]: https://code.google.com/p/android/issues/detail?id=22564
-                _fm.beginTransaction().add(mFTSFragment, TAG_FTSWORKER_FRAGMENT).commit();
-            }
-        */
-
-        //TODO: Migrating FTS indexing to service implementation; start service only if FTS is still needed
         if (!HymnBooksHelper.me().isFTSAvailable() && !mFTSServiceWorking) {
             manageFTSServiceStart();
         }
@@ -146,15 +127,6 @@ public class MyActivity extends ActionBarActivity {
 
     @Override
     protected void onPause() {
-        /*
-        //Removing fragment and reattaching it if activity gets re-created.
-        //The reason of this: https://code.google.com/p/android/issues/detail?id=22564
-        if (mFTSFragment != null) {
-            mFTSFragment.mTask.cancel(true);
-            _fm.beginTransaction().remove(mFTSFragment).commit();
-            mFTSFragment = null;
-        }
-        */
         if (mFTSServiceWorking) {
             try {
                 unregisterReceiver(mReceiver);
@@ -182,7 +154,7 @@ public class MyActivity extends ActionBarActivity {
         super.onNewIntent(intent);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String _qry = intent.getStringExtra(SearchManager.QUERY);
-            //TODO: process Cursor and display results
+            startActivity(new Intent(this, SearchActivity.class).putExtra(SearchManager.QUERY, _qry));
         }
         else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             String _s = intent.getDataString();
@@ -268,37 +240,8 @@ public class MyActivity extends ActionBarActivity {
 
 
     /**********************************************************************
-                    FTS Worker Fragment callbacks
+     Class used to receive progress broadcast updates from the FTS indexer service.
      **********************************************************************/
-    /*
-    @Override
-    public void onPreExecute() {
-        setSupportProgressBarVisibility(true);
-    }
-
-    @Override
-    public void onProgressUpdate(int val) {
-        //Maximum displayable action bar progress value is 9999.
-        setSupportProgress(val);
-    }
-
-    @Override
-    public void onCancelled(String reason) {
-        String txt = reason.length() == 0 ?
-                      HymnsApplication.myResources.getString(R.string.fts_worker_cancel_reason0) : reason;
-        Toast.makeText(this, txt, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onPostExecute() {
-        setSupportProgressBarVisibility(false);
-        supportInvalidateOptionsMenu();
-    }
-    */
-
-    /*
-     * This class is used to receive progress broadcast updates from the FTS indexer service.
-     */
     private class ProgressReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {

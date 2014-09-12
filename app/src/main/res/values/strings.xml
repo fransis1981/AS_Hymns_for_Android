@@ -58,7 +58,7 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="mnu_search_label">Search</string>
     <string name="search_hint">Search title or content...</string>
-    <string name="title_activity_search">Search</string>
+    <string name="title_activity_search">Search results...</string>
     <string name="global_search_desc_label">Search hymns titles or verse content.</string>
     <string name="voice_search_prompt">Pronounce some words to search hymns</string>
     <string name="mnu_quicksearchoptions_label">Google Quick Search options</string>
