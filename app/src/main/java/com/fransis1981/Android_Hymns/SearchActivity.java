@@ -36,6 +36,8 @@ public class SearchActivity extends FragmentActivity implements LoaderManager.Lo
 
         mSearchKeywords = getIntent().getStringExtra(SearchManager.QUERY);
 
+
+
         //Preparing cursor adapter
         mCa = new SearchResultsCursorAdapter(
                 this,

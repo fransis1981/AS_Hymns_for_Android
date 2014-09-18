@@ -111,12 +111,29 @@ public class HymnsSuggestionsProvider extends ContentProvider {
                 return _cursor;
 
             /* --------------------------- PROVIDER QUERIED FOR ACTUAL SEARCH ------------------------- */
+            /*   Using this provider path, a matrix cursor is returned with the snippets in place of    */
+            /*   the full verse contents.                                                               */
+            /* ---------------------------------------------------------------------------------------- */
             case HYMNSFTS:
                 //NOTE: doFullTextSearch returns the cursor already positioned on the first useful result.
                 _query = uri.getLastPathSegment();
                 _c = mHh.doFullTextSearch(_query, 0);
+                if (_c.getCount() > 0) {
+                    MatrixCursor _mc = new MatrixCursor(_c.getColumnNames(), _c.getCount());
+                    while (_c.moveToNext()) {
+                        _mc.addRow(new Object[] {
+                                _c.getInt(_c.getColumnIndex(MyConstants.FIELD_INNI_ID_INNARIO)),
+                                _c.getInt(_c.getColumnIndex(MyConstants.FTS_FIELD_INNI_ID)),
+                                _c.getInt(_c.getColumnIndex(MyConstants.FIELD_INNI_NUMERO)),
+                                "",     //Empty title; we read it back from objects in memory.
+                                HymnBooksHelper.SearchTextUtils.extractAndCenterSnippet(
+                                        _c.getString(_c.getColumnIndex(MyConstants.FIELD_STROFE_TESTO)),
+                                        _query, 45)
+                        });
+                    }
+                    return _mc;
+                }
 
-                return _c;
 
             default: return null;
         }       //END switch

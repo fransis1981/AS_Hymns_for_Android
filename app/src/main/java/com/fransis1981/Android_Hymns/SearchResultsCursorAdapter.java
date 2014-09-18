@@ -75,9 +75,9 @@ public class SearchResultsCursorAdapter extends SimpleCursorAdapter {
             vh.snippet.setText(Html.fromHtml(
                     HymnBooksHelper.SearchTextUtils.addColorTagsForMatch(
                             HymnBooksHelper.SearchTextUtils.addBoldTagsForMatch(
-                                    HymnBooksHelper.SearchTextUtils.extractAndCenterSnippet(
+                                    //HymnBooksHelper.SearchTextUtils.extractAndCenterSnippet(
                                             cursor.getString(cursor.getColumnIndex(MyConstants.FIELD_STROFE_TESTO)),
-                                            mSearchedQuery, 45),
+                                            //mSearchedQuery, 45),
                                     mSearchedQuery
                             ),
                             mSearchedQuery, android.R.color.white

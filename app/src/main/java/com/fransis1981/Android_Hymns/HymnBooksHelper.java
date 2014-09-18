@@ -2,6 +2,7 @@ package com.fransis1981.Android_Hymns;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MergeCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
@@ -315,6 +316,7 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
             return prm_str.replace(prm_match,
                     String.format("<font color=\"#%06X\">",0xFFFFFF & Color.rgb(255, 255, 255))
                         + prm_match + "</font>");
+            //TODO: above here the color is actually harcoded; should be correctly extracted from the parameter.
         }
 
     }       //END class SearchTextUtils
