@@ -17,6 +17,13 @@ import android.widget.TextView;
  * This is the custom cursor adapter for showing search results with proper hymnbooks names and other features.
  */
 public class SearchResultsCursorAdapter extends SimpleCursorAdapter {
+    static class ViewHolder {
+        TextView hymnbook;
+        TextView num;
+        TextView hymn;
+        TextView snippet;
+    }
+
     LayoutInflater mLi;
     Cursor mC;
     Context mContext;
@@ -41,35 +48,40 @@ public class SearchResultsCursorAdapter extends SimpleCursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return mLi.inflate(mLayoutResource, null);
+        View _v = mLi.inflate(mLayoutResource, null);
+        ViewHolder _vh = new ViewHolder();
+        _vh.hymnbook = (TextView) _v.findViewById(R.id.searchresults_hymnbook_title);
+        _vh.num = (TextView) _v.findViewById(R.id.searchresults_hymn_number);
+        _vh.hymn = (TextView) _v.findViewById(R.id.searchresults_hymn_title);
+        _vh.snippet = (TextView) _v.findViewById(R.id.searchresults_snippet);
+        _v.setTag(_vh);
+        return _v;
     }
 
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         super.bindView(view, context, cursor);
-        TextView _hymnbook = (TextView) view.findViewById(R.id.searchresults_hymnbook_title);
-        TextView _num = (TextView) view.findViewById(R.id.searchresults_hymn_number);
-        TextView _hymn = (TextView) view.findViewById(R.id.searchresults_hymn_title);
-        TextView _snippet = (TextView) view.findViewById(R.id.searchresults_snippet);
 
         Inno _inno;
         int _id = -1;
         try {
+            ViewHolder vh = (ViewHolder) view.getTag();
             _id = cursor.getInt(cursor.getColumnIndexOrThrow(MyConstants.FTS_FIELD_INNI_ID));
             _inno = Inno.findInnoById(_id);
-            _hymnbook.setText(hashMapHymnbooks.get(cursor.getInt(cursor.getColumnIndex(MyConstants.FIELD_INNI_ID_INNARIO))));
-            _num.setText(String.valueOf(_inno.getNumero()));
-            _hymn.setText(_inno.getTitolo());
-            _snippet.setText(Html.fromHtml(
+            vh.hymnbook.setText(hashMapHymnbooks.get(cursor.getInt(cursor.getColumnIndex(MyConstants.FIELD_INNI_ID_INNARIO))));
+            vh.num.setText(String.valueOf(_inno.getNumero()));
+            vh.hymn.setText(_inno.getTitolo());
+            vh.snippet.setText(Html.fromHtml(
                     HymnBooksHelper.SearchTextUtils.addColorTagsForMatch(
-                             HymnBooksHelper.SearchTextUtils.addBoldTagsForMatch(
-                             HymnBooksHelper.SearchTextUtils.extractAndCenterSnippet(
-                                     cursor.getString(cursor.getColumnIndex(MyConstants.FIELD_STROFE_TESTO)),
-                                     mSearchedQuery, 45),
-                             mSearchedQuery),
-                    mSearchedQuery, android.R.color.white
-            )));
+                            HymnBooksHelper.SearchTextUtils.addBoldTagsForMatch(
+                                    HymnBooksHelper.SearchTextUtils.extractAndCenterSnippet(
+                                            cursor.getString(cursor.getColumnIndex(MyConstants.FIELD_STROFE_TESTO)),
+                                            mSearchedQuery, 45),
+                                    mSearchedQuery
+                            ),
+                            mSearchedQuery, android.R.color.white
+                    )));
         }
         catch (InnoNotFoundException infe) {
             Log.e(MyConstants.LogTag_STR, String.format("Hymn with id %d was not found; we might add here more detailed lookup for finding it into the DB.", _id));
