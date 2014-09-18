@@ -1,5 +1,7 @@
 package com.fransis1981.Android_Hymns;
 
+import android.provider.BaseColumns;
+
 /**
  * Created by francesco.vitullo on 27/01/14.
  */
@@ -15,7 +17,7 @@ public final class MyConstants {
    //DB related constants
    public static final String LogTag_STR = "HYMNS_LOG";
    public static final String DB_NAME = "DB_Inni.s3db";
-   public static final int DB_VERSION = 7;            //Increment this number when a new DB file is going to be shipped.
+   public static final int DB_VERSION = 8;            //Increment this number when a new DB file is going to be shipped.
 
    //Database tables and fields naming and indexing
    public static final String TABLE_INNARI = "Innari";
@@ -57,11 +59,19 @@ public final class MyConstants {
 
    public static final String QUERY_DROP_FTS_TABLE = "DROP TABLE IF EXISTS " + FTS_TABLE;
 
-   //NOTE: The column "Testo" in the FTS table is the union of all verses for a given hymn.
+   /*
+    * FTS TABLE SCHEMA
+    *   - ID Innario
+    *   - ID Inno
+    *   - Titolo Inno
+    *   - Testo Inno (column "Testo" in the FTS table is the union of all verses for a given hymn)
+    */
+   public static final String FTS_FIELD_INNI_ID = BaseColumns._ID;
    public static final String QUERY_CREATE_FTS_TABLE =
            "CREATE VIRTUAL TABLE " + FTS_TABLE + " USING fts3 (" +
            FIELD_INNI_ID_INNARIO + ", " +
-           FIELD_INNI_ID + ", " +
+           FTS_FIELD_INNI_ID + ", " +
+           FIELD_INNI_NUMERO + ", " +
            FIELD_INNI_TITOLO + ", " +
            FIELD_STROFE_TESTO + ")";
 
@@ -69,4 +79,5 @@ public final class MyConstants {
     //If needed, append also the LIMIT # statement at the end for limiting the number of results.
     public static final String QUERY_FTS_SEARCH = "SELECT * FROM " + FTS_TABLE +
             " WHERE " + FTS_TABLE + " MATCH ";
+
 }

@@ -35,13 +35,12 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
     }
 
     @Override
-    public synchronized SQLiteDatabase getReadableDatabase() {
+    public SQLiteDatabase getReadableDatabase() {
         //Note that getReadableDatabase() returns a writeable db if possible (enough disk space...)
         mDB =  super.getReadableDatabase();
 
         //Store FTS availability status...
-        if (MyConstants.DEBUG) setFTSAvailable(false);
-        mFTSAvailable = isTableExisting(MyConstants.FTS_TABLE);
+        //if (MyConstants.DEBUG) setFTSAvailable(false);
         return mDB;
     }
 
@@ -49,7 +48,7 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
      * This method simply checks if the DB is not read only and executes the statement for creating a new
      * FTS table; the return value is the success status of the creation.
      */
-    public synchronized boolean createFTSTable() {
+    public boolean createFTSTable() {
         boolean ret = false;
         try {
             if (!mDB.isReadOnly())
@@ -89,7 +88,7 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
         }
     }
 
-    private boolean isTableExisting(String tableName) {
+    protected boolean isTableExisting(String tableName) {
         boolean _wasClosed = mDB == null || !mDB.isOpen();
         if(_wasClosed) mDB = getReadableDatabase();
 

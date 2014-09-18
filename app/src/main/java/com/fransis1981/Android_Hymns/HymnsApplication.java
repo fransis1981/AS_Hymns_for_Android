@@ -204,7 +204,7 @@ public class HymnsApplication extends Application {
          * This method copies a hymn's full text content (including its title) into clipboard.
          */
         static void CopyHymn(Context c, Inno prm_hymn) {
-            CopyText(c, prm_hymn.getTitolo(), prm_hymn.getFullText(true));
+            CopyText(c, prm_hymn.getTitolo(), prm_hymn.getFullText(true, true));
         }
     }       //END public static class ClipboardHelper
 

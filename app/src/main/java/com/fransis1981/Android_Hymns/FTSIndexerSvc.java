@@ -28,9 +28,6 @@ public class FTSIndexerSvc extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        //if ((flags & START_FLAG_RETRY) == 1) {
-        //    //TODO - NOTE: intent is null if service is restarted after run-time termination
-        //}
 
         // Create and execute the background task.
         mTask = new FTSTask();
@@ -70,7 +67,7 @@ public class FTSIndexerSvc extends Service {
             mTask = null;
         }
         catch (Exception e) {
-            Log.w(MyConstants.LogTag_STR, e.getMessage());
+            Log.w(MyConstants.LogTag_STR, "Terminating indexer service: " + e.getMessage());
         }
         stopSelf();
     }
@@ -84,7 +81,7 @@ public class FTSIndexerSvc extends Service {
         @Override
         protected Void doInBackground(HymnBooksHelper... prm) {
             //Wait for the DB to be available
-            while (prm[0] == null || prm[0].db == null || !prm[0].db.isOpen()) {
+            while (prm[0] == null || prm[0].mDB == null || !prm[0].mDB.isOpen()) {
                 SystemClock.sleep(2);
             }
 
@@ -108,21 +105,32 @@ public class FTSIndexerSvc extends Service {
                     mCancelReason = HymnsApplication.myResources.getString(R.string.fts_worker_cancel_reason1);
                     this.cancel(true);
                 }
-                prm[0].FTS_Building_Cursor = prm[0].db.query(MyConstants.TABLE_INNI, null, null, null, null, null, null);
+                prm[0].FTS_Building_Cursor = prm[0].mDB.query(
+                        MyConstants.TABLE_INNI,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        MyConstants.FIELD_INNI_NUMERO);
                 prm[0].FTS_Building_CurrentProgressValue = 0;
             }
 
             ContentValues _cv = new ContentValues();
+            String txt = "";
             int _successful_inserts = 0;
             while (prm[0].FTS_Building_Cursor.moveToNext() && !isCancelled()) {
                 _cv.clear();
                 Inno _inno = new Inno(prm[0].FTS_Building_Cursor, null);
-                _cv.put(MyConstants.FIELD_INNARI_ID, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNARI_ID));
-                _cv.put(MyConstants.FIELD_INNI_ID, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_ID));
+                _cv.put(MyConstants.FIELD_INNARI_ID, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_ID_INNARIO));
+                _cv.put(MyConstants.FTS_FIELD_INNI_ID, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_ID));
+                _cv.put(MyConstants.FIELD_INNI_NUMERO, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_NUMERO));
                 _cv.put(MyConstants.FIELD_INNI_TITOLO, _inno.getTitolo());
-                _cv.put(MyConstants.FIELD_STROFE_TESTO,
-                        HymnBooksHelper.normalizeAndLower(_inno.getFullText(false)));
-                if (prm[0].db.insert(MyConstants.FTS_TABLE, null, _cv) == -1) {
+                txt = HymnBooksHelper.SearchTextUtils.normalizeAndLower(_inno.getFullText(false, false));
+                txt = HymnBooksHelper.SearchTextUtils.stripPunctuation(txt).trim();
+                _cv.put(MyConstants.FIELD_STROFE_TESTO, txt);
+                if (MyConstants.DEBUG && _successful_inserts <= 10) Log.i(MyConstants.LogTag_STR, "FTS: " + txt);
+                if (prm[0].mDB.insert(MyConstants.FTS_TABLE, null, _cv) == -1) {
                     Log.e(MyConstants.LogTag_STR, "Error while FTS indexing: " + _inno.getTitolo());
                 }
                 else {

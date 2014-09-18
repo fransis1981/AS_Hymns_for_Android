@@ -25,7 +25,7 @@ public class Innario {
 
       //Populating dialer list only (not hymns objects)
       //Log.i(MyConstants.LogTag_STR, "Stato del DB nwl costruttore dell'Innario:" + HymnBooksHelper.me().db.isOpen());
-      hymnsCursor = HymnBooksHelper.me().db.query(MyConstants.TABLE_INNI,
+      hymnsCursor = HymnBooksHelper.me().mDB.query(MyConstants.TABLE_INNI,
                            null,
                            MyConstants.FIELD_INNI_ID_INNARIO + "=?", new String[] {String.valueOf(id)},
                            null, null, MyConstants.FIELD_INNI_NUMERO);

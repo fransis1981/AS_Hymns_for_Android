@@ -111,7 +111,7 @@ public class Inno {
      * it builds a new object with NULL parent and returns it.
      */
     public static Inno findInnoById(long prm_id_inno) throws InnoNotFoundException {
-        Cursor c = HymnBooksHelper.me().db.query(MyConstants.TABLE_INNI, null,
+        Cursor c = HymnBooksHelper.me().mDB.query(MyConstants.TABLE_INNI, null,
                 MyConstants.FIELD_INNI_ID + "=?", new String[]{String.valueOf(prm_id_inno)},
                 null, null, null);
         if (c.getCount() == 0) throw new InnoNotFoundException();
@@ -151,20 +151,22 @@ public class Inno {
      * New line characters are used at breaklines.
      * The parameter prm_withTitle controls wether the returned string contains the hymn title in the first line.
      */
-    public String getFullText(boolean prm_withTitle) {
+    public String getFullText(boolean prm_withTitle, boolean prm_withLabels) {
         String _s = "";
         ArrayList<Strofa> _al = getListStrofe();
 
         if (prm_withTitle) _s = getTitolo() + "\n";
         for (Strofa strofa: _al)
-            _s = _s + strofa.getLabel() + ". " + strofa.getContenuto() + "\n";
+            _s = _s +
+                    ((prm_withLabels)? strofa.getLabel() + ". " : "") +
+                    strofa.getContenuto() + "\n";
         return _s;
     }
 
    void loadStrofeFromDB() {
       if (strofe_cori == null) {
          strofe_cori = new ArrayList<Strofa>();
-         Cursor c = HymnBooksHelper.me().db.query(MyConstants.TABLE_STROFE, null,
+         Cursor c = HymnBooksHelper.me().mDB.query(MyConstants.TABLE_STROFE, null,
                                MyConstants.FIELD_STROFE_ID_INNO + "=?", new String[]{String.valueOf(id_inno)},
                                null, null, MyConstants.FIELD_STROFE_ID_NUM_STROFA);
          Strofa ss;

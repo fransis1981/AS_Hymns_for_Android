@@ -52,5 +52,7 @@
     <string name="global_search_desc_label">Cerca inni per titolo o contenuto.</string>
     <string name="voice_search_prompt">Pronuncia qualche parola da cercare negli inni</string>
     <string name="mnu_quicksearchoptions_label">Opzioni di ricerca con Google</string>
+    <string name="searchprogressdialog_message">Attendere prego.</string>
+    <string name="searchprogressdialog_title">Ricerca in corso...</string>
 
 </resources>

@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId 'com.fransis1981.Android_Hymns'
         minSdkVersion 8
-        targetSdkVersion 18
+        targetSdkVersion 19
         versionName '1.2'
 
         applicationVariants.each { variant ->
@@ -18,7 +18,7 @@ android {
 
     buildTypes {
         release {
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }

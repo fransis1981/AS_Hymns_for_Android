@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/result_listitem_bg"
+                android:weightSum="1">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[Titolo Innario]"
+            android:id="@+id/searchresults_hymnbook_title"
+            android:gravity="top"
+            android:textStyle="italic"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            style="@style/HymnTitleNumber_style"/>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NUM"
+                android:id="@+id/searchresults_hymn_number"
+                android:textColor="@color/strofe_gold_decor"
+                android:textSize="14sp"
+                style="@style/HymnTitleNumber_style"
+                />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Titolo Inno"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:id="@+id/searchresults_hymn_title"
+                android:paddingLeft="4dp"
+                />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Snippet contenuto"
+        android:id="@+id/searchresults_snippet"
+        android:gravity="top"
+        android:layout_marginLeft="1dp"
+        />
+
+</LinearLayout>

@@ -62,5 +62,7 @@
     <string name="global_search_desc_label">Search hymns titles or verse content.</string>
     <string name="voice_search_prompt">Pronounce some words to search hymns</string>
     <string name="mnu_quicksearchoptions_label">Google Quick Search options</string>
+    <string name="searchprogressdialog_message">Please wait a few moments.</string>
+    <string name="searchprogressdialog_title">Searching...</string>
 
 </resources>
