@@ -77,5 +77,8 @@ public class SearchResultsCursorAdapter extends SimpleCursorAdapter {
         catch (IllegalArgumentException iae) {
             Log.e(MyConstants.LogTag_STR, "CRITICAL: Table column with hymn ID was not found in the search results.");
         }
+        catch (Exception e) {
+            Log.e(MyConstants.LogTag_STR, "Maybe you're scrolling TOO FAST and THERE ARE TOO MANY ITEMS in the list.");
+        }
     }
 }

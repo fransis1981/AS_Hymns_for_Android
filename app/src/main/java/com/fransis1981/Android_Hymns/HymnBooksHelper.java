@@ -186,10 +186,10 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
     Cursor doFullTextSearch(String prm_query, int prm_limit) {
         if (TextUtils.isEmpty(prm_query))
             throw new IllegalArgumentException("Invoked doFullTextSearch() with an empty query string.");
-        String _sql_qry = MyConstants.QUERY_FTS_SEARCH + "'"
+        String _sql_qry = MyConstants.QUERY_FTS_SEARCH + "'\""
                     + SearchTextUtils.addFinalWildcard(
                       SearchTextUtils.stripPunctuation(
-                      SearchTextUtils.normalizeAndLower(prm_query))) + "'"
+                      SearchTextUtils.normalizeAndLower(prm_query))) + "\"'"
                     + ((prm_limit == 0)? "" : String.format(" LIMIT %d", prm_limit));
         if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, _sql_qry);
         Cursor _c = mDB.rawQuery(_sql_qry, null);

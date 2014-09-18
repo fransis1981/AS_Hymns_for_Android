@@ -19,6 +19,7 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
         super(context, name, storageDirectory, factory, version);
     }
 
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         super.onUpgrade(db, oldVersion, newVersion);
@@ -34,6 +35,7 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
         }
     }
 
+
     @Override
     public SQLiteDatabase getReadableDatabase() {
         //Note that getReadableDatabase() returns a writeable db if possible (enough disk space...)
@@ -43,6 +45,7 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
         //if (MyConstants.DEBUG) setFTSAvailable(false);
         return mDB;
     }
+
 
     /*
      * This method simply checks if the DB is not read only and executes the statement for creating a new
@@ -64,12 +67,14 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
         return ret;
     }
 
+
     /*
      * Property method to check wether the FTS table is available or not.
      */
     public boolean isFTSAvailable() {
         return mFTSAvailable;
     }
+
 
     /*
      * If you pass false as parameter, the FTS gets actually dropped; if you pass true, the FTS
@@ -87,6 +92,7 @@ public class SQLiteAssetHelperWithFTS extends SQLiteAssetHelper {
                 throw new IllegalStateException("At this point, FTS table was expected to exist.");
         }
     }
+
 
     protected boolean isTableExisting(String tableName) {
         boolean _wasClosed = mDB == null || !mDB.isOpen();

@@ -8,16 +8,16 @@
                 android:weightSum="1">
 
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="[Titolo Innario]"
             android:id="@+id/searchresults_hymnbook_title"
             android:gravity="top"
             android:textStyle="italic"
             android:textColor="@android:color/white"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="1dp"
             style="@style/HymnTitleNumber_style"/>
 
     <LinearLayout
