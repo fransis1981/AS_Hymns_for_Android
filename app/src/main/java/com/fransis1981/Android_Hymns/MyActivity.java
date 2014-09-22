@@ -162,7 +162,7 @@ public class MyActivity extends ActionBarActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String _qry = intent.getStringExtra(SearchManager.QUERY);
+            String _qry = intent.getStringExtra(SearchManager.QUERY).trim();
             if (_qry.length() == 1) {
                 Toast t = Toast.makeText(
                         getApplicationContext(),

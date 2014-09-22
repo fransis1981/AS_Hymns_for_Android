@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Created by francesco.vitullo on 27/01/14.
@@ -46,22 +47,12 @@ public class HymnsApplication extends Application {
    private static MRUManager recentsManager;
    private static StarManager starManager;
 
-   private static int currentSpinnerLevel = 0;
-   private static ImageView availableSpinner;
-
    //static TimingLogger tl;
 
    public static HymnsApplication getInstance() {
         return singleton;
     }
 
-   public static void setAvailableSpinner(ImageView _spinner) {
-      availableSpinner = _spinner;
-   }
-
-   public static void setSpinnerLevel(int _level) {
-      availableSpinner.setImageLevel(currentSpinnerLevel = _level);
-   }
 
     @Override
     public void onCreate() {
@@ -115,36 +106,49 @@ public class HymnsApplication extends Application {
         //Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("A Ti, Deus Trino, poderoso Deus,|br/|Que estás presente sempre junto aos teus|br/|A ministrar as bênçãos lá dos céus,"));
         //Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("Santo Deus, vem inflamar|br/|Nossos débeis corações;|br/|Vem as trevas dissipar,|br/|Livra-nos de imperfeições."));
         //Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("Queres a glória divina alcançar?|br/|Dá teu coração a Jesus."));
-    }
+        Log.i(MyConstants.LogTag_STR, Locale.getDefault().getCountry() + " - "
+                + Locale.getDefault().getDisplayCountry() + " - "
+                + Locale.getDefault().getLanguage() + " - "
+                + Locale.getDefault().getISO3Language());
 
-   public static void setCurrentInnario(Innario _innario) {
+    }       //END onCreate()
+
+
+    public static void setCurrentInnario(Innario _innario) {
       if (currentInnario == _innario) return;
       currentInnario = _innario;
       if (mOnCurrentInnarioChangedListener != null)
          mOnCurrentInnarioChangedListener.onCurrentInnarioChanged();
-   }
-   public static void setCurrentInnario(String _titolo) {
+    }
+
+
+    public static void setCurrentInnario(String _titolo) {
       setCurrentInnario(getInnarioByTitle(_titolo));
-   }
-   public static void setCurrentInnario(Inno.Categoria _categoria) {
+    }
+
+
+    public static void setCurrentInnario(Inno.Categoria _categoria) {
       if (_categoria == Inno.Categoria.NESSUNA) setCurrentInnario(innari.get(0));
       else setCurrentInnario(categoricalInnari.get(_categoria));
-   }
+    }
 
-   public static Innario getCurrentInnario() {
+
+    public static Innario getCurrentInnario() {
       return currentInnario;
-   }
+    }
 
-   /*
+
+    /*
     * Questo metodo restituisce l'oggetto Innario opportuno conoscendone il titolo.
     * Ritorna NULL se nessun innario corrisponde al criterio specificato.
     */
-   public static Innario getInnarioByTitle(String _title) {
+    public static Innario getInnarioByTitle(String _title) {
       for (Innario i: innari) {
          if (i.getTitolo().equals(_title)) return i;
       }
       return null;
-   }
+    }
+
 
     /*
      * Questo metodo restituisce l'oggetto Innario opportuno conoscendone l'ID nel database.
@@ -157,10 +161,11 @@ public class HymnsApplication extends Application {
         return null;
     }
 
-   /*
-    * This is a convenience method to get an ArrayList of titles for use with spinner's adapter.
-    */
-   public static ArrayList<String> getInnariTitles() {
+
+    /*
+     * This is a convenience method to get an ArrayList of titles for use with spinner's adapter.
+     */
+    public static ArrayList<String> getInnariTitles() {
       ArrayList<String> ret = new ArrayList<String>();
       for (Innario i: innari)
          ret.add(i.toString());
@@ -168,8 +173,10 @@ public class HymnsApplication extends Application {
    }
 
 
-   public static StarManager getStarManager() { return starManager; }
-   public static MRUManager getRecentsManager() { return recentsManager; }
+    public static StarManager getStarManager() { return starManager; }
+
+
+    public static MRUManager getRecentsManager() { return recentsManager; }
 
 
     //Helper class to clusterize clipboard related methods.

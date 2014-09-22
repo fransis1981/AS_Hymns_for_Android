@@ -94,10 +94,4 @@ public class SearchResultsCursorAdapter extends SimpleCursorAdapter {
         }
     }
 
-    /*
-    @Override
-    public long getItemId(int position) {
-        mC.moveToPosition(position);
-    }
-    */
 }
