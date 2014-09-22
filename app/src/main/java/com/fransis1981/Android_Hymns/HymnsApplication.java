@@ -108,7 +108,7 @@ public class HymnsApplication extends Application {
         //Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("Queres a glória divina alcançar?|br/|Dá teu coração a Jesus."));
         Log.i(MyConstants.LogTag_STR, Locale.getDefault().getCountry() + " - "
                 + Locale.getDefault().getDisplayCountry() + " - "
-                + Locale.getDefault().getLanguage() + " - "
+                + Locale.getDefault().getLanguage() + " - "         //This is something I can properly use.
                 + Locale.getDefault().getISO3Language());
 
     }       //END onCreate()

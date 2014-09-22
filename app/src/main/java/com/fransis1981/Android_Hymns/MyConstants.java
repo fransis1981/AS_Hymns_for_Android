@@ -17,7 +17,7 @@ public final class MyConstants {
    //DB related constants
    public static final String LogTag_STR = "HYMNS_LOG";
    public static final String DB_NAME = "DB_Inni.s3db";
-   public static final int DB_VERSION = 8;            //Increment this number when a new DB file is going to be shipped.
+   public static final int DB_VERSION = 9;            //Increment this number when a new DB file is going to be shipped.
 
    //Database tables and fields naming and indexing
    public static final String TABLE_INNARI = "Innari";
