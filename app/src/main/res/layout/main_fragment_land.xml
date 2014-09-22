@@ -20,55 +20,55 @@
              style="@style/spinners_labels_style_direct"
              android:layout_marginRight="2dp"
              android:layout_marginTop="1dp"/>
-     <Spinner
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:id="@+id/spinner_innari"
-             android:layout_marginRight="2dp"
-             android:layout_marginBottom="20dp"/>
-     <TextView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="@string/label_categoria"
-             android:layout_gravity="center"
-             android:id="@+id/lbl_categoria"
-             android:textSize="@dimen/main_labels_textsize"
-             style="@style/spinners_labels_style_direct"
-             android:layout_marginRight="2dp"/>
-     <Spinner
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:id="@+id/spinner_categoria"
-             />
- </LinearLayout>
-
- <TabHost
-         android:layout_width="fill_parent"
-         android:layout_height="match_parent"
-         android:id="@android:id/tabhost"
-         android:layout_weight="40">
-     <LinearLayout
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:orientation="vertical">
-         <TabWidget
-                 android:id="@android:id/tabs"
+         <Spinner
                  android:layout_width="fill_parent"
-                 android:layout_height="wrap_content">
-         </TabWidget>
-         <FrameLayout
-                 android:id="@android:id/tabcontent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/spinner_innari"
+                 android:layout_marginRight="2dp"
+                 android:layout_marginBottom="20dp"/>
+         <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/label_categoria"
+                 android:layout_gravity="center"
+                 android:id="@+id/lbl_categoria"
+                 android:textSize="@dimen/main_labels_textsize"
+                 style="@style/spinners_labels_style_direct"
+                 android:layout_marginRight="2dp"/>
+         <Spinner
                  android:layout_width="fill_parent"
-                 android:layout_height="fill_parent">
-
-             <android.support.v4.view.ViewPager
-                     android:id="@+id/main_viewpager"
-                     android:layout_width="fill_parent"
-                     android:layout_height="fill_parent"
-                     />
-
-         </FrameLayout>
+                 android:layout_height="wrap_content"
+                 android:id="@+id/spinner_categoria"
+                 />
      </LinearLayout>
- </TabHost>
+
+     <TabHost
+             android:layout_width="fill_parent"
+             android:layout_height="match_parent"
+             android:id="@android:id/tabhost"
+             android:layout_weight="40">
+         <LinearLayout
+                 android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:orientation="vertical">
+             <TabWidget
+                     android:id="@android:id/tabs"
+                     android:layout_width="fill_parent"
+                     android:layout_height="wrap_content">
+             </TabWidget>
+             <FrameLayout
+                     android:id="@android:id/tabcontent"
+                     android:layout_width="fill_parent"
+                     android:layout_height="fill_parent">
+
+                 <android.support.v4.view.ViewPager
+                         android:id="@+id/main_viewpager"
+                         android:layout_width="fill_parent"
+                         android:layout_height="fill_parent"
+                         />
+
+             </FrameLayout>
+         </LinearLayout>
+     </TabHost>
 
 </LinearLayout>
