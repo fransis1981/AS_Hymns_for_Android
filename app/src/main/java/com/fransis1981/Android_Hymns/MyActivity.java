@@ -179,9 +179,9 @@ public class MyActivity extends ActionBarActivity {
             );
         }
         else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            String _s = intent.getDataString();
+            String _s = intent.getDataString().trim();
             if (_s.length() > 0) {
-                if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "Intercepted an ACTION_VIEW from suggestion with data " + _s);
+                if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "Intercepted ACTION_VIEW intent from suggestion with data " + _s);
                 try {
                     callback_HymnSelected(Inno.findInnoById(Long.parseLong(_s)));
                 }
