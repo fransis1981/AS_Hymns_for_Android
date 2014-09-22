@@ -54,5 +54,9 @@
     <string name="mnu_quicksearchoptions_label">Opzioni di ricerca con Google</string>
     <string name="searchprogressdialog_message">Attendere prego.</string>
     <string name="searchprogressdialog_title">Ricerca in corso...</string>
+    <string name="msg_single_char_searches">Le ricerche con una sola lettera non sono consentite.</string>
+    <string name="toast_indexing_complete_line1">Indicizzazione completata!</string>
+    <string name="toast_indexing_complete_line2">Usa la seguente icona posta in alto per cercare:</string>
+    <string name="magnifier_icon_description">Icona lente d'ingrandimento</string>
 
 </resources>

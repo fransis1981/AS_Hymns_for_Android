@@ -314,9 +314,8 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
          */
         public static String addColorTagsForMatch(String prm_str, String prm_match, int prm_color) {
             return prm_str.replace(prm_match,
-                    String.format("<font color=\"#%06X\">",0xFFFFFF & Color.rgb(255, 255, 255))
+                    String.format("<font color=\"#%06X\">",0xFFFFFF & prm_color)
                         + prm_match + "</font>");
-            //TODO: above here the color is actually harcoded; should be correctly extracted from the parameter.
         }
 
     }       //END class SearchTextUtils

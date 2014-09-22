@@ -80,7 +80,7 @@ public class SearchResultsCursorAdapter extends SimpleCursorAdapter {
                                             //mSearchedQuery, 45),
                                     mSearchedQuery
                             ),
-                            mSearchedQuery, android.R.color.white
+                            mSearchedQuery, HymnsApplication.myResources.getColor(android.R.color.white)
                     )));
         }
         catch (InnoNotFoundException infe) {
@@ -93,4 +93,11 @@ public class SearchResultsCursorAdapter extends SimpleCursorAdapter {
             Log.e(MyConstants.LogTag_STR, "Maybe you're scrolling TOO FAST and THERE ARE TOO MANY ITEMS in the list.");
         }
     }
+
+    /*
+    @Override
+    public long getItemId(int position) {
+        mC.moveToPosition(position);
+    }
+    */
 }

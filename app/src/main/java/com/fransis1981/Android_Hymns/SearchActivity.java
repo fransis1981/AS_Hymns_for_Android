@@ -1,5 +1,6 @@
 package com.fransis1981.Android_Hymns;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -12,7 +13,9 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,7 +23,8 @@ import android.widget.TextView;
  * This activity is invoked when there is a search to perform. Search keywords are passed
  * as a string extra to the intent, under the SearchManager.QUERY key.
  */
-public class SearchActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SearchActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+                                                                ListView.OnItemClickListener {
     private static final int SEARCHRESULTS_LOADER = 0;
     private static final int PROGRESS_DIALOG = 0;
 
@@ -53,8 +57,17 @@ public class SearchActivity extends FragmentActivity implements LoaderManager.Lo
         );
         mLv = (ListView) findViewById(android.R.id.list);
         mLv.setAdapter(mCa);
+        mLv.setOnItemClickListener(this);
 
         getSupportLoaderManager().initLoader(SEARCHRESULTS_LOADER, null, this);
+    }
+
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.i(MyConstants.LogTag_STR, String.format("Tapped item with id %d", id));
+        setResult(Activity.RESULT_OK, new Intent().setData(Uri.parse(String.valueOf(id))));
+        finish();
     }
 
 
@@ -109,6 +122,16 @@ public class SearchActivity extends FragmentActivity implements LoaderManager.Lo
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mCa.changeCursor(null);
+        try {
+            mCa.changeCursor(null);
+        }
+        catch (Exception e) {}
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        mCa = null;
+        super.onDestroy();
     }
 }

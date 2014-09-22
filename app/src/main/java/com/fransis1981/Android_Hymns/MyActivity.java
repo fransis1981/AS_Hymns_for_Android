@@ -1,5 +1,6 @@
 package com.fransis1981.Android_Hymns;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,10 +16,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 
 public class MyActivity extends ActionBarActivity {
@@ -28,6 +33,8 @@ public class MyActivity extends ActionBarActivity {
 
    //Using symbolic constants for menu items, as by convention.
    private static final int MENU_PREFERENCES = Menu.FIRST;
+
+    private static final int ACTIVITYRESULT_SEARCHHYMN = 0;
 
    //Constants for bundle arguments
    static final String TAB_BUNDLESTATE = "SelectedTab";
@@ -49,6 +56,8 @@ public class MyActivity extends ActionBarActivity {
     SingleHymn_Fragment singleHymn_fragment;
     boolean mFTSServiceWorking = false;
     ProgressReceiver mReceiver;
+    android.support.v7.widget.SearchView mSearchView;
+
 
     /** Called when the activity is first created.  */
     @Override
@@ -92,15 +101,15 @@ public class MyActivity extends ActionBarActivity {
 
         mSearchMenuItem = menu.findItem(R.id.mnu_search);
         mSearchMenuItem.setVisible(HymnBooksHelper.me().isFTSAvailable());
-        android.support.v7.widget.SearchView _sv;
         SearchManager _sm = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        _sv = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
-        _sv.setSearchableInfo(_sm.getSearchableInfo(getComponentName()));
+        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
+        mSearchView.setSearchableInfo(_sm.getSearchableInfo(getComponentName()));
 
         menu.findItem(R.id.mnu_system_search_options).setIntent(new Intent(Settings.ACTION_SEARCH_SETTINGS));
 
         return true;
     }
+
 
     @Override
     protected void onResume() {
@@ -154,7 +163,20 @@ public class MyActivity extends ActionBarActivity {
         super.onNewIntent(intent);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String _qry = intent.getStringExtra(SearchManager.QUERY);
-            startActivity(new Intent(this, SearchActivity.class).putExtra(SearchManager.QUERY, _qry));
+            if (_qry.length() == 1) {
+                Toast t = Toast.makeText(
+                        getApplicationContext(),
+                        getString(R.string.msg_single_char_searches),
+                        Toast.LENGTH_SHORT
+                );
+                t.setGravity(Gravity.TOP, 0, 0);
+                t.show();
+                return;
+            }
+            startActivityForResult(
+                    new Intent(this, SearchActivity.class).putExtra(SearchManager.QUERY, _qry),
+                    ACTIVITYRESULT_SEARCHHYMN
+            );
         }
         else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             String _s = intent.getDataString();
@@ -171,7 +193,27 @@ public class MyActivity extends ActionBarActivity {
     }
 
 
-    //This method is used to discriminate between different kinds of layouts.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        MenuItemCompat.collapseActionView(mSearchMenuItem);
+
+        //Got a single possible request code for now, so not implementing switch statement.
+        if (resultCode == Activity.RESULT_OK) {
+            String _s = data.getDataString();
+            try {
+                callback_HymnSelected(Inno.findInnoById(Long.parseLong(_s)));
+            }
+            catch (InnoNotFoundException infe) {
+                Log.e(MyConstants.LogTag_STR, "Search result clicked: inno not found exception ---> this should be impossible.");
+            }
+        }
+    }
+
+
+    /*
+     * This method is used to discriminate between different kinds of layouts.
+     */
     void callback_HymnSelected(Inno inno) {
         if (_tabletMode) {
             singleHymn_fragment.showHymn(inno);
@@ -181,6 +223,7 @@ public class MyActivity extends ActionBarActivity {
             SingleHymn_Activity.startIntentWithHymn(this, inno);
         }
     }
+
 
     //TODO: this method is currently unused (waiting for the implementation of dynamic fragments)
     private void deployFragments(boolean prm_controls_on_left) {
@@ -207,6 +250,7 @@ public class MyActivity extends ActionBarActivity {
         _ft.replace(currentHymnsContainerID, _shf).commit();
         _shf.showHymn(HymnsApplication.getCurrentInnario().getInno(1));
     }
+
 
     /*
      * Helper method for taking all actions related to FTS Indexer service start
@@ -248,6 +292,11 @@ public class MyActivity extends ActionBarActivity {
             int _val = intent.getIntExtra(FTSIndexerSvc.FTS_PROGRESS_EXTRA_VAL, 0);
             if (_val == FTSIndexerSvc.FTS_PROGRESS_COMPLETE) {
                 manageFTSServiceEnd();
+                Toast t = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+                LayoutInflater li = LayoutInflater.from(context);
+                View v = li.inflate(R.layout.toast_indexing_finished, null);
+                t.setView(v);
+                t.show();
             }
             else {
                 setSupportProgress(_val);
