@@ -81,7 +81,7 @@ public class HymnsApplication extends Application {
         //select it, otherwise load xml defaults. This is the logic only one no user preferences are stored.
         SharedPreferences _prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (!(_prefs.getBoolean(PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES, false))) {
-            //This branch gets executed only if preferences have been never set before (or user wiped app data)
+            //This branch gets executed only if preferences have never been set before (or user wiped app data)
             PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.prefs, false);
             String available_locales = TextUtils.join(";",myResources.getStringArray(R.array.pref_international_values));
             String default_language = Locale.getDefault().getLanguage();

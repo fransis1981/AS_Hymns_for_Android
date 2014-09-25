@@ -66,6 +66,7 @@ public final class MyConstants {
     * FTS TABLE SCHEMA
     *   - ID Innario
     *   - ID Inno
+    *   - Numero Inno
     *   - Titolo Inno
     *   - Testo Inno (column "Testo" in the FTS table is the union of all verses for a given hymn)
     */
