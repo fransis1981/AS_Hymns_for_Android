@@ -19,14 +19,17 @@ public final class MyConstants {
    public static final String DB_NAME = "DB_Inni.s3db";
    public static final int DB_VERSION = 9;            //Increment this number when a new DB file is going to be shipped.
 
-   //Database tables and fields naming and indexing
-   public static final String TABLE_INNARI = "Innari";
-   public static final String FIELD_INNARI_ID = "ID_Innario";
-   public static final String FIELD_INNARI_TITOLO = "Titolo";
-   public static final String FIELD_INNARI_NUM_INNI = "Numero_Inni";
-   public static final int INDEX_INNARI_ID = 0;
-   public static final int INDEX_INNARI_TITOLO = 1;
-   public static final int INDEX_INNARI_NUM_INNI = 2;
+    //Database tables and fields naming and indexing
+    public static final String TABLE_INNARI = "Innari";
+    public static final String FIELD_INNARI_ID = "ID_Innario";
+    public static final String FIELD_INNARI_TITOLO = "Titolo";
+    public static final String FIELD_INNARI_LANG_CODE = "Language_Code";
+    public static final String FIELD_INNARI_COUNTRY_CODE = "Country_Code";
+    public static final int INDEX_INNARI_ID = 0;
+    public static final int INDEX_INNARI_TITOLO = 1;
+    public static final int INDEX_INNARI_NUM_INNI = 2;
+    public static final int INDEX_INNARI_LANG_CODE = 3;
+    public static final int INDEX_INNARI_COUNTRY_CODE = 4;
 
    public static final String TABLE_INNI = "Inni";
    public static final String FIELD_INNI_ID = "ID_Inno";
@@ -80,7 +83,8 @@ public final class MyConstants {
            FTS_FIELD_INNI_ID + ", " +
            FIELD_INNI_NUMERO + ", " +
            FIELD_INNI_TITOLO + ", " +
-           FIELD_STROFE_TESTO + ")";
+           FIELD_STROFE_TESTO
+                   + ")";
 
     //Template for a search query on the FTS table; append 'search keywords' to this string.
     //If needed, append also the LIMIT # statement at the end for limiting the number of results.

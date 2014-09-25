@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/prefcategory_international">
+
+        <ListPreference
+            android:enabled="true"
+            android:key="pref_language_selected"
+            android:title="@string/pref_language_title"
+            android:summary="@string/pref_language_summary"
+            android:entries="@array/pref_international_labels"
+            android:entryValues="@array/pref_international_values"
+            android:defaultValue="@string/pref_international_defaultvalue" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

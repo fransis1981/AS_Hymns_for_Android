@@ -105,6 +105,7 @@ public class MyActivity extends ActionBarActivity {
         mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
         mSearchView.setSearchableInfo(_sm.getSearchableInfo(getComponentName()));
 
+        menu.findItem(R.id.mnu_app_settings).setIntent(new Intent(this, PrefsActivity.class));
         menu.findItem(R.id.mnu_system_search_options).setIntent(new Intent(Settings.ACTION_SEARCH_SETTINGS));
 
         return true;

@@ -9,6 +9,13 @@
           myapp:actionViewClass="android.support.v7.widget.SearchView"
           android:visible="false" />
 
+    <item
+        android:id="@+id/mnu_app_settings"
+        android:title="@string/mnu_appsettings_label"
+        android:visible="true"
+        myapp:showAsAction="never"
+        />
+
     <item android:id="@+id/mnu_system_search_options"
           android:title="@string/mnu_quicksearchoptions_label"
           myapp:showAsAction="never"

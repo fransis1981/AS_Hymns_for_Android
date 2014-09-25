@@ -17,7 +17,7 @@
     <string name="tab_recents">Recenti</string>
     <string name="tab_starred">Preferiti</string>
 
-    <!-- Tab titles -->
+    <!-- Menu items -->
     <string name="menu_hymn_copy_label">Copia</string>
     <string name="menu_hymn_copy_strophe_label">Copia questa strofa</string>
     <string name="menu_hymn_copy_full_label">Copia intero inno</string>
@@ -26,8 +26,8 @@
     <string name="mnu_move_controls_on_the_right">Sposta i controlli a destra</string>
     <string name="mnu_move_controls_on_the_left">Sposta i controlli a sinistra</string>
 
-    <string name="fts_worker_cancel_reason0">Problema nella creazuibe della tabella indice; contattare il programmatore.</string>
-    <string name="fts_worker_cancel_reason1">Impossibile creare la tabella FTS; controllare la memoria disponibile.</string>
+    <string name="fts_worker_cancel_reason0">Problema nella creazione della tabella indice; contattare il programmatore.</string>
+    <string name="fts_worker_cancel_reason1">Impossibile creare la tabella indice; controllare la memoria disponibile.</string>
 
 
     <!-- abc -> AppCompat strings -->
@@ -45,6 +45,15 @@
     <string name="abc_shareactionprovider_share_with_application" msgid="7165123711973476752">"Condividi con %s"</string>
     <string name="abc_shareactionprovider_share_with" msgid="3421042268587513524">"Condividi con"</string>
 
+    <!-- String value to support preferences -->
+    <string name="title_prefsactivity">Impostazioni</string>
+    <string name="prefcategory_international">Internazionalizzazione</string>
+    <string name="pref_language_title">Innari internazionali</string>
+    <string name="pref_language_it">Italiano</string>
+    <string name="pref_language_pt">Portoghese (Brasile)</string>
+    <string name="pref_language_summary">Nell\'app saranno visualizzati soltanto gli innari appartenenti alla lingua (nazione) selezionata.</string>
+    <!-- ************************************** -->
+
 
     <string name="mnu_search_label">Cerca</string>
     <string name="search_hint">Cerca titolo/strofe...</string>
@@ -58,5 +67,6 @@
     <string name="toast_indexing_complete_line1">Indicizzazione completata!</string>
     <string name="toast_indexing_complete_line2">Usa la seguente icona posta in alto per cercare:</string>
     <string name="magnifier_icon_description">Icona lente d\'ingrandimento</string>
+    <string name="mnu_appsettings_label">Impostazioni applicazione</string>
 
 </resources>

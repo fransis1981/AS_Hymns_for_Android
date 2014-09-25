@@ -56,6 +56,16 @@
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <!-- Description of the choose target button in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] -->
     <string name="abc_shareactionprovider_share_with">Share with</string>
+
+    <!-- String value to support preferences -->
+    <string name="title_prefsactivity">Settings</string>
+    <string name="prefcategory_international">International</string>
+    <string name="pref_language_title">International Hymnbooks</string>
+    <string name="pref_language_it">Italian</string>
+    <string name="pref_language_pt">Portoguese (Brazil)</string>
+    <string name="pref_language_summary">Only hymnnbooks for the selected locale (language and country) will be displayed.</string>
+    <!-- ************************************** -->
+
     <string name="mnu_search_label">Search</string>
     <string name="search_hint">Search title or content...</string>
     <string name="title_activity_search">Search results...</string>
@@ -68,5 +78,6 @@
     <string name="toast_indexing_complete_line1">Text indexing complete!</string>
     <string name="toast_indexing_complete_line2">Use this icon in the top bar to perform searches:</string>
     <string name="magnifier_icon_description">Magnifier icon</string>
+    <string name="mnu_appsettings_label">App settings</string>
 
 </resources>

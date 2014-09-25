@@ -4,10 +4,13 @@ import android.app.Application;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -28,6 +31,9 @@ public class HymnsApplication extends Application {
    public static Typeface fontTitolo1;
    public static Typeface fontLabelStrofa;
    public static Typeface fontContenutoStrofa;
+
+    //Two-chars identifier of the selected language. This is used for selecting relevant hymnbooks.
+    public static String mCurrentLanguageLocale;
 
    public static ArrayList<Innario> innari;
    public static HashMap<Inno.Categoria, Innario> categoricalInnari;    //One separate Innario for each category.
@@ -70,6 +76,25 @@ public class HymnsApplication extends Application {
        //Si prepara l'intent per il single hymn (to avoid null pointer exceptions at first invocation)
        SingleHymn_Activity.setupIntent();
        //tl.addSplit("Prepared intent.");
+
+        //Managing preferences; if device language locale belongs to one of those available then automatically
+        //select it, otherwise load xml defaults. This is the logic only one no user preferences are stored.
+        SharedPreferences _prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (!(_prefs.getBoolean(PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES, false))) {
+            //This branch gets executed only if preferences have been never set before (or user wiped app data)
+            PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.prefs, false);
+            String available_locales = TextUtils.join(";",myResources.getStringArray(R.array.pref_international_values));
+            String default_language = Locale.getDefault().getLanguage();
+            if (available_locales.contains(default_language)) {
+                Log.i(MyConstants.LogTag_STR, "Device locale is included in the app: " + default_language);
+                SharedPreferences.Editor e = _prefs.edit();
+                e.putString(PrefsActivity.PREF_LANGUAGE_SELECTED, default_language).commit();
+                mCurrentLanguageLocale = default_language;
+            }
+        }
+        mCurrentLanguageLocale = _prefs.getString(
+                PrefsActivity.PREF_LANGUAGE_SELECTED,
+                myResources.getString(R.string.pref_international_defaultvalue));
 
        //Time logging continued within the helper class...
        HymnBooksHelper hymnBooksHelper = new HymnBooksHelper(getApplicationContext());

@@ -12,4 +12,17 @@
 
     <!-- Default positioning of the controls fragment (it's on the left side of the screen) -->
     <bool name="default_controls_on_the_left">true</bool>
+
+    <!-- Arrays to support preferences -->
+    <string-array name="pref_international_labels">
+        <item>@string/pref_language_it</item>
+        <item>@string/pref_language_pt</item>
+    </string-array>
+    <string-array name="pref_international_values">
+        <item>it</item>
+        <item>pt</item>
+    </string-array>
+    <string name="pref_international_defaultvalue">it</string>
+    <!-- ************************************** -->
+
 </resources>

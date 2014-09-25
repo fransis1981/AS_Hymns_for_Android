@@ -53,6 +53,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PrefsActivity"
+            android:label="@string/title_prefsactivity" >
+        </activity>
 
         <provider
             android:name=".HymnsSuggestionsProvider"
