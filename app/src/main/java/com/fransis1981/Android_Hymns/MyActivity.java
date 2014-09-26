@@ -36,10 +36,13 @@ public class MyActivity extends ActionBarActivity {
 
     private static final int ACTIVITYRESULT_SEARCHHYMN = 0;
 
-   //Constants for bundle arguments
-   static final String TAB_BUNDLESTATE = "SelectedTab";
-   static final String CATEGORIASELECTION_BUNDLESTATE = "SelectedCategory";
-   static final String INNARIOSELECTION_BUNDLESTATE = "SelectedHymnBook";
+    //Constants for bundle arguments
+    static final String TAB_BUNDLESTATE = "SelectedTab";
+    static final String CATEGORIASELECTION_BUNDLESTATE = "SelectedCategory";
+    static final String INNARIOSELECTION_BUNDLESTATE = "SelectedHymnBook";
+    static final String SEARCHTEXT_BUNDLESTATE = "SearchText";
+    static final String SEARCHEXPANDED_BUNDLESTATE = "SearchExpanded";
+    static final String FTSWORKING_BUNDLESTATE = "FTSWorking";
 
     //Dictionary preference for the positioning of the controls fragment in tablet mode.
     static final String PREF_Controls_On_The_Left = "Controls_On_The_Left";
@@ -51,12 +54,14 @@ public class MyActivity extends ActionBarActivity {
     private boolean _tabletMode;
 
     private MenuItem mSearchMenuItem;
+    android.support.v7.widget.SearchView mSearchView;
+    private boolean mSearchExpanded;
+    private CharSequence mSearchQuery;
 
     FragmentManager _fm;
     SingleHymn_Fragment singleHymn_fragment;
     boolean mFTSServiceWorking = false;
     ProgressReceiver mReceiver;
-    android.support.v7.widget.SearchView mSearchView;
 
 
     /** Called when the activity is first created.  */
@@ -94,21 +99,13 @@ public class MyActivity extends ActionBarActivity {
         }
    }
 
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        mSearchMenuItem = menu.findItem(R.id.mnu_search);
-        mSearchMenuItem.setVisible(HymnBooksHelper.me().isFTSAvailable());
-        SearchManager _sm = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
-        mSearchView.setSearchableInfo(_sm.getSearchableInfo(getComponentName()));
-
-        menu.findItem(R.id.mnu_app_settings).setIntent(new Intent(this, PrefsActivity.class));
-        menu.findItem(R.id.mnu_system_search_options).setIntent(new Intent(Settings.ACTION_SEARCH_SETTINGS));
-
-        return true;
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mFTSServiceWorking = savedInstanceState.getBoolean(FTSWORKING_BUNDLESTATE);
+        mSearchExpanded = savedInstanceState.getBoolean(SEARCHEXPANDED_BUNDLESTATE);
+        mSearchQuery = savedInstanceState.getCharSequence(SEARCHTEXT_BUNDLESTATE);
     }
 
 
@@ -132,6 +129,37 @@ public class MyActivity extends ActionBarActivity {
         }
 
         super.onResume();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        mSearchMenuItem = menu.findItem(R.id.mnu_search);
+        mSearchMenuItem.setVisible(HymnBooksHelper.me().isFTSAvailable());
+        SearchManager _sm = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
+        mSearchView.setSearchableInfo(_sm.getSearchableInfo(getComponentName()));
+        if (mSearchExpanded) {
+            MenuItemCompat.expandActionView(mSearchMenuItem);
+            mSearchView.setQuery(mSearchQuery, false);
+        }
+
+        menu.findItem(R.id.mnu_app_settings).setIntent(new Intent(this, PrefsActivity.class));
+        menu.findItem(R.id.mnu_system_search_options).setIntent(new Intent(Settings.ACTION_SEARCH_SETTINGS));
+
+        return true;
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(FTSWORKING_BUNDLESTATE, mFTSServiceWorking);
+        outState.putBoolean(SEARCHEXPANDED_BUNDLESTATE, MenuItemCompat.isActionViewExpanded(mSearchMenuItem));
+        outState.putCharSequence(SEARCHTEXT_BUNDLESTATE, mSearchView.getQuery());
+        super.onSaveInstanceState(outState);
     }
 
 

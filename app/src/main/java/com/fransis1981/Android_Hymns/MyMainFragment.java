@@ -125,7 +125,6 @@ public class MyMainFragment extends Fragment
                                           fragment_keypad, fragment_hymnslist,fragment_recent, fragment_starred);
       mViewPager = (ViewPager) v.findViewById(R.id.main_viewpager);
       mViewPager.setAdapter(mPagerAdapter);
-      mViewPager.setAdapter(mPagerAdapter);
       mViewPager.setOnPageChangeListener(this);
       mViewPager.setOffscreenPageLimit(4);
 
