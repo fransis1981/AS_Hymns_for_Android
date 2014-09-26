@@ -174,6 +174,7 @@ public class MyActivity extends ActionBarActivity {
                 t.show();
                 return;
             }
+            MenuItemCompat.collapseActionView(mSearchMenuItem);
             startActivityForResult(
                     new Intent(this, SearchActivity.class).putExtra(SearchManager.QUERY, _qry),
                     ACTIVITYRESULT_SEARCHHYMN
@@ -184,6 +185,7 @@ public class MyActivity extends ActionBarActivity {
             if (_s.length() > 0) {
                 if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "Intercepted ACTION_VIEW intent from suggestion with data " + _s);
                 try {
+                    MenuItemCompat.collapseActionView(mSearchMenuItem);
                     callback_HymnSelected(Inno.findInnoById(Long.parseLong(_s)));
                 }
                 catch (InnoNotFoundException infe) {
@@ -197,7 +199,6 @@ public class MyActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        MenuItemCompat.collapseActionView(mSearchMenuItem);
 
         //Got a single possible request code for now, so not implementing switch statement.
         if (resultCode == Activity.RESULT_OK) {
