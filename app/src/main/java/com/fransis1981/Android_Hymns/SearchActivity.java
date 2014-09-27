@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 /*
  * This activity is invoked when there is a search to perform. Search keywords are passed

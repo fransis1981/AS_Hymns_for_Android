@@ -39,9 +39,11 @@ public class SearchResultsCursorAdapter extends SimpleCursorAdapter {
         mLayoutResource = layout;
         mLi = LayoutInflater.from(context);
         mSearchedQuery = searched_query;
-        hashMapHymnbooks = new SparseArray<String>(HymnBooksHelper.me().innari.size());
-        for (Innario _i: HymnBooksHelper.me().innari) {
-            hashMapHymnbooks.put(Integer.parseInt(_i.getId()), String.format("[%s]", _i.getTitolo()));
+        if (hashMapHymnbooks == null) {
+            hashMapHymnbooks = new SparseArray<String>(HymnBooksHelper.me().innari.size());
+            for (Innario _i : HymnBooksHelper.me().innari) {
+                hashMapHymnbooks.put(Integer.parseInt(_i.getId()), String.format("[%s]", _i.getTitolo()));
+            }
         }
     }
 
