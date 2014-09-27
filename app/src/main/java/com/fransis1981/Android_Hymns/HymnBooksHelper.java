@@ -38,9 +38,6 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
      *     Costanti e variabili per supportare la conservazione dello stato del processo di background per la
      *     costruzione della tabella FTS. Questo è un work-around ad un bug della support-library di Google.
      */
-    public static final int FTS_BUILDING_STOPPED = -1;
-    public int FTS_Building_CurrentProgressValue = FTS_BUILDING_STOPPED;
-    public Cursor FTS_Building_Cursor;
 
     private int mTotalNumberOfHymns = 0;    //Actual value is calculated upon initialization
     /* ---------------------------------------------------------------------- */
@@ -145,14 +142,6 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
             throw new IllegalStateException("FTS table does not contain the correct number of hymns.");
         }
         mFTSAvailable = _av;
-    }
-
-    /*
-     * Returns true if fields state shows that FTS table is still under building process.
-     */
-    public boolean isBuildingFTS() {
-        return  (FTS_Building_CurrentProgressValue > HymnBooksHelper.FTS_BUILDING_STOPPED)
-                && (FTS_Building_Cursor != null);
     }
 
 

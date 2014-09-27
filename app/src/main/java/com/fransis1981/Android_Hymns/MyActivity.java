@@ -89,7 +89,6 @@ public class MyActivity extends ActionBarActivity {
                 singleHymn_fragment.showHymn(HymnsApplication.getCurrentInnario().getInno(1));
             }
 
-            ActionBar ab = getSupportActionBar();
             setSupportProgressBarIndeterminate(false);
 
 
@@ -300,10 +299,10 @@ public class MyActivity extends ActionBarActivity {
      * (e.g., nulling the receiver, hide progress bar, etc.)
      */
     void manageFTSServiceEnd() {
-        setSupportProgressBarVisibility(false);
-        mFTSServiceWorking = false;
-        if (!mSearchMenuItem.isVisible()) supportInvalidateOptionsMenu();
         try {
+            setSupportProgressBarVisibility(false);
+            mFTSServiceWorking = false;
+            if (!mSearchMenuItem.isVisible()) supportInvalidateOptionsMenu();
             unregisterReceiver(mReceiver);
             mReceiver = null;
         }

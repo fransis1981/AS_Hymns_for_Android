@@ -55,7 +55,7 @@ public class HymnsApplication extends Application {
 
    //static TimingLogger tl;
 
-   public static HymnsApplication getInstance() {
+    public static HymnsApplication getInstance() {
         return singleton;
     }
 
@@ -78,7 +78,7 @@ public class HymnsApplication extends Application {
        //tl.addSplit("Prepared intent.");
 
         //Managing preferences; if device language locale belongs to one of those available then automatically
-        //select it, otherwise load xml defaults. This is the logic only one no user preferences are stored.
+        //select it, otherwise load xml defaults. This is the logic only when no user preferences are stored.
         SharedPreferences _prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (!(_prefs.getBoolean(PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES, false))) {
             //This branch gets executed only if preferences have never been set before (or user wiped app data)
@@ -89,44 +89,43 @@ public class HymnsApplication extends Application {
                 Log.i(MyConstants.LogTag_STR, "Device locale is included in the app: " + default_language);
                 SharedPreferences.Editor e = _prefs.edit();
                 e.putString(PrefsActivity.PREF_LANGUAGE_SELECTED, default_language).commit();
-                mCurrentLanguageLocale = default_language;
             }
         }
         mCurrentLanguageLocale = _prefs.getString(
                 PrefsActivity.PREF_LANGUAGE_SELECTED,
                 myResources.getString(R.string.pref_international_defaultvalue));
 
-       //Time logging continued within the helper class...
-       HymnBooksHelper hymnBooksHelper = new HymnBooksHelper(getApplicationContext());
-       HymnBooksHelper.me().caricaInnari(true);
-       innari = HymnBooksHelper.me().innari;
-       categoricalInnari = HymnBooksHelper.me().categoricalInnari;
+        //Time logging continued within the helper class...
+        HymnBooksHelper hymnBooksHelper = new HymnBooksHelper(getApplicationContext());
+        HymnBooksHelper.me().caricaInnari(true);
+        innari = HymnBooksHelper.me().innari;
+        categoricalInnari = HymnBooksHelper.me().categoricalInnari;
 
-       //Si imposta l'innario corrente al primo innario disponibile
-       setCurrentInnario(innari.get(0));
+        //Si imposta l'innario corrente al primo innario disponibile
+        setCurrentInnario(innari.get(0));
 
-       //Si crea il gestore dai cantici recenti
-       recentsManager = new MRUManager();
-       try {
-          //Restoring saved preferences (recents)
-          recentsManager.readFromPreferences(getApplicationContext());
-       }
-       catch (Exception e) {
-          Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE RESTORING RECENT HYMNS...." + e.getMessage());
-       }
-       //tl.addSplit("Prepared recents manager with preferences.");
+        //Si crea il gestore dai cantici recenti
+        recentsManager = new MRUManager();
+        try {
+           //Restoring saved preferences (recents)
+           recentsManager.readFromPreferences(getApplicationContext());
+        }
+        catch (Exception e) {
+            Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE RESTORING RECENT HYMNS...." + e.getMessage());
+        }
+        //tl.addSplit("Prepared recents manager with preferences.");
 
-       //Si crea il gestore dei preferiti (starred)
-       starManager = new StarManager();
-       try {
-          //Restoring saved preferences (starred)
-          starManager.readFromPreferences(getApplicationContext());
-       }
-       catch (Exception e) {
-          Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE RESTORING STARRED HYMNS...." + e.getMessage());
-       }
-       //tl.addSplit("Prepared star manager with preferences.");
-       //tl.dumpToLog();
+        //Si crea il gestore dei preferiti (starred)
+        starManager = new StarManager();
+        try {
+           //Restoring saved preferences (starred)
+           starManager.readFromPreferences(getApplicationContext());
+        }
+        catch (Exception e) {
+           Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE RESTORING STARRED HYMNS...." + e.getMessage());
+        }
+        //tl.addSplit("Prepared star manager with preferences.");
+        //tl.dumpToLog();
 
         //Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("A Ti, Deus Trino, poderoso Deus,|br/|Que estás presente sempre junto aos teus|br/|A ministrar as bênçãos lá dos céus,"));
         //Log.i(MyConstants.LogTag_STR, HymnBooksHelper.normalizeAndLower("Santo Deus, vem inflamar|br/|Nossos débeis corações;|br/|Vem as trevas dissipar,|br/|Livra-nos de imperfeições."));

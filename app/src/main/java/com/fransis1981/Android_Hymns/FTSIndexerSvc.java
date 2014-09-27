@@ -3,6 +3,7 @@ package com.fransis1981.Android_Hymns;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -72,6 +73,23 @@ public class FTSIndexerSvc extends Service {
         stopSelf();
     }
 
+    //-------------------------------------------------------
+    // Fields to support FTSTask progress.
+    //-------------------------------------------------------
+    public static final int FTS_BUILDING_STOPPED = -1;
+    static Cursor mFTSCursor;
+    static int mFTS_CurrentProgressValue = FTS_BUILDING_STOPPED;
+
+
+    /*
+     * Returns true if fields state shows that FTS table is still under building process.
+     */
+    public static boolean isBuildingFTS() {
+        return  (mFTS_CurrentProgressValue > FTS_BUILDING_STOPPED)
+                && (mFTSCursor != null);
+    }
+
+
     class FTSTask extends AsyncTask<HymnBooksHelper, Integer, Void> {
 
         @Override
@@ -82,30 +100,30 @@ public class FTSIndexerSvc extends Service {
         protected Void doInBackground(HymnBooksHelper... prm) {
             //Wait for the DB to be available
             while (prm[0] == null || prm[0].mDB == null || !prm[0].mDB.isOpen()) {
-                SystemClock.sleep(2);
+                SystemClock.sleep(1);
             }
 
             int _increment = HymnBooksHelper.PROGRESSBAR_MAX_VALUE / prm[0].getTotalNumberOfHymns();
 
             //Checking previous execution and progress status
-            if (prm[0].isBuildingFTS()) {
+            if (isBuildingFTS()) {
                 //FTS build previously started; should fix cursor and progress value to one step back,
                 //remembering to delete for safety current pointed hymn's ID.
-                if (prm[0].FTS_Building_Cursor.getPosition() > -1) {
-                    int _tempid = prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_ID);
+                if (mFTSCursor.getPosition() > -1) {
+                    int _tempid = mFTSCursor.getInt(MyConstants.INDEX_INNI_ID);
                     prm[0].deleteHymnFromFTS_byID(_tempid);
-                    prm[0].FTS_Building_Cursor.moveToPrevious();
+                    mFTSCursor.moveToPrevious();
                 }
 
-                publishProgress(prm[0].FTS_Building_CurrentProgressValue =
-                        ((prm[0].FTS_Building_Cursor.getPosition()+1)*_increment));
+                publishProgress(mFTS_CurrentProgressValue =
+                        ((mFTSCursor.getPosition()+1)*_increment));
             }
             else {
                 if (!prm[0].createFTSTable()) {
                     mCancelReason = HymnsApplication.myResources.getString(R.string.fts_worker_cancel_reason1);
                     this.cancel(true);
                 }
-                prm[0].FTS_Building_Cursor = prm[0].mDB.query(
+                mFTSCursor = prm[0].mDB.query(
                         MyConstants.TABLE_INNI,
                         null,
                         null,
@@ -113,18 +131,18 @@ public class FTSIndexerSvc extends Service {
                         null,
                         null,
                         MyConstants.FIELD_INNI_NUMERO);
-                prm[0].FTS_Building_CurrentProgressValue = 0;
+                mFTS_CurrentProgressValue = 0;
             }
 
             ContentValues _cv = new ContentValues();
             String txt = "";
             int _successful_inserts = 0;
-            while (prm[0].FTS_Building_Cursor.moveToNext() && !isCancelled()) {
+            while (mFTSCursor.moveToNext() && !isCancelled()) {
                 _cv.clear();
-                Inno _inno = new Inno(prm[0].FTS_Building_Cursor, null);
-                _cv.put(MyConstants.FIELD_INNARI_ID, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_ID_INNARIO));
-                _cv.put(MyConstants.FTS_FIELD_INNI_ID, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_ID));
-                _cv.put(MyConstants.FIELD_INNI_NUMERO, prm[0].FTS_Building_Cursor.getInt(MyConstants.INDEX_INNI_NUMERO));
+                Inno _inno = new Inno(mFTSCursor, null);
+                _cv.put(MyConstants.FIELD_INNARI_ID, mFTSCursor.getInt(MyConstants.INDEX_INNI_ID_INNARIO));
+                _cv.put(MyConstants.FTS_FIELD_INNI_ID, mFTSCursor.getInt(MyConstants.INDEX_INNI_ID));
+                _cv.put(MyConstants.FIELD_INNI_NUMERO, mFTSCursor.getInt(MyConstants.INDEX_INNI_NUMERO));
                 _cv.put(MyConstants.FIELD_INNI_TITOLO, _inno.getTitolo());
                 txt = HymnBooksHelper.SearchTextUtils.normalizeAndLower(_inno.getFullText(false, false));
                 txt = HymnBooksHelper.SearchTextUtils.stripPunctuation(txt).trim();
@@ -137,16 +155,16 @@ public class FTSIndexerSvc extends Service {
                     _successful_inserts++;
                 }
 
-                publishProgress(prm[0].FTS_Building_CurrentProgressValue += _increment);
+                publishProgress(mFTS_CurrentProgressValue += _increment);
             }
             //break everything and do not change any status-relevant fields if this task was cancelled.
             if (MyConstants.DEBUG)
                 Log.i(MyConstants.LogTag_STR, String.format("Correctly inserted %d rows into FTS table.", _successful_inserts));
             if (isCancelled()) return null;
 
-            prm[0].FTS_Building_Cursor.close();
-            prm[0].FTS_Building_Cursor = null;
-            prm[0].FTS_Building_CurrentProgressValue = HymnBooksHelper.FTS_BUILDING_STOPPED;
+            mFTSCursor.close();
+            mFTSCursor = null;
+            mFTS_CurrentProgressValue = FTS_BUILDING_STOPPED;
             prm[0].setFTSAvailable(true);
             if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "Completed FTS table generation.");
             return null;
