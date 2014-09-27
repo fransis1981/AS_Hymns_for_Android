@@ -2,13 +2,13 @@ package com.fransis1981.Android_Hymns;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Html;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 

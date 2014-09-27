@@ -27,10 +27,12 @@ public class SearchActivity extends FragmentActivity implements LoaderManager.Lo
                                                                 ListView.OnItemClickListener {
     private static final int SEARCHRESULTS_LOADER = 0;
     private static final int PROGRESS_DIALOG = 0;
+    private static final String DIALOGSHOWN_BUNDLESTATE = "DlgShown";
 
     String mSearchKeywords;
     SearchResultsCursorAdapter mCa;
     ListView mLv;
+    boolean mDialogShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +40,12 @@ public class SearchActivity extends FragmentActivity implements LoaderManager.Lo
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_search);
 
+        if (savedInstanceState != null) {
+            mDialogShown = savedInstanceState.getBoolean(DIALOGSHOWN_BUNDLESTATE);
+        } else {
+            mDialogShown = false;
+        }
         mSearchKeywords = getIntent().getStringExtra(SearchManager.QUERY);
-
-
 
         //Preparing cursor adapter
         mCa = new SearchResultsCursorAdapter(
@@ -59,9 +64,18 @@ public class SearchActivity extends FragmentActivity implements LoaderManager.Lo
         mLv.setAdapter(mCa);
         mLv.setOnItemClickListener(this);
 
-        getSupportLoaderManager().initLoader(SEARCHRESULTS_LOADER, null, this);
+        if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, String.format("onCreate(): %d elements in the cursor.", mCa.getCount()));
+        LoaderManager _lm = getSupportLoaderManager();
+        _lm.initLoader(SEARCHRESULTS_LOADER, null, this);
+
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(DIALOGSHOWN_BUNDLESTATE, mDialogShown);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -90,6 +104,8 @@ public class SearchActivity extends FragmentActivity implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "onCreateLoader() invoked!");
+        mDialogShown = true;
         showDialog(PROGRESS_DIALOG);
         switch (id) {
             case SEARCHRESULTS_LOADER:
@@ -110,13 +126,12 @@ public class SearchActivity extends FragmentActivity implements LoaderManager.Lo
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        try {
+        if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "onLoadFinished() invoked!");
+        if (mDialogShown) {
+            mDialogShown = false;
             dismissDialog(PROGRESS_DIALOG);
         }
-        catch (Exception e) {
-            //Avoiding dismissing what hasn't been shown.
-        }
-        mCa.changeCursor(data);
+        mCa.swapCursor(data);
     }
 
 

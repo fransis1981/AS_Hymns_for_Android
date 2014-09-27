@@ -7,6 +7,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -82,7 +83,7 @@ public class HymnsSuggestionsProvider extends ContentProvider {
     }
 
     /*
-     * If query text is made up of 1 or 2 chars, then return at once with no suggestions.
+     * Here managing all requests to this provider; despite the name, it also manages standard searches.
      */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
@@ -92,6 +93,7 @@ public class HymnsSuggestionsProvider extends ContentProvider {
         switch (mURI_MATCHER.match(uri)) {
             /* --------------------------- PROVIDER QUERIED FOR SUGGESTIONS ------------------------- */
             case SUGGESTIONS:
+                // If query text is made up of 1 or 2 chars, then return at once with no suggestions.
                 MatrixCursor _cursor = new MatrixCursor(SUGGESTIONS_COLUMNS, mCapacity);
                 String _query = uri.getLastPathSegment();
                 if (_query.length() <= 2) return _cursor;
@@ -130,6 +132,7 @@ public class HymnsSuggestionsProvider extends ContentProvider {
                 else {
                     _mc = new MatrixCursor(MyConstants.FTS_COLUMN_NAMES, _c.getCount());
                     do {
+                        //if (MyConstants.DEBUG) SystemClock.sleep(333);     //To test issue with the progress dialog
                         _mc.addRow(new Object[] {
                                 _c.getInt(_c.getColumnIndex(MyConstants.FIELD_INNI_ID_INNARIO)),
                                 _c.getInt(_c.getColumnIndex(MyConstants.FTS_FIELD_INNI_ID)),
