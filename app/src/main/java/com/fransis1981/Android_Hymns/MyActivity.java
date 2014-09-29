@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 
@@ -144,7 +145,14 @@ public class MyActivity extends ActionBarActivity {
             MenuItemCompat.expandActionView(mSearchMenuItem);
             mSearchView.setQuery(mSearchQuery, false);
         }
-
+        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    showInputMethod(view.findFocus());
+                }
+            }
+        });
         menu.findItem(R.id.mnu_app_settings).setIntent(new Intent(this, PrefsActivity.class));
         menu.findItem(R.id.mnu_system_search_options).setIntent(new Intent(Settings.ACTION_SEARCH_SETTINGS));
 
@@ -198,6 +206,7 @@ public class MyActivity extends ActionBarActivity {
                 );
                 t.setGravity(Gravity.TOP, 0, 0);
                 t.show();
+                mSearchView.clearFocus(); mSearchView.requestFocus();
                 return;
             }
             MenuItemCompat.collapseActionView(mSearchMenuItem);
@@ -307,6 +316,16 @@ public class MyActivity extends ActionBarActivity {
         }
         catch (Exception e) {
             Log.e(MyConstants.LogTag_STR, "MyActivity.manageFTSServiceEnd(): " + e.getMessage());
+        }
+    }
+
+    /*
+     * To display, when needed, the soft keyboard.
+     */
+    private void showInputMethod(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(view, 0);
         }
     }
 
