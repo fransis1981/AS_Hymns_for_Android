@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /*
  * This activity is invoked when there is a search to perform. Search keywords are passed
@@ -130,7 +131,13 @@ public class SearchActivity extends FragmentActivity implements LoaderManager.Lo
             mDialogShown = false;
             dismissDialog(PROGRESS_DIALOG);
         }
-        mCa.swapCursor(data);
+        if (data.getCount() > 0) {
+            mCa.swapCursor(data);
+        }
+        else {
+            Toast.makeText(this, getString(R.string.msg_empty_results), Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
 

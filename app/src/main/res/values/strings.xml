@@ -74,10 +74,11 @@
     <string name="mnu_quicksearchoptions_label">Google Quick Search options</string>
     <string name="searchprogressdialog_message">Please wait a few moments.</string>
     <string name="searchprogressdialog_title">Searching...</string>
-    <string name="msg_single_char_searches">Single character searches are not allowed.</string>
+    <string name="msg_short_searches">Searches with 1 or 2 characters are not allowed.</string>
     <string name="toast_indexing_complete_line1">Text indexing complete!</string>
     <string name="toast_indexing_complete_line2">Use this icon in the top bar to perform searches:</string>
     <string name="magnifier_icon_description">Magnifier icon</string>
     <string name="mnu_appsettings_label">App settings</string>
+    <string name="msg_empty_results">Specified keywords did not yield any result.</string>
 
 </resources>

@@ -12,7 +12,6 @@ import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -191,10 +190,10 @@ public class MyActivity extends ActionBarActivity {
         super.onNewIntent(intent);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String _qry = intent.getStringExtra(SearchManager.QUERY).trim();
-            if (_qry.length() == 1) {
+            if (_qry.length() <= 2) {
                 Toast t = Toast.makeText(
                         getApplicationContext(),
-                        getString(R.string.msg_single_char_searches),
+                        getString(R.string.msg_short_searches),
                         Toast.LENGTH_SHORT
                 );
                 t.setGravity(Gravity.TOP, 0, 0);
