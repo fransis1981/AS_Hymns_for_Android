@@ -15,6 +15,7 @@ public class FTSIndexerSvc extends Service {
     public static final int FTS_PROGRESS_COMPLETE = 12345;
 
     private FTSTask mTask;
+    private HymnBooksHelper mHH;       //Used to keep a reference and possibly avoid GC
     
     //This variable is used to decide wether to broadcast a progress update or not.
     private int mCurrentProgress;
@@ -32,7 +33,8 @@ public class FTSIndexerSvc extends Service {
 
         // Create and execute the background task.
         mTask = new FTSTask();
-        mTask.execute(HymnBooksHelper.me());
+        mHH = HymnBooksHelper.me();
+        mTask.execute();
 
         return Service.START_STICKY;
     }
@@ -66,9 +68,10 @@ public class FTSIndexerSvc extends Service {
         try {
             mTask.cancel(true);
             mTask = null;
+            mHH = null;
         }
         catch (Exception e) {
-            Log.w(MyConstants.LogTag_STR, "Terminating indexer service: " + e.getMessage());
+            Log.w(MyConstants.LogTag_STR, "Terminating indexer service with exception: " + e.getMessage());
         }
         stopSelf();
     }
@@ -90,20 +93,20 @@ public class FTSIndexerSvc extends Service {
     }
 
 
-    class FTSTask extends AsyncTask<HymnBooksHelper, Integer, Void> {
+    class FTSTask extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
         }
 
         @Override
-        protected Void doInBackground(HymnBooksHelper... prm) {
+        protected Void doInBackground(Void... ignore) {
             //Wait for the DB to be available
-            while (prm[0] == null || prm[0].mDB == null || !prm[0].mDB.isOpen()) {
+            while (mHH == null || mHH.mDB == null || !mHH.mDB.isOpen()) {
                 SystemClock.sleep(1);
             }
 
-            int _increment = HymnBooksHelper.PROGRESSBAR_MAX_VALUE / prm[0].getTotalNumberOfHymns();
+            int _increment = HymnBooksHelper.PROGRESSBAR_MAX_VALUE / mHH.getTotalNumberOfHymns();
 
             //Checking previous execution and progress status
             if (isBuildingFTS()) {
@@ -111,7 +114,7 @@ public class FTSIndexerSvc extends Service {
                 //remembering to delete for safety current pointed hymn's ID.
                 if (mFTSCursor.getPosition() > -1) {
                     int _tempid = mFTSCursor.getInt(MyConstants.INDEX_INNI_ID);
-                    prm[0].deleteHymnFromFTS_byID(_tempid);
+                    mHH.deleteHymnFromFTS_byID(_tempid);
                     mFTSCursor.moveToPrevious();
                 }
 
@@ -119,11 +122,11 @@ public class FTSIndexerSvc extends Service {
                         ((mFTSCursor.getPosition()+1)*_increment));
             }
             else {
-                if (!prm[0].createFTSTable()) {
+                if (!mHH.createFTSTable()) {
                     mCancelReason = HymnsApplication.myResources.getString(R.string.fts_worker_cancel_reason1);
                     this.cancel(true);
                 }
-                mFTSCursor = prm[0].mDB.query(
+                mFTSCursor = mHH.mDB.query(
                         MyConstants.TABLE_INNI,
                         null,
                         null,
@@ -148,7 +151,7 @@ public class FTSIndexerSvc extends Service {
                 txt = HymnBooksHelper.SearchTextUtils.stripPunctuation(txt).trim();
                 _cv.put(MyConstants.FIELD_STROFE_TESTO, txt);
                 if (MyConstants.DEBUG && _successful_inserts <= 10) Log.i(MyConstants.LogTag_STR, "FTS: " + txt);
-                if (prm[0].mDB.insert(MyConstants.FTS_TABLE, null, _cv) == -1) {
+                if (mHH.mDB.insert(MyConstants.FTS_TABLE, null, _cv) == -1) {
                     Log.e(MyConstants.LogTag_STR, "Error while FTS indexing: " + _inno.getTitolo());
                 }
                 else {
@@ -165,7 +168,7 @@ public class FTSIndexerSvc extends Service {
             mFTSCursor.close();
             mFTSCursor = null;
             mFTS_CurrentProgressValue = FTS_BUILDING_STOPPED;
-            prm[0].setFTSAvailable(true);
+            mHH.setFTSAvailable(true);
             if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "Completed FTS table generation.");
             return null;
         }
