@@ -24,7 +24,7 @@ public class SingleHymn_Activity extends FragmentActivity {
       Bundle extras = getIntent().getExtras();
       int hymnNumber = extras.getInt(NUMERO_INNO_BUNDLEARG);
       String innarioTitle = extras.getString(INNARIO_BUNDLEARG);
-      final Inno hymnToDisplay =  HymnsApplication.getInnarioByTitle(innarioTitle).getInno(hymnNumber);
+      final Inno hymnToDisplay =  HymnBooksHelper.me().getInnarioByTitle(innarioTitle).getInno(hymnNumber);
 
       SingleHymn_Fragment frag = (SingleHymn_Fragment) getSupportFragmentManager().findFragmentById(R.id.singlehymn_fragment);
       frag.showHymn(hymnToDisplay);

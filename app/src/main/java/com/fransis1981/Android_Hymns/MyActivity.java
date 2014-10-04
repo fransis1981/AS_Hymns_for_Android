@@ -187,8 +187,8 @@ public class MyActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         //Saving preferences (recents and starred) before the activity gets destroyed
-        HymnsApplication.getRecentsManager().saveToPreferences(this);
-        HymnsApplication.getStarManager().saveToPreferences(this);
+        HymnsApplication.getRecentsManager().saveToPreferences(this, HymnsApplication.getCurrentLanguage());
+        HymnsApplication.getStarManager().saveToPreferences(this, HymnsApplication.getCurrentLanguage());
         super.onDestroy();
     }
 
@@ -302,6 +302,7 @@ public class MyActivity extends ActionBarActivity {
         startService(new Intent(this, FTSIndexerSvc.class));
     }
 
+
     /*
      * Helper method for taking all actions related to FTS Indexer service end. (Note that the service self stops).
      * (e.g., nulling the receiver, hide progress bar, etc.)
@@ -318,6 +319,7 @@ public class MyActivity extends ActionBarActivity {
             Log.e(MyConstants.LogTag_STR, "MyActivity.manageFTSServiceEnd(): " + e.getMessage());
         }
     }
+
 
     /*
      * To display, when needed, the soft keyboard.

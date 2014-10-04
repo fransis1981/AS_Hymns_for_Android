@@ -57,11 +57,6 @@ public final class MyConstants {
 
    public static final String FTS_TABLE = "hymns_FTS";
 
-   //Queries
-   public static final String QUERY_SELECT_INNARI = "SELECT * FROM Innari";
-
-   public static final String QUERY_DROP_FTS_TABLE = "DROP TABLE IF EXISTS " + FTS_TABLE;
-
    /*
     * FTS TABLE SCHEMA
     *   - ID Innario
@@ -69,8 +64,9 @@ public final class MyConstants {
     *   - Numero Inno
     *   - Titolo Inno
     *   - Testo Inno (column "Testo" in the FTS table is the union of all verses for a given hymn)
+    *   - Language code (e.g., 'it', 'pt', etc.)
     */
-   public static final String FTS_FIELD_INNI_ID = BaseColumns._ID;
+    public static final String FTS_FIELD_INNI_ID = BaseColumns._ID;
     public static final String[] FTS_COLUMN_NAMES = new String[] {
             FIELD_INNI_ID_INNARIO,
             FTS_FIELD_INNI_ID,
@@ -78,7 +74,7 @@ public final class MyConstants {
             FIELD_INNI_TITOLO,
             FIELD_STROFE_TESTO
     };
-   public static final String QUERY_CREATE_FTS_TABLE =
+    public static final String QUERY_CREATE_FTS_TABLE =
            "CREATE VIRTUAL TABLE " + FTS_TABLE + " USING fts3 (" +
            FIELD_INNI_ID_INNARIO + ", " +
            FTS_FIELD_INNI_ID + ", " +
@@ -87,9 +83,31 @@ public final class MyConstants {
            FIELD_STROFE_TESTO
                    + ")";
 
+
+    // ---------------------------  Queries  ----------------------------------------------
+    public static final String QUERY_SELECT_INNARI = "SELECT * FROM " + TABLE_INNARI;
+
+    public static final String QUERY_DROP_FTS_TABLE = "DROP TABLE IF EXISTS " + FTS_TABLE;
+
+    //Parameter 1: language code to filter hymnbooks.
+    public static final String QUERY_SELECT_INNARI_WITH_LANG = "SELECT * FROM " + TABLE_INNARI
+            + " WHERE " + FIELD_INNARI_LANG_CODE + "=?";
+
+
     //Template for a search query on the FTS table; append 'search keywords' to this string.
     //If needed, append also the LIMIT # statement at the end for limiting the number of results.
     public static final String QUERY_FTS_SEARCH = "SELECT * FROM " + FTS_TABLE +
             " WHERE " + FTS_TABLE + " MATCH ";
+
+
+    //WHERE condition with ?s for searching FTS table with language condition
+    //Placeholder <ids>: comma separated list of the desired hymnbook IDs for narrowing the search;
+    //Placeholder <keywords>: phrase keywords
+    public static final String PLACEHOLDER_ids = "<ids>";
+    public static final String PLACEHOLDER_keywords = "<keywords>";
+    public static final String QUERY_FTS_SEARCH_SELECTION_ON_HYMNBOOKS =
+            "SELECT * FROM " + FTS_TABLE +
+                    " WHERE " + FIELD_INNI_ID_INNARIO + " IN (" + PLACEHOLDER_ids + ") AND " +
+                    FTS_TABLE + " MATCH \"" + PLACEHOLDER_keywords + "\"";
 
 }

@@ -43,50 +43,69 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
     /* ---------------------------------------------------------------------- */
 
    HymnBooksHelper(Context context) {
-      super(context, MyConstants.DB_NAME, null, null, MyConstants.DB_VERSION);
-      setForcedUpgrade();       //PLEASE NOTE: without these I was not able to open DB in write-mode to allow upgrade.
-      mContext = context;
-      singleton = this;
+       super(context, MyConstants.DB_NAME, null, null, MyConstants.DB_VERSION);
+       setForcedUpgrade();       //PLEASE NOTE: without these I was not able to open DB in write-mode to allow upgrade.
+       mContext = context;
+       singleton = this;
+       getReadableDatabase();
 
-   }
-   public static HymnBooksHelper me() { return singleton; }
+       //Calculating the total number of hymns over all hymnbooks.
+       Cursor c = mDB.rawQuery(MyConstants.QUERY_SELECT_INNARI, null);
+       while (c.moveToNext()) {
+           mTotalNumberOfHymns += c.getInt(MyConstants.INDEX_INNARI_NUM_INNI);
+       }
+       c.close();
 
-
-   private void initDataStructures() {
-      getReadableDatabase();
-
-       //HymnsApplication.tl.addSplit("Preliminary operations upon DB.");
-
-      //Si prepara la struttura per gli innari di categoria
-      categoricalInnari = new HashMap<Inno.Categoria, Innario>();
-      for (Inno.Categoria cat: Inno.Categoria.values())
-         categoricalInnari.put(cat, new Innario(cat.toString()));
-
-      //Qui si caricano gli innari veri e propri (da SD oppure file XML)
-      innari = new ArrayList<Innario>();
-
-      Cursor c = mDB.rawQuery(MyConstants.QUERY_SELECT_INNARI, null);
-      while (c.moveToNext()) {
-         innari.add(new Innario(c.getInt(MyConstants.INDEX_INNARI_NUM_INNI),
-                                c.getString(MyConstants.INDEX_INNARI_TITOLO),
-                                c.getString(MyConstants.INDEX_INNARI_ID)));
-         //Log.i(MyConstants.LogTag_STR, "LETTO DAL DB: " + c.getString(MyConstants.INDEX_INNARI_TITOLO));
-
-          mTotalNumberOfHymns += c.getInt(MyConstants.INDEX_INNARI_NUM_INNI);
-      }
-      c.close();
-
+       //Checking FTS availability and consistency.
        mFTSAvailable = isTableExisting(MyConstants.FTS_TABLE);
        if (mFTSAvailable) {
            //Just to be paranoid...
            c = mDB.query(MyConstants.FTS_TABLE, null, null, null, null, null, null);
-           if (c.getCount() != getTotalNumberOfHymns())
+           if (c.getCount() != mTotalNumberOfHymns)
                setFTSAvailable(false);
            c.close();
        }
 
-      //HymnsApplication.tl.addSplit("All hymnbooks acquired by means of the cursor (Dialer Lists and base Inno objects).");
+       initDataStructures();
    }
+
+
+    public static HymnBooksHelper me() { return singleton; }
+
+
+    private void initDataStructures() {
+        //Si prepara la struttura per gli innari di categoria
+        categoricalInnari = new HashMap<Inno.Categoria, Innario>();
+        for (Inno.Categoria cat: Inno.Categoria.values())
+           categoricalInnari.put(cat, new Innario(cat.toString()));
+
+        //Si prepara l'array di base degli innari
+        innari = new ArrayList<Innario>();
+    }
+
+
+   /*
+    * This methods populates the innari field with the hymnbooks matching the specified language.
+    */
+   void caricaInnari(String prm_language) {
+      try {
+          innari.clear();
+          for (Inno.Categoria cat: Inno.Categoria.values())
+              categoricalInnari.get(cat).clear();
+
+          Cursor c = mDB.rawQuery(MyConstants.QUERY_SELECT_INNARI, null);
+          while (c.moveToNext()) {
+              if (c.getString(MyConstants.INDEX_INNARI_LANG_CODE).equalsIgnoreCase(prm_language))
+                  innari.add(new Innario(c));
+          }
+          c.close();
+
+      } catch (Exception e) {
+         Log.e(MyConstants.LogTag_STR, String.format("CATCHED SOMETHING WHILE LOADING HYMNS [%s]...[%s]", prm_language, e.getMessage()));
+         e.printStackTrace();
+      }
+   }
+
 
     /*
      * Access to a private field.
@@ -95,36 +114,34 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
         return mTotalNumberOfHymns;
     }
 
-   /*
-    * Questo metodo popola l'array globale degli innari;
-    * se è disponibile un file serializzato si carica da li, altrimenti si fa il parsing del file XML.
-    * Se _forceXML è TRUE allora si obbliga l'algoritmo ad acquisire i dati da XML.
-    */
-   void caricaInnari(boolean _forceXML) {
-      try {
-
-         initDataStructures();
-
-      } catch (Exception e) {
-         Log.e(MyConstants.LogTag_STR, "CATCHED SOMETHING WHILE LOADING HYMNS...." + e.getMessage());
-         e.printStackTrace();
-      }
-   }
-
 
    public void addCategoricalInno(Inno _inno) {
       categoricalInnari.get(_inno.getCategoria()).addInno(_inno);
    }
 
-   /*
-    * Questo metodo restituisce l'oggetto Innario opportuno conoscendone l'ID.
-   */
-   public Innario getInnarioByID(String _id) {
-      for (Innario i: innari) {
-         if (i.getId().equals(_id)) return i;
-      }
-      return null;
-   }
+
+    /*
+     * Questo metodo restituisce l'oggetto Innario opportuno conoscendone l'ID nel database.
+     * Ritorna NULL se nessun innario corrisponde al criterio specificato.
+     */
+    public Innario getInnarioByID(String _id) {
+        for (Innario i: innari) {
+           if (i.getId().equals(_id)) return i;
+        }
+        return null;
+    }
+
+
+    /*
+    * Questo metodo restituisce l'oggetto Innario opportuno conoscendone il titolo.
+    * Ritorna NULL se nessun innario corrisponde al criterio specificato.
+    */
+    public Innario getInnarioByTitle(String _title) {
+        for (Innario i: innari) {
+            if (i.getTitolo().equals(_title)) return i;
+        }
+        return null;
+    }
 
 
     /*
@@ -167,6 +184,7 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
      * Starting from a user-entered query text (passed in the prm_query parameter), this method:
      *  - Normalizes special characters
      *  - Add wildcards in between words
+     *  - Builds a list of IDs for narrowing search only on the currently loaded hymnbooks (they depend on the language)
      *  - NOT DONE -> Builds actual query using the NEAR/2 FTS keyword [Wildcards should be enough]
      *  - Runs the query, limiting the number of results to the value passed in the prm_limit parameter
      *    (if this parameter is greater than 0)
@@ -176,11 +194,14 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
     Cursor doFullTextSearch(String prm_query, int prm_limit) {
         if (TextUtils.isEmpty(prm_query))
             throw new IllegalArgumentException("Invoked doFullTextSearch() with an empty query string.");
-        String _sql_qry = MyConstants.QUERY_FTS_SEARCH + "'\""
-                    + SearchTextUtils.addFinalWildcard(
-                      SearchTextUtils.stripPunctuation(
-                      SearchTextUtils.normalizeAndLower(prm_query))) + "\"'"
-                    + ((prm_limit == 0)? "" : String.format(" LIMIT %d", prm_limit));
+        String search_terms =
+                SearchTextUtils.addFinalWildcard(
+                SearchTextUtils.stripPunctuation(
+                SearchTextUtils.normalizeAndLower(prm_query)));
+        String _sql_qry = MyConstants.QUERY_FTS_SEARCH_SELECTION_ON_HYMNBOOKS
+                .replace(MyConstants.PLACEHOLDER_keywords, search_terms);
+        _sql_qry = _sql_qry.replace(MyConstants.PLACEHOLDER_ids, TextUtils.join(",", getLoadedHymnbooksIds()));
+        _sql_qry = _sql_qry + ((prm_limit == 0)? "" : String.format(" LIMIT %d", prm_limit));
         if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, _sql_qry);
         Cursor _c = mDB.rawQuery(_sql_qry, null);
         if (_c != null && !_c.moveToFirst()) {
@@ -189,6 +210,19 @@ public class HymnBooksHelper extends SQLiteAssetHelperWithFTS {
         }
 
         return _c;
+    }
+
+
+    /*
+     * This method returns an array of strings, and each string represents one hymnbook ID among those
+     * currently loaded.
+     */
+    public String[] getLoadedHymnbooksIds() {
+        String[] ttt = new String[innari.size()];
+        for (int i = 0; i < innari.size(); i++) {
+            ttt[i] = innari.get(i).getId();
+        }
+        return ttt;
     }
 
 

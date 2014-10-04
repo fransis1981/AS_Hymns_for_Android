@@ -80,18 +80,19 @@ public class Inno {
     public int getNumero() { return numero; }
 
     /* ATTENZIONE: questo oggetto può essere null se l'Inno è usato solo a fini di elaborazione intermedia. */
-   public Innario getParentInnario() { return parentInnario; }
+    public Innario getParentInnario() { return parentInnario; }
 
-   public Categoria getCategoria() { return categoria; }
+    public Categoria getCategoria() { return categoria; }
 
-   public int getNumTotaleStrofe() { return numStrofe + numCori; }
+    public int getNumTotaleStrofe() { return numStrofe + numCori; }
 
 
-   public Inno() {
-      numStrofe = 0 ;
-      numCori = 0;
-      strofe_cori = null;
-   }
+    public Inno() {
+        numStrofe = 0 ;
+        numCori = 0;
+        strofe_cori = null;
+    }
+
 
    public Inno(Cursor cursor, Innario _parent) {
       numStrofe = 0 ;
@@ -116,7 +117,7 @@ public class Inno {
                 null, null, null);
         if (c.getCount() == 0) throw new InnoNotFoundException();
         c.moveToNext();
-        Innario _innario = HymnsApplication.getInnarioByID(c.getString(MyConstants.INDEX_INNI_ID_INNARIO));
+        Innario _innario = HymnBooksHelper.me().getInnarioByID(c.getString(MyConstants.INDEX_INNI_ID_INNARIO));
         if (_innario != null) {
             return _innario.getInno(c.getInt(MyConstants.INDEX_INNI_NUMERO));
         }
@@ -125,26 +126,30 @@ public class Inno {
         }
     }
 
-   public ArrayList<Strofa> getListStrofe() {
-      //Load strofe on demand by means of a cursor
-      loadStrofeFromDB();
-      return strofe_cori;
-   }
 
-   public Inno setStarred(boolean starred) {
-      if (mStarred != starred) {
-         if (starred) {
-            HymnsApplication.getStarManager().addStarred(this);
-         }
-         else {
-            HymnsApplication.getStarManager().removeStarred(this);
-         }
-         mStarred = starred;
-      }
-      return this;                //Implementing chaining
-   }
+    public ArrayList<Strofa> getListStrofe() {
+        //Load strofe on demand by means of a cursor
+        loadStrofeFromDB();
+        return strofe_cori;
+    }
 
-   public boolean isStarred() { return mStarred; }
+
+    public Inno setStarred(boolean starred) {
+        if (mStarred != starred) {
+            if (starred) {
+                HymnsApplication.getStarManager().addStarred(this);
+            }
+            else {
+                HymnsApplication.getStarManager().removeStarred(this);
+            }
+            mStarred = starred;
+        }
+       return this;                //Implementing chaining
+    }
+
+
+    public boolean isStarred() { return mStarred; }
+
 
     /*
      * This method returns a single string containing the hymn full text.
@@ -163,21 +168,22 @@ public class Inno {
         return _s;
     }
 
-   void loadStrofeFromDB() {
-      if (strofe_cori == null) {
-         strofe_cori = new ArrayList<Strofa>();
-         Cursor c = HymnBooksHelper.me().mDB.query(MyConstants.TABLE_STROFE, null,
-                               MyConstants.FIELD_STROFE_ID_INNO + "=?", new String[]{String.valueOf(id_inno)},
-                               null, null, MyConstants.FIELD_STROFE_ID_NUM_STROFA);
-         Strofa ss;
-         while (c.moveToNext()) {
-            ss = new Strofa(c, numStrofe, this);
-            if (ss.IsChorus()) numCori++;
-            else numStrofe++;
-            strofe_cori.add(ss);
-         }
-         c.close();
-      }
-   }
+
+    void loadStrofeFromDB() {
+        if (strofe_cori == null) {
+           strofe_cori = new ArrayList<Strofa>();
+           Cursor c = HymnBooksHelper.me().mDB.query(MyConstants.TABLE_STROFE, null,
+                                 MyConstants.FIELD_STROFE_ID_INNO + "=?", new String[]{String.valueOf(id_inno)},
+                                 null, null, MyConstants.FIELD_STROFE_ID_NUM_STROFA);
+           Strofa ss;
+           while (c.moveToNext()) {
+               ss = new Strofa(c, numStrofe, this);
+               if (ss.IsChorus()) numCori++;
+               else numStrofe++;
+               strofe_cori.add(ss);
+           }
+           c.close();
+        }
+    }
 
 }

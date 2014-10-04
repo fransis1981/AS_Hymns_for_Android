@@ -9,49 +9,64 @@ import java.util.ArrayList;
  * Created by Fransis on 23/02/14 20.07.
  */
 public class Innario {
-   private String titolo;
-   private String id;
-   private int numeroInni;
-   private SparseArray<Inno> inni;
-   private DialerList mDialerList;
-   private Cursor hymnsCursor;
+    private String titolo;
+    private String id;
+    private int numeroInni;
+    private String mLanguage;
+    private String mCountry;
 
-   private void init(int _numeroinni, String _titolo, String _id) {
-      mDialerList = new DialerList();
-      numeroInni = _numeroinni;
-      titolo = _titolo;
-      id = _id;
-      inni = new SparseArray<Inno>(_numeroinni);
+    private SparseArray<Inno> inni;
+    private DialerList mDialerList;
+    private Cursor hymnsCursor;
 
-      //Populating dialer list only (not hymns objects)
-      //Log.i(MyConstants.LogTag_STR, "Stato del DB nwl costruttore dell'Innario:" + HymnBooksHelper.me().db.isOpen());
-      hymnsCursor = HymnBooksHelper.me().mDB.query(MyConstants.TABLE_INNI,
+   private void init(int _numeroinni, String _titolo, String _id, String _lang, String _country) {
+       mDialerList = new DialerList();
+       numeroInni = _numeroinni;
+       titolo = _titolo;
+       id = _id;
+       mLanguage = _lang;
+       mCountry = _country;
+       inni = new SparseArray<Inno>(_numeroinni);
+
+       //Populating dialer list only (not hymns objects)
+       //Log.i(MyConstants.LogTag_STR, "Stato del DB nwl costruttore dell'Innario:" + HymnBooksHelper.me().db.isOpen());
+       hymnsCursor = HymnBooksHelper.me().mDB.query(MyConstants.TABLE_INNI,
                            null,
                            MyConstants.FIELD_INNI_ID_INNARIO + "=?", new String[] {String.valueOf(id)},
                            null, null, MyConstants.FIELD_INNI_NUMERO);
-      while (hymnsCursor.moveToNext()) {
-         Inno iii = new Inno(hymnsCursor, this);
-         int num = iii.getNumero();
-         inni.append(num, iii);
-         mDialerList.addAvailableNumber(num);
+       while (hymnsCursor.moveToNext()) {
+          Inno iii = new Inno(hymnsCursor, this);
+          int num = iii.getNumero();
+          inni.append(num, iii);
+          mDialerList.addAvailableNumber(num);
 
-         //Se l'inno appartiene ad una categoria, lo si sistema nell'opportuna struttura dati
-         if (iii.getCategoria() != Inno.Categoria.NESSUNA) {
-            HymnBooksHelper.me().addCategoricalInno(iii);
-         }
-      }
+           //Se l'inno appartiene ad una categoria, lo si sistema nell'opportuna struttura dati
+           if (iii.getCategoria() != Inno.Categoria.NESSUNA) {
+               HymnBooksHelper.me().addCategoricalInno(iii);
+           }
+       }
 
-      hymnsCursor.moveToFirst();
+       hymnsCursor.moveToFirst();
    }
 
-   //This constructor is used if you want to extract fields from the cursor from an external class.
+    //This constructor is used if you want to extract fields from the cursor from an external class.
+    public Innario(Cursor c) {
+        init(
+                c.getInt(MyConstants.INDEX_INNARI_NUM_INNI),
+                c.getString(MyConstants.INDEX_INNARI_TITOLO),
+                c.getString(MyConstants.INDEX_INNARI_ID),
+                c.getString(MyConstants.INDEX_INNARI_LANG_CODE),
+                c.getString(MyConstants.INDEX_INNARI_COUNTRY_CODE)
+        );
+    }
+
    public Innario(int numeroinni, String titolo, String id) {
-      init(numeroinni, titolo, id);
+      init(numeroinni, titolo, id, "", "");
    }
 
    //This constructor prepares an empty innario (populate using addInno() method).
    public Innario(String titolo) {
-      init(0, titolo, titolo);
+      init(0, titolo, titolo, "", "");
    }
 
    /*
@@ -66,51 +81,87 @@ public class Innario {
       return this;
    }
 
-   public String getTitolo() {
+    public String getTitolo() {
       return titolo;
    }
-   public Innario setTitolo(String _titolo) {
-      titolo = _titolo;
-      return this;
-   }
 
-   public String getId() { return id; }
+    
+    public Innario setTitolo(String _titolo) {
+       titolo = _titolo;
+       return this;
+    }
 
-   public int getNumeroInni() {
+
+    public String getId() { return id; }
+
+
+    public int getNumeroInni() {
       return numeroInni;
    }
 
-   public Inno getInno(int number) {
+
+    public Inno getInno(int number) {
       return inni.get(number);
    }
 
-   public DialerList getDialerList() {
+
+    public String getLanguageCode() {
+        return mLanguage;
+    }
+
+
+    public String getCountry() {
+        return mCountry;
+    }
+
+
+    public DialerList getDialerList() {
       return mDialerList;
    }
 
-   public Cursor getHymnsCursor() {
+
+    public Cursor getHymnsCursor() {
       return hymnsCursor;
    }
 
-   public boolean hasHymn(int number) {
+
+    public boolean hasHymn(int number) {
       return inni.indexOfKey(number) >= 0;
    }
 
-   //toString returns the title
-   @Override
-   public String toString() {
+
+    //toString returns the title
+    @Override
+    public String toString() {
       return getTitolo();
    }
 
-   public ArrayList<Inno> hymnsToArrayList() {
-      int ss = inni.size();
-      ArrayList<Inno> ret = new ArrayList<Inno>(ss);
-      for (int i = 0; i < ss; i++)
-         ret.add(inni.valueAt(i));
-      return ret;
-   }
 
-   public void dispose() {
+    public ArrayList<Inno> hymnsToArrayList() {
+        int ss = inni.size();
+        ArrayList<Inno> ret = new ArrayList<Inno>(ss);
+        for (int i = 0; i < ss; i++)
+            ret.add(inni.valueAt(i));
+        return ret;
+    }
+
+
+    /*
+     * Utility method to cleanup an hymnbook without recreating it (thus modifying its pointer).
+     * Used at startup for proper management of caterogical hymnbooks.
+     */
+    public void clear() {
+        inni.clear();
+        mDialerList = new DialerList();
+        try {
+            hymnsCursor.close();
+        }
+        catch (Exception e) {}
+        hymnsCursor = null;
+    }
+
+
+    public void dispose() {
       hymnsCursor.close();
    }
 }

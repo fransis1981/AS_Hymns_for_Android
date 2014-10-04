@@ -12,7 +12,7 @@ import java.util.Collections;
  */
 public class StarManager {
    private static String StarredPreferences_STR = "Storage_Starred";
-   private static String PREF_RecentsNumber = "NumS";
+   private static String PREF_StarredNumber = "NumS";
    private static String PREF_HymnRef = "RefS";
 
    public interface StarredItemsChangedListener {
@@ -73,32 +73,39 @@ public class StarManager {
     * 1- Save the number or recent hymns
     * 2- For each recent hymn save a string with the following format:
     *             <ID_Innario>|<NumeroInno>
+    *
+    *  NOTE: the language code is appended to the string identifying the set of preferences.
+    *        For backward compatibility, the "it" code is replaced with the empty string.
     */
-   public void saveToPreferences(Context context) {
-      SharedPreferences sp = context.getSharedPreferences(StarredPreferences_STR, Context.MODE_PRIVATE);
-      SharedPreferences.Editor e = sp.edit().clear();
-      e.putInt(PREF_RecentsNumber, mStarredList.size());
-      int n = 1;
-      for (Inno i: mStarredList) {
-         e.putString(PREF_HymnRef + n++, i.getParentInnario().getId() + "|" + i.getNumero());
-      }
-      e.commit();
+   public void saveToPreferences(Context context, String prm_lang) {
+       String locale_suffix = (prm_lang.equalsIgnoreCase("it"))? "" : prm_lang;
+       SharedPreferences sp = context.getSharedPreferences(StarredPreferences_STR + locale_suffix, Context.MODE_PRIVATE);
+       SharedPreferences.Editor e = sp.edit().clear();
+       e.putInt(PREF_StarredNumber, mStarredList.size());
+       int n = 1;
+       for (Inno i: mStarredList) {
+           e.putString(PREF_HymnRef + n++, i.getParentInnario().getId() + "|" + i.getNumero());
+       }
+       e.commit();
    }
 
-   public void readFromPreferences(Context context) throws InnoNotFoundException {
-      SharedPreferences sp = context.getSharedPreferences(StarredPreferences_STR, Context.MODE_PRIVATE);
-      mStarredList.clear();
-      int n = sp.getInt(PREF_RecentsNumber, 0);
-      for (int i = 1; i <= n; i++) {
-         String[] tokens = sp.getString(PREF_HymnRef + i, "").split("\\|");
-         Innario innario = HymnBooksHelper.me().getInnarioByID(tokens[0]);
-         if (innario == null) continue;            //Se l'innario non viene trovato si salta quest'inno
-         int num = Integer.parseInt(tokens[1]);
-         Inno inno = innario.getInno(num);
-         if (inno == null) throw new InnoNotFoundException(num);
-         inno.mStarred = true;
-         mStarredList.add(inno);
-      }
-      if (n > 0) raiseStarredItemsChangedEvent();
+
+   public void readFromPreferences(Context context, String prm_lang) throws InnoNotFoundException {
+       String locale_suffix = (prm_lang.equalsIgnoreCase("it"))? "" : prm_lang;
+       SharedPreferences sp = context.getSharedPreferences(StarredPreferences_STR + locale_suffix, Context.MODE_PRIVATE);
+       mStarredList.clear();
+       int n = sp.getInt(PREF_StarredNumber, 0);
+       for (int i = 1; i <= n; i++) {
+           String[] tokens = sp.getString(PREF_HymnRef + i, "").split("\\|");
+           Innario innario = HymnBooksHelper.me().getInnarioByID(tokens[0]);
+           if (innario == null) continue;            //Se l'innario non viene trovato si salta quest'inno
+           int num = Integer.parseInt(tokens[1]);
+           Inno inno = innario.getInno(num);
+           if (inno == null) throw new InnoNotFoundException(num);
+           inno.mStarred = true;
+           mStarredList.add(inno);
+       }
+
+       raiseStarredItemsChangedEvent();
    }
 }
