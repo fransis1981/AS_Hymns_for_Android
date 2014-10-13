@@ -9,6 +9,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -98,9 +99,6 @@ public class HymnsApplication extends Application {
 
         //Managing preferences; if device language locale belongs to one of those available then automatically
         //select it, otherwise load xml defaults. This is the logic only when no user preferences are stored.
-
-        //TODO: preferences from preference screen do not persist across app launches...
-
         SharedPreferences _prefs = PreferenceManager.getDefaultSharedPreferences(mAppContext);
         if (!(_prefs.getBoolean(PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES, false))) {
             //This branch gets executed only if preferences have never been set before (or user wiped app data)
@@ -135,10 +133,10 @@ public class HymnsApplication extends Application {
 
 
     public static void setCurrentInnario(Innario _innario) {
-      if (currentInnario == _innario) return;
-      currentInnario = _innario;
-      if (mOnCurrentInnarioChangedListener != null)
-         mOnCurrentInnarioChangedListener.onCurrentInnarioChanged();
+       if (currentInnario == _innario) return;
+       currentInnario = _innario;
+       if (mOnCurrentInnarioChangedListener != null)
+           mOnCurrentInnarioChangedListener.onCurrentInnarioChanged();
     }
 
 
@@ -154,7 +152,8 @@ public class HymnsApplication extends Application {
 
 
     public static Innario getCurrentInnario() {
-      return currentInnario;
+        while (currentInnario == null) SystemClock.sleep(1);        //Waiting fot the 1st hymnbook to be available?
+        return currentInnario;
     }
 
 

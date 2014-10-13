@@ -26,11 +26,14 @@ public class Fragment_Keypad extends Fragment implements UpdateContentItf {
 
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      View rootView = inflater.inflate(R.layout.mainscreen_fragment_keypad, container, false);
+       View rootView = inflater.inflate(R.layout.mainscreen_fragment_keypad, container, false);
 
-      //Getting and keeping the text view showing the composed number
-      txtComposedNumber = (TextView) rootView.findViewById(R.id.txt_composed_number);
-      txtComposedNumber.setText("");
+       //Getting and keeping the text view showing the composed number
+       txtComposedNumber = (TextView) rootView.findViewById(R.id.txt_composed_number);
+       txtComposedNumber.setText("");
+
+       //Leveraging the updateContent() callback invoked by the application class on initial loading.
+       //resetComposedNumber();
 
       //Getting a reference to the keypad and setting the listenr for number confirmed
       keypad = (NumKeyPadView) rootView.findViewById(R.id.main_keypad);
@@ -43,30 +46,29 @@ public class Fragment_Keypad extends Fragment implements UpdateContentItf {
                case 1: case 2: case 3:
                case 4: case 5: case 6:
                case 7: case 8: case 9:
-                  txtComposedNumber.setText(curr + String.valueOf(number));
-                  keypad.setObscureList((mCurrentDialerList = mCurrentDialerList.getSubDialerList(number)).getObscureList());
-                  keypad.cancelOkButtonTimeout();
-                  if (isComposedNumberValid()) keypad.startOkButtonTimeout();
-                  break;
+                   txtComposedNumber.setText(curr + String.valueOf(number));
+                   mCurrentDialerList = mCurrentDialerList.getSubDialerList(number);
+                   keypad.setObscureList(mCurrentDialerList.getObscureList());
+                   keypad.cancelOkButtonTimeout();
+                   if (isComposedNumberValid()) keypad.startOkButtonTimeout();
+                   break;
 
                case NumKeyPadView.KEYPAD_CANCEL:
-                  keypad.cancelOkButtonTimeout();
-                  if (curr.length() == 0) break;
-                  txtComposedNumber.setText(curr.subSequence(0, curr.length() - 1));
-                  keypad.setObscureList((mCurrentDialerList = mCurrentDialerList.getParentDialerList()).getObscureList());
-                  if (isComposedNumberValid()) keypad.startOkButtonTimeout();
-                  break;
+                   keypad.cancelOkButtonTimeout();
+                   if (curr.length() == 0) break;
+                   txtComposedNumber.setText(curr.subSequence(0, curr.length() - 1));
+                   keypad.setObscureList((mCurrentDialerList = mCurrentDialerList.getParentDialerList()).getObscureList());
+                   if (isComposedNumberValid()) keypad.startOkButtonTimeout();
+                   break;
 
                case NumKeyPadView.KEYPAD_OK:
-                  if (curr.length() == 0) break;
-                  ((MyActivity) getActivity()).callback_HymnSelected(HymnsApplication.getCurrentInnario().getInno(mLastValidComposedNumber));
-                  resetComposedNumber();
-                  break;
+                   if (curr.length() == 0) break;
+                   ((MyActivity) getActivity()).callback_HymnSelected(HymnsApplication.getCurrentInnario().getInno(mLastValidComposedNumber));
+                   resetComposedNumber();
+                   break;
             }
          }
       });
-
-      resetComposedNumber();
 
       return rootView;
    }
@@ -82,28 +84,29 @@ public class Fragment_Keypad extends Fragment implements UpdateContentItf {
       else return false;
    }
 
-   public void resetComposedNumber() {
-      try {
-         txtComposedNumber.setText("");
-         mCurrentDialerList = HymnsApplication.getCurrentInnario().getDialerList();
-         keypad.setObscureList(mCurrentDialerList.getObscureList());
-      } catch (NullPointerException npe) {
-         //Log.w(MyConstants.LogTag_STR, "Catched a NULL Pointer in Fragment Keypad while in resetComposedNumber().");
-      }
-   }
 
-   public void resetOnCurrentInnario() {
+    public void resetComposedNumber() {
+        txtComposedNumber.setText("");
+        mCurrentDialerList = HymnsApplication.getCurrentInnario().getDialerList();
+        keypad.setObscureList(mCurrentDialerList.getObscureList());
+    }
+
+
+    public void resetOnCurrentInnario() {
       resetComposedNumber();
    }
 
-   @Override
-   public void updateContent() {
+
+    @Override
+    public void updateContent() {
       resetComposedNumber();
    }
 
-   void abortKeypadTimeout() {
-      try {
-         keypad.cancelOkButtonTimeout();
-      } catch (Exception e) {}
-   }
+
+    void abortKeypadTimeout() {
+        try {
+            keypad.cancelOkButtonTimeout();
+        } catch (Exception e) {}
+    }
+
 }
