@@ -3,12 +3,14 @@ package com.fransis1981.Android_Hymns;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 /**
  * Created by Fransis on 05/03/14 11.56.
  */
 public class MainScreenPagerAdapter extends FragmentPagerAdapter
-      implements HymnsApplication.OnCurrentInnarioChangedListener, StarManager.StarredItemsChangedListener,
+      implements HymnsApplication.OnCurrentInnarioChangedListener,
+                 StarManager.StarredItemsChangedListener,
                  MRUManager.MRUStateChangedListener {
 
    public static enum FragmentContextEnum {
@@ -103,13 +105,14 @@ public class MainScreenPagerAdapter extends FragmentPagerAdapter
       updateFragmentContent(1);
    }
 
+
    @Override
    public void OnStarredItemsChanged() {
-      //Log.i(MyConstants.LogTag_STR, "Updating fragments with fresh news STAR information!");
-      for (int i = 1; i <= 2; i++)
-         if (fragmentContext.ordinal() != i) updateFragmentContent(i);
-      updateFragmentContent(3);
+      if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "Updating fragments with fresh new STAR information! Selected tab:" + fragmentContext.ordinal());
+      for (int i = 1; i <= 3; i++)
+         updateFragmentContent(i);
    }
+
 
    @Override
    public void OnMRUStateChanged() {
@@ -117,20 +120,24 @@ public class MainScreenPagerAdapter extends FragmentPagerAdapter
       updateFragmentContent(2);
    }
 
+
    private String getFragmentTag(int pos) {
       return "android:switcher:" + R.id.main_viewpager + ":" + pos;
    }
 
+
    Fragment getFragmentByPos(int pos) {
          return _fm.findFragmentByTag(getFragmentTag(pos));
    }
+
 
    //This is a wrapper method for calling udpateContent on a given fragment. Useful for external callbacks.
    void updateFragmentContent(int pos) {
       try {
          ((UpdateContentItf) getFragmentByPos(pos)).updateContent();
       } catch (Exception e) {
-         //Just to avoid app crashes on null fragments of the SingleHymn activity is active.
+          if (MyConstants.DEBUG) Log.e(MyConstants.LogTag_STR, "Just to avoid app crashes on null fragments if the SingleHymn activity is active.");
       }
    }
+
 }
