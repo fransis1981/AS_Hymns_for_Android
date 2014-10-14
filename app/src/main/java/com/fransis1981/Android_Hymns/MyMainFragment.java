@@ -69,10 +69,11 @@ public class MyMainFragment extends Fragment
       }
 
       if (savedInstanceState != null) {
-         currentCategoriaSelection = savedInstanceState.getInt(MyActivity.CATEGORIASELECTION_BUNDLESTATE);
-         currentInnariSelection = savedInstanceState.getInt(MyActivity.INNARIOSELECTION_BUNDLESTATE);
-         String sss = savedInstanceState.getString(MyActivity.TAB_BUNDLESTATE);
-         mTabHost.setCurrentTabByTag((sss == null)? MyConstants.TAB_MAIN_KEYPAD : sss);
+          currentCategoriaSelection = savedInstanceState.getInt(MyActivity.CATEGORIASELECTION_BUNDLESTATE);
+          currentInnariSelection = savedInstanceState.getInt(MyActivity.INNARIOSELECTION_BUNDLESTATE);
+          String sss = savedInstanceState.getString(MyActivity.TAB_BUNDLESTATE);
+          mTabHost.setCurrentTabByTag((sss == null)? MyConstants.TAB_MAIN_KEYPAD : sss);
+          //if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "Restored tab state for : " + sss);
       }
 
       return v;
@@ -133,6 +134,7 @@ public class MyMainFragment extends Fragment
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
       if (parent == mSpinnerInnari) {
+          if (currentInnariSelection == position) return;
           //Handling selection on spinner Innari; 1st useful element is at index 1.
          //Log.i(MyConstants.LogTag_STR, "A selection happened in the spinner Innari!!!! [" + selected_str + "]");
 
@@ -151,7 +153,9 @@ public class MyMainFragment extends Fragment
          currentInnariSelection = position;
       }
       else if (parent == mSpinnerCategoria) {
+          if (currentCategoriaSelection == position) return;
          //Handling selection on spinner Categoria
+          if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "Restoring state for category at position: " + position);
          if (position == 0) {
             if (mSpinnerInnari.getSelectedItemPosition() == 0) mSpinnerInnari.setSelection(1);
          } else {
@@ -161,19 +165,20 @@ public class MyMainFragment extends Fragment
             highlightLabelCategoria();
             mTabHost.setCurrentTabByTag(MyConstants.TAB_MAIN_HYMNSLIST);
          }
+          currentCategoriaSelection = position;
       }
-   }
+    }
 
 
     @Override
     public void onResume() {
-      super.onResume();
-       //updateHymnbooksSpinnerStatus(); //TODO: if this works, it would be niceto run this statement only after language change...
-      if (currentInnariSelection == -1 && currentCategoriaSelection == -1) mSpinnerInnari.setSelection(1);
-      else {
-         if (currentInnariSelection > 0) mSpinnerInnari.setSelection(currentInnariSelection);
-         else if (currentCategoriaSelection > 0) mSpinnerCategoria.setSelection(currentCategoriaSelection);
-      }
+        super.onResume();
+        if (currentInnariSelection == -1 && currentCategoriaSelection == -1) mSpinnerInnari.setSelection(1, false);
+        else {
+           if (currentInnariSelection > 0) mSpinnerInnari.setSelection(currentInnariSelection, false);
+           else if (currentCategoriaSelection > 0) mSpinnerCategoria.setSelection(currentCategoriaSelection, false);
+        }
+        //if (MyConstants.DEBUG) Log.i(MyConstants.LogTag_STR, "Resuming MyMainFragment!!");
    }
 
 
@@ -256,7 +261,7 @@ public class MyMainFragment extends Fragment
         spin_innariAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerInnari.setAdapter(spin_innariAdapter);
         mSpinnerInnari.invalidate();
-        mSpinnerInnari.setSelection(1);
+        mSpinnerInnari.setSelection(1, false);
         mSpinnerInnari.setOnItemSelectedListener(this);
     }
 
