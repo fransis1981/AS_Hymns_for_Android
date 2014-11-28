@@ -34,8 +34,15 @@ public class Fragment_HymnsList extends Fragment implements UpdateContentItf {
 
    public void resetOnCurrentInnario() {
       if (_list != null) {
-         _list.setAdapter(new Inni1RowAdapter(getActivity(), HymnsApplication.getCurrentInnario().hymnsToArrayList()));
-         ((ArrayAdapter<Inno>) _list.getAdapter()).notifyDataSetChanged();
+          int index = _list.getFirstVisiblePosition();
+          View v = _list.getChildAt(0);
+          int top = (v == null) ? 0 : v.getTop();
+
+          _list.setAdapter(new Inni1RowAdapter(getActivity(), HymnsApplication.getCurrentInnario().hymnsToArrayList()));
+          ((ArrayAdapter<Inno>) _list.getAdapter()).notifyDataSetChanged();
+
+          // restore index and position
+          _list.setSelectionFromTop(index, top);
       }
    }
 
